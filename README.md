@@ -76,6 +76,12 @@ drone-gis-swarm/
 > The TIF file is stored via Git LFS.
 > Run `git lfs pull` after cloning to download it.
 
+**Coordinate Reference System (CRS):** `EPSG:4269` (NAD83)
+> Note: The USGS DEM uses NAD83 (EPSG:4269), not WGS84 (EPSG:4326).
+> The difference is less than 1 meter in the continental US and does not
+> meaningfully affect simulation results. Acknowledged in paper methodology.
+> Folium and GeoJSON outputs use WGS84 (EPSG:4326) as required by those formats.
+
 **Simulation bounding box (clipped from full tile):**
 
 | Parameter | Value |
@@ -84,7 +90,9 @@ drone-gis-swarm/
 | North | 40.67° N |
 | West | -111.81° W |
 | East | -111.58° W |
-| Elevation range | ~1,443m – ~3,200m |
+| Elevation min | 1,375.6m |
+| Elevation max | 3,500.3m |
+| DEM shape | 2,484 × 1,296 pixels |
 
 ---
 
@@ -159,7 +167,7 @@ Geospatial map output: GeoJSON + GeoTIFF + Folium web map (gis/folium_map.py)
 
 If contributing or extending, build and test modules in this order:
 
-1. `gis/coordinate_transformer.py` — foundation, everything depends on this
+1. `gis/coordinate_transformer.py` — foundation, everything depends on this ✓
 2. `gis/sensor_heatmap.py` — requires coordinate transformer
 3. `gis/coverage_analyzer.py` — requires heatmap
 4. `gis/folium_map.py` — requires all of the above
@@ -180,6 +188,9 @@ If contributing or extending, build and test modules in this order:
 
 ---
 
-## Author
+## Technical Notes
 
-**ORCID:** https://orcid.org/0009-0002-6160-0993
+- **CRS:** DEM is NAD83 (EPSG:4269). Outputs (GeoJSON, Folium) use WGS84 (EPSG:4326). Difference < 1m in CONUS.
+- **DEM clipping:** `coordinate_transformer.py` clips the full 394MB tile to the BCC bounding box on load — only ~10MB held in memory during simulation.
+- **Elevation validated:** Range 1,375.6m–3,500.3m matches known Big Cottonwood Canyon topography.
+

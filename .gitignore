@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+
+# Simulation outputs (generated, not committed)
+results/simulation_outputs/rasters/
+results/simulation_outputs/geojson/
+results/simulation_outputs/maps/
+
+# Test outputs specifically
+results/simulation_outputs/rasters/test_*.tif
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

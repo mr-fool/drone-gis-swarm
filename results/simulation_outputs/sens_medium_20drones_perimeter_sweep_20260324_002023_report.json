@@ -1,0 +1,50 @@
+{
+  "simulation_area": {
+    "bounds": {
+      "south": 40.55,
+      "north": 40.67,
+      "west": -111.81,
+      "east": -111.58
+    },
+    "location": "Big Cottonwood Canyon, Wasatch Range, Utah",
+    "width_m": 19320.000000000335,
+    "height_m": 13320.000000000506
+  },
+  "overall_coverage": {
+    "total_cells": 27600,
+    "covered_cells": 2274,
+    "coverage_pct": 8.24,
+    "mean_confidence": 0.3817,
+    "max_confidence": 0.507,
+    "mean_visits": 1.06,
+    "gap_cells": 25326,
+    "gap_pct": 91.76
+  },
+  "elevation_band_coverage": {
+    "valley": {
+      "elevation_range_m": "1375\u20131800",
+      "total_cells": 3322,
+      "covered_cells": 267,
+      "coverage_pct": 8.04,
+      "mean_confidence": 0.3331
+    },
+    "mid_slope": {
+      "elevation_range_m": "1800\u20132600",
+      "total_cells": 11036,
+      "covered_cells": 935,
+      "coverage_pct": 8.47,
+      "mean_confidence": 0.3975
+    },
+    "alpine": {
+      "elevation_range_m": "2600\u20133500",
+      "total_cells": 13242,
+      "covered_cells": 1072,
+      "coverage_pct": 8.1,
+      "mean_confidence": 0.3801
+    }
+  },
+  "coverage_gaps": {
+    "n_gap_zones": 40,
+    "total_gap_km2": 236.1302
+  }
+}

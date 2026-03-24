@@ -15,6 +15,7 @@ import argparse
 import sys
 import os
 import json
+import numpy as np
 from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -22,6 +23,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from src.drone_trajectory_generator import (
     DroneSwarmGenerator, SimulationBounds, FlightPattern
 )
+from src.sensor_simulation import VirtualSensorArray, SensorType
 from gis.coordinate_transformer import CoordinateTransformer, SIM_WIDTH_M, SIM_HEIGHT_M
 from gis.sensor_heatmap import SensorHeatmap
 from gis.coverage_analyzer import CoverageAnalyzer
@@ -47,29 +49,108 @@ PATTERN_MAP = {
 }
 
 
-def extract_positions(swarm_result: dict) -> list[dict]:
+def compute_sensor_confidences(
+    trajectories: np.ndarray,
+    bounds: SimulationBounds,
+    timestep: float
+) -> np.ndarray:
+    """
+    Run the sensor simulation over swarm trajectories and return
+    per-drone per-timestep confidence scores.
+
+    Uses a perimeter camera array matching the original JDMS publication
+    setup — 8 visible-spectrum cameras at 600m radius, 100m elevation.
+
+    Parameters
+    ----------
+    trajectories : np.ndarray shape [n_drones, n_steps, 3]
+    bounds       : SimulationBounds
+    timestep     : simulation timestep in seconds
+
+    Returns
+    -------
+    np.ndarray shape [n_drones, n_steps] — confidence scores 0.0–1.0
+    """
+    print("    Setting up sensor array...")
+    sensor_array = VirtualSensorArray(bounds)
+    sensor_array.setup_perimeter_array(
+        num_cameras = 8,
+        sensor_type = SensorType.VISIBLE_SPECTRUM
+    )
+
+    n_drones, n_steps, _ = trajectories.shape
+    confidences = np.zeros((n_drones, n_steps), dtype=np.float32)
+
+    print(f"    Computing confidence for {n_drones} drones × "
+          f"{n_steps} timesteps...")
+
+    # Sample every 5th timestep for speed — interpolate the rest
+    sample_interval = 5
+    for step in range(0, n_steps, sample_interval):
+        drone_positions = trajectories[:, step, :]  # [n_drones, 3]
+        timestamp       = step * timestep
+
+        observations = sensor_array.observe_targets_parallel(
+            drone_positions, timestamp
+        )
+
+        # Build per-drone confidence from all camera observations
+        drone_conf = np.zeros(n_drones)
+        drone_obs_count = np.zeros(n_drones)
+
+        for obs in observations:
+            for idx, det in enumerate(obs.detected_objects):
+                drone_id = det["drone_id"]
+                if drone_id < n_drones and idx < len(obs.confidence_scores):
+                    drone_conf[drone_id]      += obs.confidence_scores[idx]
+                    drone_obs_count[drone_id] += 1
+
+        # Mean confidence across all cameras that detected each drone
+        for d in range(n_drones):
+            if drone_obs_count[d] > 0:
+                confidences[d, step] = drone_conf[d] / drone_obs_count[d]
+            else:
+                # Drone not detected by any camera — low confidence
+                confidences[d, step] = 0.1
+
+    # Interpolate sampled steps to fill all timesteps
+    for d in range(n_drones):
+        sampled_steps = list(range(0, n_steps, sample_interval))
+        all_steps     = list(range(n_steps))
+        confidences[d] = np.interp(
+            all_steps,
+            sampled_steps,
+            confidences[d, sampled_steps]
+        )
+
+    mean_conf = confidences[confidences > 0.1].mean() if (confidences > 0.1).any() else 0.0
+    print(f"    Mean confidence: {mean_conf:.4f}")
+    return confidences
+
+
+def extract_positions(
+    swarm_result: dict,
+    confidences: np.ndarray = None
+) -> list[dict]:
     """
     Convert swarm simulation output to GIS position format.
 
-    Scales x/y from 1km simulation space to full BCC canyon area
-    so drone paths spread across the entire simulation region.
+    Scales x/y from 1km simulation space to full BCC canyon area.
+    Uses real sensor confidence scores if provided.
     """
     trajectories = swarm_result["trajectories"]  # [drone, time, 3]
     n_drones, n_steps, _ = trajectories.shape
 
-    # Scale 0-1000m sim space to full BCC area
-    x_scale = SIM_WIDTH_M  / 1000.0   # ~19.32x
-    y_scale = SIM_HEIGHT_M / 1000.0   # ~13.32x
-
-    confidences = swarm_result.get("detection_confidences", None)
+    x_scale = SIM_WIDTH_M  / 1000.0
+    y_scale = SIM_HEIGHT_M / 1000.0
 
     positions = []
     for drone_id in range(n_drones):
         for step in range(n_steps):
             x, y, z = trajectories[drone_id, step]
 
-            if confidences is not None and drone_id < len(confidences):
-                conf = float(confidences[drone_id])
+            if confidences is not None:
+                conf = float(confidences[drone_id, step])
             else:
                 conf = 0.65
 
@@ -92,9 +173,15 @@ def run_simulation(
     timestep:      float = 0.5,
     drone_type:    str   = "small",
     output_prefix: str   = "bcc",
+    use_sensor:    bool  = True,
 ) -> dict:
     """
     Run the full drone swarm GIS simulation pipeline.
+
+    Parameters
+    ----------
+    use_sensor : if True, compute real sensor confidence scores
+                 if False, use flat 0.65 default (faster)
     """
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     prefix    = f"{output_prefix}_{n_drones}drones_{pattern}_{timestamp}"
@@ -107,6 +194,7 @@ def run_simulation(
     print(f"Duration:  {duration}s")
     print(f"Timestep:  {timestep}s")
     print(f"Drone:     {drone_type}")
+    print(f"Sensor:    {'real confidence' if use_sensor else 'default 0.65'}")
     print("=" * 55)
 
     # ── Step 1: Run swarm simulation ──────────────────────────
@@ -122,9 +210,20 @@ def run_simulation(
         drone_type  = drone_type,
     )
 
-    positions = extract_positions(swarm_result)
-    print(f"    Generated {len(positions):,} position readings "
-          f"from {n_drones} drones")
+    trajectories = swarm_result["trajectories"]
+    n_drones_actual, n_steps, _ = trajectories.shape
+    print(f"    Generated {n_drones_actual * n_steps:,} position readings "
+          f"from {n_drones_actual} drones")
+
+    # ── Step 1b: Compute sensor confidence ───────────────────
+    confidences = None
+    if use_sensor:
+        print("\n[1b] Computing sensor confidence scores...")
+        confidences = compute_sensor_confidences(
+            trajectories, BCC_SIM_BOUNDS, timestep
+        )
+
+    positions = extract_positions(swarm_result, confidences)
 
     # ── Step 2: Transform coordinates ────────────────────────
     print("\n[2/5] Loading terrain and transforming coordinates...")
@@ -184,6 +283,8 @@ def parse_args():
     parser.add_argument("--timestep",    type=float, default=0.5)
     parser.add_argument("--drone-type",  type=str,   default="small",
                         choices=["micro", "small", "medium"])
+    parser.add_argument("--no-sensor",   action="store_true",
+                        help="Skip sensor confidence (faster, uses default 0.65)")
     return parser.parse_args()
 
 
@@ -195,4 +296,5 @@ if __name__ == "__main__":
         duration   = args.duration,
         timestep   = args.timestep,
         drone_type = args.drone_type,
+        use_sensor = not args.no_sensor,
     )

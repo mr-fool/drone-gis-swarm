@@ -18,8 +18,7 @@ Simulates a swarm of drones flying over real terrain (USGS elevation data, Big C
 drone-gis-swarm/
 ├── data/
 │   └── raw/
-│       ├── USGS_13_n41w112_20260113.tif   # Big Cottonwood Canyon DEM (USGS 3DEP, 394MB)
-│       └── README_data.md                  # Data provenance and download instructions
+│       └── USGS_13_n41w112_20260113.tif   # Big Cottonwood Canyon DEM (USGS 3DEP, 394MB, Git LFS)
 │
 ├── gis/                                    # GIS pipeline — primary contribution
 │   ├── __init__.py
@@ -32,28 +31,30 @@ drone-gis-swarm/
 ├── src/                                    # Drone swarm simulation core
 │   ├── __init__.py
 │   ├── drone_trajectory_generator.py       # Flight path generation
-│   ├── sensor_simulation.py                # Sensor array modeling
+│   ├── sensor_simulation.py                # Sensor array modeling with real confidence scores
 │   └── volumetric_detection.py             # 3D detection pipeline
 │
 ├── paper/
 │   ├── draft.md                            # Research paper draft
-│   ├── figures/                            # Generated map outputs for paper
+│   ├── figures/                            # Publication-ready figures (300 DPI PNG)
 │   └── references.bib                      # Bibliography
 │
 ├── results/
+│   ├── paper/                              # Main results — all 5 flight patterns
+│   │   ├── comparison_table_*.json         # Coverage comparison table
+│   │   └── comparison_table_*.csv          # CSV version for analysis
+│   ├── sensitivity/                        # Sensitivity study results
+│   │   └── sensitivity_results_*.json
 │   └── simulation_outputs/
 │       ├── geojson/                        # Drone path GeoJSON files
 │       ├── rasters/                        # Generated GeoTIFF outputs
 │       └── maps/                           # Folium HTML map outputs
 │
-├── tests/
-│   ├── __init__.py
-│   ├── test_coordinate_transformer.py
-│   ├── test_sensor_heatmap.py
-│   └── test_coverage_analyzer.py
-│
 ├── app.py                                  # Gradio UI entry point
 ├── run_gis_simulation.py                   # Headless pipeline runner (no GUI)
+├── generate_paper_results.py               # Runs all 5 patterns, saves comparison table
+├── generate_paper_figures.py               # Generates publication-ready figures from results
+├── generate_sensitivity_study.py           # Sensitivity analysis — swarm size, duration, drone type
 ├── requirements_gis.txt                    # GIS dependencies
 ├── requirements.txt                        # Swarm simulation dependencies
 └── README.md                               # This file
@@ -123,6 +124,7 @@ gradio
 matplotlib
 numpy
 pyproj
+pandas
 ```
 
 ---
@@ -135,15 +137,57 @@ pyproj
 python app.py
 ```
 
-Opens an interactive interface with drone swarm controls, simulation parameters, and live map output.
+Opens an interactive interface at `http://localhost:7860` with drone swarm controls, simulation parameters, live coverage report, and downloadable output files.
 
-### Run headless pipeline
+### Recommended workflow — full paper pipeline
 
 ```bash
-python run_gis_simulation.py
+# Step 1 — run a single simulation and verify outputs
+python run_gis_simulation.py --drones 20 --pattern perimeter_sweep --duration 60
+
+# Step 2 — run all 5 patterns and generate comparison table
+python generate_paper_results.py
+
+# Step 3 — generate publication figures from results
+python generate_paper_figures.py
+
+# Step 4 — run sensitivity study (swarm size, duration, drone type)
+python generate_sensitivity_study.py
 ```
 
-Runs the full pipeline without the GUI. Outputs saved to `results/simulation_outputs/`.
+### run_gis_simulation.py options
+
+```bash
+# Default: 10 drones, perimeter_sweep, 60 seconds, real sensor confidence
+python run_gis_simulation.py
+
+# Custom parameters
+python run_gis_simulation.py --drones 20 --pattern formation_flying --duration 90
+
+# Skip sensor confidence for speed
+python run_gis_simulation.py --no-sensor
+
+# Available patterns
+# perimeter_sweep | formation_flying | random_dispersal | evasive_maneuvers | coordinated_attack
+
+# Available drone types
+# micro | small | medium
+```
+
+### generate_sensitivity_study.py options
+
+```bash
+# Run all three studies (~30 minutes)
+python generate_sensitivity_study.py
+
+# Run one study at a time
+python generate_sensitivity_study.py --study swarm_size
+python generate_sensitivity_study.py --study duration
+python generate_sensitivity_study.py --study drone_type
+
+# Skip sensor confidence for speed
+python generate_sensitivity_study.py --no-sensor
+```
 
 ---
 
@@ -152,26 +196,28 @@ Runs the full pipeline without the GUI. Outputs saved to `results/simulation_out
 ```
 Drone swarm simulation (src/)
         ↓
+Sensor confidence scoring: VirtualSensorArray — real detection confidence per position
+        ↓
 Coordinate transformation: x/y meters → lat/lon (gis/coordinate_transformer.py)
         ↓
-Sensor data collection: elevation, coverage, signal readings (gis/sensor_heatmap.py)
+Sensor heatmap: confidence + visit count → raster layer (gis/sensor_heatmap.py)
         ↓
-GIS data fusion: GeoPandas + Rasterio processing (gis/coverage_analyzer.py)
+Coverage analysis: gap detection, elevation band breakdown (gis/coverage_analyzer.py)
         ↓
-Geospatial map output: GeoJSON + GeoTIFF + Folium web map (gis/folium_map.py)
+Geospatial output: GeoJSON + GeoTIFF + Folium web map (gis/folium_map.py)
 ```
 
 ---
 
 ## Build Order (GIS Layer)
 
-If contributing or extending, build and test modules in this order:
+Modules were built and tested in this order:
 
-1. `gis/coordinate_transformer.py` — foundation, everything depends on this ✓
-2. `gis/sensor_heatmap.py` — requires coordinate transformer
-3. `gis/coverage_analyzer.py` — requires heatmap
-4. `gis/folium_map.py` — requires all of the above
-5. `app.py` — Gradio interface, built last
+1. `gis/coordinate_transformer.py` [ok]
+2. `gis/sensor_heatmap.py` [ok]
+3. `gis/coverage_analyzer.py` [ok]
+4. `gis/folium_map.py` [ok]
+5. `app.py` [ok]
 
 ---
 
@@ -190,7 +236,9 @@ If contributing or extending, build and test modules in this order:
 
 ## Technical Notes
 
-- **CRS:** DEM is NAD83 (EPSG:4269). Outputs (GeoJSON, Folium) use WGS84 (EPSG:4326). Difference < 1m in CONUS.
+- **CRS:** DEM is NAD83 (EPSG:4269). Outputs (GeoJSON, Folium) use WGS84 (EPSG:4326). Difference < 1m in continental US.
 - **DEM clipping:** `coordinate_transformer.py` clips the full 394MB tile to the BCC bounding box on load — only ~10MB held in memory during simulation.
 - **Elevation validated:** Range 1,375.6m–3,500.3m matches known Big Cottonwood Canyon topography.
-
+- **Coordinate scaling:** Swarm simulation uses 1km × 1km space. Positions are scaled to full BCC area (19.3km × 13.3km) before GIS processing.
+- **Sensor confidence:** Real detection confidence computed via `VirtualSensorArray` with 8-camera perimeter array. Use `--no-sensor` flag for faster runs with default 0.65 confidence.
+- **Git LFS:** The 394MB DEM file is stored via Git LFS. Run `git lfs pull` after cloning.

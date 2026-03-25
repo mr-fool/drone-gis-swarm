@@ -242,3 +242,24 @@ Modules were built and tested in this order:
 - **Coordinate scaling:** Swarm simulation uses 1km × 1km space. Positions are scaled to full BCC area (19.3km × 13.3km) before GIS processing.
 - **Sensor confidence:** Real detection confidence computed via `VirtualSensorArray` with 8-camera perimeter array. Use `--no-sensor` flag for faster runs with default 0.65 confidence.
 - **Git LFS:** The 394MB DEM file is stored via Git LFS. Run `git lfs pull` after cloning.
+
+---
+
+## Known Limitations
+
+These limitations are acknowledged in the paper's methodology and limitations section.
+
+**1. Terrain occlusion not modeled**
+The sensor confidence model assumes unobstructed line-of-sight between cameras and drones. Canyon walls and ridgelines that would block detection in reality are not accounted for. This may overestimate detection confidence in areas of steep relief. Future work: incorporate ray-casting against the DEM.
+
+**2. Trajectories are not terrain-following**
+Drone flight paths are generated in a normalized 1km × 1km virtual space with simple altitude constraints. The DEM is used to compute altitude above ground level (AGL) after the fact, but drone altitude is not adjusted to maintain constant AGL or avoid terrain obstacles. A drone crossing a 200m ridge at a set altitude of 100m will be 100m AGL on the ridge but 300m AGL in the adjacent valley.
+
+**3. Aspect ratio distortion from coordinate scaling**
+The 1km × 1km simulation space is linearly scaled to the 19.3km × 13.3km canyon area, producing a 1:0.69 aspect ratio transformation. Flight pattern geometry is stretched accordingly — a square perimeter sweep in virtual space becomes a rectangle in real space. This is documented but not corrected in the current implementation.
+
+**4. Sensor confidence is single-view not multi-view fused**
+Detection confidence is computed per camera observation and averaged. A proper multi-view fusion model would weight confidence by triangulation geometry and camera overlap. The current approach is appropriate for a coverage heatmap but does not reflect optimal sensor fusion.
+
+**5. volumetric_detection.py is not integrated**
+`src/volumetric_detection.py` is carried over from the prior JDMS publication on counter-drone detection. It is not part of the GIS pipeline and is not called by `run_gis_simulation.py`. It is retained for reference only.

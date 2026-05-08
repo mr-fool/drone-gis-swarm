@@ -167,8 +167,12 @@ python run_gis_simulation.py --drones 20 --pattern formation_flying --duration 9
 # Skip sensor confidence for speed
 python run_gis_simulation.py --no-sensor
 
-# Available patterns
-# perimeter_sweep | formation_flying | random_dispersal | evasive_maneuvers | coordinated_attack
+# Available patterns (internal code names → paper names)
+# perimeter_sweep      → Perimeter Sweep
+# formation_flying     → Formation Traverse
+# random_dispersal     → Stochastic Dispersal
+# evasive_maneuvers    → Sinusoidal Dispersal
+# coordinated_attack   → Centripetal Convergence
 
 # Available drone types
 # micro | small | medium
@@ -236,6 +240,7 @@ Modules were built and tested in this order:
 
 ## Technical Notes
 
+- **Flight pattern naming:** The `FlightPattern` enum in `src/drone_trajectory_generator.py` uses internal code names inherited from a prior project (`coordinated_attack`, `evasive_maneuvers`, `formation_flying`, `random_dispersal`, `perimeter_sweep`). The accompanying ASPJ paper uses descriptive geometric names: Centripetal Convergence, Sinusoidal Dispersal, Formation Traverse, Stochastic Dispersal, and Perimeter Sweep respectively. The code names and paper names refer to the same patterns; the enum values are not renamed to preserve compatibility with existing result files.
 - **CRS:** DEM is NAD83 (EPSG:4269). Outputs (GeoJSON, Folium) use WGS84 (EPSG:4326). Difference < 1m in continental US.
 - **DEM clipping:** `coordinate_transformer.py` clips the full 394MB tile to the BCC bounding box on load — only ~10MB held in memory during simulation.
 - **Elevation validated:** Range 1,375.6m–3,500.3m matches known Big Cottonwood Canyon topography.

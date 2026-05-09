@@ -209,9 +209,9 @@ def plot_swarm_size(results: list[dict]) -> str:
     ax2.set_xticks(sizes)
 
     plt.suptitle(
-        "Sensitivity Study 1: Swarm Size\n"
-        f"Pattern: perimeter_sweep | Duration: {BASELINE['duration']}s | "
-        f"Drone: {BASELINE['drone_type']}",
+        "Sensitivity Study: Swarm Size\n"
+        f"Pattern: Perimeter Sweep | Duration: {BASELINE['duration']}s | "
+        f"Drone: {BASELINE['drone_type'].title()}",
         fontsize=13, fontweight="bold"
     )
     plt.tight_layout()
@@ -260,9 +260,9 @@ def plot_duration(results: list[dict]) -> str:
     ax2.set_xticks(durations)
 
     plt.suptitle(
-        "Sensitivity Study 2: Simulation Duration\n"
-        f"Pattern: perimeter_sweep | Drones: {BASELINE['n_drones']} | "
-        f"Drone: {BASELINE['drone_type']}",
+        "Sensitivity Study: Simulation Duration\n"
+        f"Pattern: Perimeter Sweep | Drones: {BASELINE['n_drones']} | "
+        f"Drone: {BASELINE['drone_type'].title()}",
         fontsize=13, fontweight="bold"
     )
     plt.tight_layout()
@@ -328,8 +328,8 @@ def plot_drone_type(results: list[dict]) -> str:
     ax2.grid(axis="y", alpha=0.3)
 
     plt.suptitle(
-        "Sensitivity Study 3: Drone Type\n"
-        f"Pattern: perimeter_sweep | Drones: {BASELINE['n_drones']} | "
+        "Sensitivity Study: Drone Type\n"
+        f"Pattern: Perimeter Sweep | Drones: {BASELINE['n_drones']} | "
         f"Duration: {BASELINE['duration']}s",
         fontsize=13, fontweight="bold"
     )

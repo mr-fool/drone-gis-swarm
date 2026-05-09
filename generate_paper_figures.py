@@ -35,6 +35,17 @@ COLORS = {
     "coordinated_attack": "#F44336",
 }
 
+PATTERN_NAMES = {
+    "perimeter_sweep":    "Perimeter Sweep",
+    "formation_flying":   "Formation Traverse",
+    "random_dispersal":   "Stochastic Dispersal",
+    "evasive_maneuvers":  "Sinusoidal Dispersal",
+    "coordinated_attack": "Centripetal Convergence",
+}
+
+def pattern_label(key):
+    return PATTERN_NAMES.get(key, key.replace("_", " ").title())
+
 
 def load_latest_results(results_path=None):
     if results_path and os.path.exists(results_path):
@@ -49,7 +60,7 @@ def load_latest_results(results_path=None):
 
 def fig1_coverage_comparison(results):
     fig, ax = plt.subplots(figsize=(11, 6))
-    patterns   = [r["pattern"].replace("_", "\n") for r in results]
+    patterns   = [pattern_label(r["pattern"]) for r in results]
     coverage   = [r["coverage_pct"] for r in results]
     gaps       = [r["gap_pct"] for r in results]
     colors     = [COLORS[r["pattern"]] for r in results]
@@ -64,7 +75,7 @@ def fig1_coverage_comparison(results):
     ax.set_xlabel("Flight Pattern", fontsize=12)
     ax.set_ylabel("Area (%)", fontsize=12)
     ax.set_title(
-        f"Figure 1: Coverage vs Gap by Flight Pattern\n"
+        f"Coverage vs Gap by Flight Pattern\n"
         f"Big Cottonwood Canyon — {results[0]['n_drones']} drones, "
         f"{results[0]['duration_s']}s",
         fontsize=13, fontweight="bold"
@@ -102,7 +113,7 @@ def fig2_elevation_heatmap(results):
     ax.set_xticks(range(3))
     ax.set_xticklabels(band_labels, fontsize=11)
     ax.set_yticks(range(len(patterns)))
-    ax.set_yticklabels([p.replace("_", " ").title() for p in patterns], fontsize=11)
+    ax.set_yticklabels([pattern_label(p) for p in patterns], fontsize=11)
 
     for i in range(len(patterns)):
         for j in range(3):
@@ -112,7 +123,7 @@ def fig2_elevation_heatmap(results):
 
     plt.colorbar(im, ax=ax, label="Coverage (%)")
     ax.set_title(
-        "Figure 2: Coverage by Elevation Band and Flight Pattern\n"
+        "Coverage by Elevation Band and Flight Pattern\n"
         "Big Cottonwood Canyon, Wasatch Range, Utah",
         fontsize=13, fontweight="bold"
     )
@@ -139,7 +150,7 @@ def fig3_coverage_vs_gaps(results):
 
     for r in results:
         color  = COLORS[r["pattern"]]
-        label  = r["pattern"].replace("_", " ").title()
+        label  = pattern_label(r["pattern"])
         offset = label_offsets.get(r["pattern"], (10, 5))
 
         ax.scatter(r["coverage_pct"], r["total_gap_km2"],
@@ -154,7 +165,7 @@ def fig3_coverage_vs_gaps(results):
     ax.set_xlabel("Overall Coverage (%)", fontsize=12)
     ax.set_ylabel("Total Gap Area (km²)", fontsize=12)
     ax.set_title(
-        "Figure 3: Coverage Efficiency by Flight Pattern\n"
+        "Coverage Efficiency by Flight Pattern\n"
         "Higher coverage + lower gap area = bottom right (ideal)",
         fontsize=13, fontweight="bold"
     )
@@ -232,7 +243,7 @@ def fig4_terrain_overview():
     ax2.grid(axis="x", alpha=0.3)
 
     plt.suptitle(
-        "Figure 4: Simulation Terrain — Big Cottonwood Canyon, Utah",
+        "Simulation Terrain — Big Cottonwood Canyon, Utah",
         fontsize=13, fontweight="bold", y=1.01
     )
     plt.tight_layout()
@@ -275,8 +286,7 @@ def fig5_coverage_rasters(results):
 
         masked = np.ma.masked_where(data == 0, data)
         im = ax.imshow(masked, cmap="plasma", vmin=0, vmax=1, aspect="auto")
-        ax.set_title(pattern.replace("_", "\n").title(),
-                     fontsize=10, fontweight="bold")
+        ax.set_title(pattern_label(pattern), fontsize=10, fontweight="bold")
         ax.axis("off")
         plt.colorbar(im, ax=ax, label="Confidence", shrink=0.8)
 
@@ -286,7 +296,7 @@ def fig5_coverage_rasters(results):
         axes[row][col].axis("off")
 
     plt.suptitle(
-        "Figure 5: Detection Confidence Rasters by Flight Pattern\n"
+        "Detection Confidence Rasters by Flight Pattern\n"
         "Big Cottonwood Canyon — shows spatial coverage geometry per pattern",
         fontsize=13, fontweight="bold"
     )

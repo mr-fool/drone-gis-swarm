@@ -80,9 +80,12 @@ drone-gis-swarm/
 
 **Coordinate Reference System (CRS):** `EPSG:4269` (NAD83)
 > Note: The USGS DEM uses NAD83 (EPSG:4269), not WGS84 (EPSG:4326).
-> The difference is less than 1 meter in the continental US and does not
-> meaningfully affect simulation results. Acknowledged in paper methodology.
-> Folium and GeoJSON outputs use WGS84 (EPSG:4326) as required by those formats.
+> The simulation works directly in the DEM's coordinates. GeoTIFF, GeoJSON and
+> Folium outputs are labeled WGS84 (EPSG:4326), as those formats expect, but no
+> datum transformation is applied, so their coordinates are NAD83 values.
+> The two datums differ by about 1–2 m in the continental US, far below the
+> 10 m DEM resolution and the ~84 m × 111 m analysis grid, so this does not
+> affect the results.
 
 **Simulation bounding box (clipped from full tile):**
 
@@ -246,7 +249,7 @@ Modules were built and tested in this order:
 ## Technical Notes
 
 - **Flight pattern naming:** The `FlightPattern` enum in `src/drone_trajectory_generator.py` uses internal code names inherited from a prior project (`coordinated_attack`, `evasive_maneuvers`, `formation_flying`, `random_dispersal`, `perimeter_sweep`). The accompanying ASPJ paper uses descriptive geometric names: Centripetal Convergence, Sinusoidal Dispersal, Formation Traverse, Stochastic Dispersal, and Perimeter Sweep respectively. The code names and paper names refer to the same patterns; the enum values are not renamed to preserve compatibility with existing result files.
-- **CRS:** DEM is NAD83 (EPSG:4269). Outputs (GeoJSON, Folium) use WGS84 (EPSG:4326). Difference < 1m in continental US.
+- **CRS:** DEM is NAD83 (EPSG:4269). Outputs (GeoTIFF, GeoJSON, Folium) are labeled WGS84 (EPSG:4326) without a datum transformation; the datums differ by ~1–2 m in the continental US, negligible at this resolution.
 - **DEM clipping:** `coordinate_transformer.py` clips the full 394MB tile to the BCC bounding box on load — only ~10MB held in memory during simulation.
 - **Elevation validated:** Range 1,375.6m–3,500.3m matches known Big Cottonwood Canyon topography.
 - **Coordinate scaling:** Swarm simulation runs in real meters over the full BCC area (19.3km × 13.3km); no post-hoc scaling.

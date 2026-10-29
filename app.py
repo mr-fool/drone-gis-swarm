@@ -218,7 +218,7 @@ def build_ui() -> gr.Blocks:
         gr.Markdown("""
         ---
         **Data:** USGS 3DEP 1/3 Arc-Second DEM, tile n41w112 (2026-01-13)  
-        **CRS:** EPSG:4269 (NAD83) → outputs in EPSG:4326 (WGS84)  
+        **CRS:** EPSG:4269 (NAD83); outputs labeled EPSG:4326 (WGS84), no datum shift applied (~1–2 m difference)  
         **Elevation range:** 1,375m – 3,500m  
         """)
 

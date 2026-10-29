@@ -275,11 +275,13 @@ Modules were built and tested in this order:
 - **Tests:** `pytest tests/` checks timestep invariance, altitude sensitivity,
   no boundary pile-up and seed reproducibility.
 
-Not yet addressed: the gap-zone count (`get_coverage_gaps`) still splits gap
-regions into strips because of floating-point cell edges; the sensor
-"confidence" is computed for a camera ring around the area and is mostly the
-0.1 no-detection value at real scale; the inherited wind model adds a constant
-+0.05 m/s climb (~+90 m over 30 min), which widens footprints later in a flight.
+- **Gap zones** are the 4-connected components of uncovered 0.001° cells
+  (at least 4 cells), found on the raster. An empty map is one gap zone.
+- **Altitude hold.** Wind is applied horizontally only; previously its vertical
+  component made every drone climb ~90 m per 30 minutes.
+
+Not yet addressed: the sensor "confidence" is computed for a camera ring around
+the area and is mostly the 0.1 no-detection value at real scale.
 
 ## Known Limitations
 

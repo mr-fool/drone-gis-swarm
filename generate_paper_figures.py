@@ -201,19 +201,31 @@ def fig4_terrain_overview():
         fontsize=12, fontweight="bold"
     )
 
-    # Add elevation band contour lines instead of overlay
-    lats = np.linspace(ct.bounds["south"], ct.bounds["north"], dem.shape[0])
-    lons = np.linspace(ct.bounds["west"],  ct.bounds["east"],  dem.shape[1])
+    # Elevation band boundaries as contour lines.
+    # DEM row 0 is the NORTH edge (imshow origin="upper"), so latitude must
+    # run north -> south down the rows. (It previously ran south -> north,
+    # which drew the contours mirrored top-to-bottom.) Pixel centers are used.
+    n_rows, n_cols = dem.shape
+    dlat = (ct.bounds["north"] - ct.bounds["south"]) / n_rows
+    dlon = (ct.bounds["east"]  - ct.bounds["west"])  / n_cols
+    lats = ct.bounds["north"] - (np.arange(n_rows) + 0.5) * dlat
+    lons = ct.bounds["west"]  + (np.arange(n_cols) + 0.5) * dlon
     LON, LAT = np.meshgrid(lons, lats)
     ax1.contour(LON, LAT, dem, levels=[1800, 2600],
                 colors=["#1565C0", "#E65100"], linewidths=1.5,
                 linestyles="--")
-    ax1.text(-111.79, 40.565, "Valley", color="#1565C0",
-             fontsize=9, fontweight="bold")
-    ax1.text(-111.79, 40.595, "Mid-slope", color="#E65100",
-             fontsize=9, fontweight="bold")
-    ax1.text(-111.79, 40.645, "Alpine", color="#6A1B9A",
-             fontsize=9, fontweight="bold")
+    # Legend instead of hand-placed text labels (those sat on the wrong
+    # terrain: the "Alpine" label was on ~1,900 m ground)
+    from matplotlib.lines import Line2D
+    ax1.legend(
+        handles=[
+            Line2D([], [], color="#1565C0", linestyle="--", linewidth=1.5,
+                   label="1,800 m (valley / mid-slope)"),
+            Line2D([], [], color="#E65100", linestyle="--", linewidth=1.5,
+                   label="2,600 m (mid-slope / alpine)"),
+        ],
+        loc="lower right", fontsize=8, framealpha=0.85,
+    )
 
     # Right: clean elevation histogram with band shading
     valid = dem[dem > -9000].flatten()

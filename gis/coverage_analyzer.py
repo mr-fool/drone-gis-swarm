@@ -18,6 +18,8 @@ import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point, LineString, Polygon, box
 from shapely.ops import unary_union
+from shapely.affinity import affine_transform
+from scipy import ndimage
 import json
 import os
 from typing import Optional
@@ -82,45 +84,47 @@ class CoverageAnalyzer:
 
         Returns
         -------
-        GeoDataFrame of gap polygons in WGS84
+        GeoDataFrame of gap polygons in WGS84, one row per gap zone
+
+        Gap zones are the 4-connected components of uncovered grid cells,
+        found on the raster itself. (The previous version unioned per-cell
+        boxes whose edges were computed in floating point; adjacent boxes
+        did not always share exact edges, so an entirely empty map came out
+        as 40 horizontal strips instead of one gap.)
         """
         coverage = self._coverage_raster()
         gap_mask = coverage == 0
 
         resolution = self.heatmap.resolution
         bounds     = self.heatmap.bounds
-        n_rows, n_cols = coverage.shape
 
-        gap_polygons = []
-        for row in range(n_rows):
-            for col in range(n_cols):
-                if gap_mask[row, col]:
-                    west  = bounds["west"]  + col * resolution
-                    east  = west + resolution
-                    north = bounds["north"] - row * resolution
-                    south = north - resolution
-                    gap_polygons.append(box(west, south, east, north))
-
-        if not gap_polygons:
+        labels, n_labels = ndimage.label(gap_mask)   # 4-connectivity
+        if n_labels == 0:
             return gpd.GeoDataFrame(
-                {"geometry": [], "area_km2": []}, crs="EPSG:4326"
+                {"geometry": [], "area_km2": [], "n_cells": []}, crs="EPSG:4326"
             )
+        sizes = np.bincount(labels.ravel())
 
-        # Merge adjacent gap cells into contiguous polygons
-        merged = unary_union(gap_polygons)
-        geoms  = list(merged.geoms) if merged.geom_type == "MultiPolygon" \
-                 else [merged]
+        # Cell -> lon/lat: x = west + col*res, y = north - row*res
+        to_lonlat = [resolution, 0.0, 0.0, -resolution,
+                     bounds["west"], bounds["north"]]
+        cell_km2  = resolution * resolution * 111 * 84
 
-        # Filter small gaps
-        cell_area = resolution * resolution
-        min_area  = min_gap_cells * cell_area
-        geoms     = [g for g in geoms if g.area >= min_area]
+        geoms, areas, n_cells = [], [], []
+        for lab in range(1, n_labels + 1):
+            if sizes[lab] < min_gap_cells:
+                continue
+            rows, cols = np.nonzero(labels == lab)
+            # Build the polygon on the integer grid, where shared edges are
+            # exact, then transform to geographic coordinates.
+            grid_poly = unary_union([box(c, r, c + 1, r + 1)
+                                     for r, c in zip(rows, cols)])
+            geoms.append(affine_transform(grid_poly, to_lonlat))
+            areas.append(round(float(sizes[lab]) * cell_km2, 4))
+            n_cells.append(int(sizes[lab]))
 
         gdf = gpd.GeoDataFrame(
-            {
-                "geometry": geoms,
-                "area_km2": [round(g.area * 111 * 84, 4) for g in geoms],
-            },
+            {"geometry": geoms, "area_km2": areas, "n_cells": n_cells},
             crs="EPSG:4326"
         )
         return gdf

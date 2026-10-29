@@ -87,3 +87,32 @@ def test_no_boundary_pileup():
 def test_seed_reproducible():
     for p in ("perimeter_sweep", "evasive_maneuvers", "random_dispersal"):
         assert np.array_equal(_traj(p, seed=3), _traj(p, seed=3))
+
+
+def test_no_altitude_creep():
+    # Wind is applied horizontally only; altitude-holding patterns stay level
+    z = _traj(duration=1800.0)[..., 2]
+    assert abs(z[:, -1].mean() - z[:, 0].mean()) < 10.0
+
+
+def test_empty_map_is_one_gap_zone(ct, tmp_path):
+    from gis.sensor_heatmap import SensorHeatmap
+    from gis.coverage_analyzer import CoverageAnalyzer
+    hm = SensorHeatmap(ct, output_dir=str(tmp_path))
+    gaps = CoverageAnalyzer(ct, hm, output_dir=str(tmp_path)).get_coverage_gaps()
+    assert len(gaps) == 1
+    assert gaps.n_cells.iloc[0] == hm.n_rows * hm.n_cols
+
+
+def test_gap_zones_match_connected_components(ct, tmp_path):
+    from scipy import ndimage
+    from gis.sensor_heatmap import SensorHeatmap
+    from gis.coverage_analyzer import CoverageAnalyzer
+    from gis.footprint_coverage import FootprintCoverage
+    fp = FootprintCoverage(ct)
+    fp.add_trajectories(_traj())
+    an = CoverageAnalyzer(ct, SensorHeatmap(ct, output_dir=str(tmp_path)),
+                          output_dir=str(tmp_path), footprint=fp)
+    labels, n = ndimage.label(an._coverage_raster() == 0)
+    sizes = np.bincount(labels.ravel())[1:]
+    assert len(an.get_coverage_gaps()) == int((sizes >= 4).sum())

@@ -228,7 +228,13 @@ class DroneSwarmGenerator:
             desired_vel = self._apply_velocity_constraints(desired_vel, current_vel, spec, dt)
             
             # Add environmental effects
-            effective_vel = desired_vel + self.wind_velocity * 0.1  # Partial wind effect
+            # Partial wind effect, horizontal only: the autopilot holds
+            # altitude. (Adding the 0.5 m/s vertical component here made every
+            # drone climb a steady 0.05 m/s, about +90 m per 30 minutes, which
+            # widened camera footprints later in each flight.)
+            wind_effect = self.wind_velocity * 0.1
+            wind_effect[2] = 0.0
+            effective_vel = desired_vel + wind_effect
             
             # Update position
             current_pos += effective_vel * dt

@@ -136,30 +136,52 @@ def fig2_elevation_heatmap(results):
 
 
 def fig3_coverage_vs_gaps(results):
-    """Fixed: clear per-point label offsets to prevent overlap."""
+    """Coverage vs gap area, with labels placed from the data (no hand-tuned
+    offsets, which broke whenever the results changed)."""
     fig, ax = plt.subplots(figsize=(9, 6))
 
-    # Manual offsets to keep labels readable
-    label_offsets = {
-        "perimeter_sweep":    (10,   5),
-        "formation_flying":   (-95, -18),
-        "random_dispersal":   (10,   5),
-        "evasive_maneuvers":  (10,   5),
-        "coordinated_attack": (10,  -18),
-    }
+    xs = np.array([r["coverage_pct"] for r in results], dtype=float)
+    ys = np.array([r["total_gap_km2"] for r in results], dtype=float)
 
     for r in results:
-        color  = COLORS[r["pattern"]]
-        label  = pattern_label(r["pattern"])
-        offset = label_offsets.get(r["pattern"], (10, 5))
+        ax.scatter(r["coverage_pct"], r["total_gap_km2"], s=200,
+                   color=COLORS[r["pattern"]], zorder=5,
+                   label=pattern_label(r["pattern"]))
 
-        ax.scatter(r["coverage_pct"], r["total_gap_km2"],
-                   s=200, color=color, zorder=5, label=label)
+    # Pad the axes so labels stay inside the plotting area
+    xpad = 0.08 * max(np.ptp(xs), 1.0); ypad = 0.10 * max(np.ptp(ys), 1.0)
+    ax.set_xlim(xs.min() - xpad, xs.max() + xpad)
+    ax.set_ylim(ys.min() - ypad, ys.max() + ypad)
+    fig.canvas.draw()
+
+    # Work in display (pixel) coordinates to judge crowding
+    pts = ax.transData.transform(np.column_stack([xs, ys]))
+    ax_bbox = ax.get_window_extent()
+    sides = ["right"] * len(results)
+    vshift = [0] * len(results)
+    for i in range(len(results)):
+        # Points in the right third get their label on the left
+        if pts[i, 0] > ax_bbox.x0 + 0.66 * ax_bbox.width:
+            sides[i] = "left"
+        for j in range(i + 1, len(results)):
+            dx = pts[j, 0] - pts[i, 0]; dy = pts[j, 1] - pts[i, 1]
+            if abs(dx) < 160 and abs(dy) < 40:
+                # Crowded pair: split the labels to opposite sides and
+                # nudge them apart vertically
+                left, right = (i, j) if dx > 0 else (j, i)
+                sides[left], sides[right] = "left", "right"
+                lower, upper = (i, j) if dy > 0 else (j, i)
+                vshift[lower] -= 8; vshift[upper] += 8
+
+    for k, r in enumerate(results):
+        left = sides[k] == "left"
         ax.annotate(
-            label,
-            (r["coverage_pct"], r["total_gap_km2"]),
-            textcoords="offset points", xytext=offset,
-            fontsize=9, color=color, fontweight="bold"
+            pattern_label(r["pattern"]),
+            (xs[k], ys[k]),
+            textcoords="offset points",
+            xytext=(-12 if left else 12, vshift[k]),
+            ha="right" if left else "left", va="center",
+            fontsize=9, color=COLORS[r["pattern"]], fontweight="bold",
         )
 
     ax.set_xlabel("Overall Coverage (%)", fontsize=12)

@@ -24,6 +24,11 @@ from typing import Optional
 
 from gis.coordinate_transformer import CoordinateTransformer, BCC_BOUNDS
 from gis.sensor_heatmap import SensorHeatmap
+from gis.footprint_coverage import FootprintCoverage
+
+# A coarse (0.001-degree) cell counts as covered when at least this fraction
+# of its area was inside a camera footprint.
+COARSE_COVERED_FRACTION = 0.5
 
 
 # Elevation bands for terrain coverage analysis (meters ASL)
@@ -46,10 +51,18 @@ class CoverageAnalyzer:
         self,
         transformer: CoordinateTransformer,
         heatmap: SensorHeatmap,
-        output_dir: str = "results/simulation_outputs"
+        output_dir: str = "results/simulation_outputs",
+        footprint: Optional[FootprintCoverage] = None,
     ):
+        """
+        footprint : if given, all coverage statistics are area-based (camera
+                    footprint along the flight path). If None, the legacy
+                    point-sample metric is used (a cell is covered if any
+                    position sample falls in it) -- kept only for comparison.
+        """
         self.transformer = transformer
         self.heatmap     = heatmap
+        self.footprint   = footprint
         self.output_dir  = output_dir
         self.geojson_dir = os.path.join(output_dir, "geojson")
         self.dem         = transformer.get_dem_array()
@@ -71,7 +84,7 @@ class CoverageAnalyzer:
         -------
         GeoDataFrame of gap polygons in WGS84
         """
-        coverage = self.heatmap.get_coverage_raster()
+        coverage = self._coverage_raster()
         gap_mask = coverage == 0
 
         resolution = self.heatmap.resolution
@@ -111,6 +124,18 @@ class CoverageAnalyzer:
             crs="EPSG:4326"
         )
         return gdf
+
+    def get_coverage_fraction_raster(self) -> np.ndarray:
+        """Fraction of each coarse cell imaged (footprint metric only)."""
+        hm = self.heatmap
+        return self.footprint.coarse_fraction(hm.n_rows, hm.n_cols, hm.bounds, hm.resolution)
+
+    def _coverage_raster(self) -> np.ndarray:
+        """Coarse-grid raster that is > 0 where a cell counts as covered."""
+        if self.footprint is None:
+            return self.heatmap.get_coverage_raster()
+        frac = self.get_coverage_fraction_raster()
+        return (frac >= COARSE_COVERED_FRACTION).astype(np.float32)
 
     def get_elevation_band_coverage(self) -> dict:
         """
@@ -165,6 +190,16 @@ class CoverageAnalyzer:
                 "coverage_pct":      round(coverage_pct, 2),
                 "mean_confidence":   round(mean_conf, 4),
             }
+
+        if self.footprint is not None:
+            fp = self.footprint.band_coverage(ELEVATION_BANDS)
+            for band_name, r in results.items():
+                r["legacy_point_sample_coverage_pct"] = r.pop("coverage_pct")
+                r["legacy_total_cells"]   = r.pop("total_cells")
+                r["legacy_covered_cells"] = r.pop("covered_cells")
+                r["total_pixels"]  = fp[band_name]["total_pixels"]
+                r["imaged_pixels"] = fp[band_name]["imaged_pixels"]
+                r["coverage_pct"]  = fp[band_name]["coverage_pct"]
 
         return results
 
@@ -245,6 +280,22 @@ class CoverageAnalyzer:
         dict with all coverage statistics
         """
         basic_stats = self.heatmap.get_coverage_stats()
+        if self.footprint is not None:
+            legacy = basic_stats
+            covered = self._coverage_raster() > 0
+            total   = int(covered.size)
+            basic_stats = {
+                **self.footprint.summary(),
+                "total_cells":   total,
+                "covered_cells": int(covered.sum()),
+                "covered_cell_definition": f">= {COARSE_COVERED_FRACTION:.0%} of 0.001-degree cell imaged",
+                "gap_cells":     total - int(covered.sum()),
+                "gap_pct":       round(100 - self.footprint.coverage_pct(), 2),
+                "mean_confidence": legacy["mean_confidence"],
+                "max_confidence":  legacy["max_confidence"],
+                "legacy_point_sample_coverage_pct": legacy["coverage_pct"],
+                "legacy_point_sample_covered_cells": legacy["covered_cells"],
+            }
         elev_stats  = self.get_elevation_band_coverage()
         gaps        = self.get_coverage_gaps()
 
@@ -278,6 +329,10 @@ class CoverageAnalyzer:
         print(f"  Total cells:      {oc['total_cells']:,}")
         print(f"  Covered cells:    {oc['covered_cells']:,}")
         print(f"  Coverage:         {oc['coverage_pct']}%")
+        if "imaged_km2" in oc:
+            print(f"  Imaged area:      {oc['imaged_km2']} of {oc['total_km2']} km² "
+                  f"(footprint, FOV {oc['fov_deg']}°, {oc['altitude_mode']})")
+            print(f"  Legacy point-sample coverage: {oc['legacy_point_sample_coverage_pct']}%")
         print(f"  Mean confidence:  {oc['mean_confidence']}")
         print(f"  Gap cells:        {oc['gap_cells']:,} ({oc['gap_pct']}%)")
 

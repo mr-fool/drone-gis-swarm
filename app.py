@@ -152,11 +152,11 @@ def build_ui() -> gr.Blocks:
                 )
 
                 duration = gr.Slider(
-                    minimum = 10,
-                    maximum = 120,
-                    value   = 60,
-                    step    = 10,
-                    label   = "Duration (seconds)",
+                    minimum = 300,
+                    maximum = 3600,
+                    value   = 1800,
+                    step    = 300,
+                    label   = "Duration (seconds, real time)",
                 )
 
                 drone_type = gr.Radio(

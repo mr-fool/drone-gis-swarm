@@ -8,7 +8,14 @@ Runs without a GUI. For interactive use, run app.py instead.
 
 Usage:
     python run_gis_simulation.py
-    python run_gis_simulation.py --drones 20 --pattern formation_flying --duration 30
+    python run_gis_simulation.py --drones 20 --pattern formation_flying --duration 1800 --seed 42
+
+Simulation runs in REAL meters over the Big Cottonwood Canyon bounding box
+(~19.3 km x 13.3 km) at the drones' physical speeds, and coverage is the area
+imaged by each drone's nadir camera footprint along its path (see
+gis/footprint_coverage.py). Earlier versions simulated a 1 km box and scaled
+positions by ~19x afterwards, which made drones fly at 150-330 m/s, and
+counted a cell as covered if any position sample fell in it.
 """
 
 import argparse
@@ -28,17 +35,25 @@ from gis.coordinate_transformer import CoordinateTransformer, SIM_WIDTH_M, SIM_H
 from gis.sensor_heatmap import SensorHeatmap
 from gis.coverage_analyzer import CoverageAnalyzer
 from gis.folium_map import FoliumMap
+from gis.footprint_coverage import (
+    FootprintCoverage, DEFAULT_FOV_DEG, DEFAULT_MAX_MAPPING_AGL
+)
 
 
-# Keep original 1km scale — coordinate transformer scales to full BCC area
+# Simulate directly in real meters over the full BCC bounding box.
+# z is height above ground (50–500 m) in "agl" mode, or height above the
+# highest terrain in the area in "msl" mode (see gis/footprint_coverage.py).
 BCC_SIM_BOUNDS = SimulationBounds(
     x_min = 0.0,
-    x_max = 1000.0,
+    x_max = SIM_WIDTH_M,
     y_min = 0.0,
-    y_max = 1000.0,
+    y_max = SIM_HEIGHT_M,
     z_min = 50.0,
     z_max = 500.0
 )
+
+# Default mission duration: 30 minutes, a typical small-UAS endurance.
+DEFAULT_DURATION_S = 1800.0
 
 PATTERN_MAP = {
     "coordinated_attack": FlightPattern.COORDINATED_ATTACK,
@@ -90,7 +105,10 @@ def compute_sensor_confidences(
         drone_positions = trajectories[:, step, :]  # [n_drones, 3]
         timestamp       = step * timestep
 
-        observations = sensor_array.observe_targets_parallel(
+        # Serial on purpose: the threaded version draws from the global
+        # random generator in thread-scheduling order, so a fixed seed did
+        # not give reproducible confidences.
+        observations = sensor_array.observe_targets(
             drone_positions, timestamp
         )
 
@@ -135,14 +153,11 @@ def extract_positions(
     """
     Convert swarm simulation output to GIS position format.
 
-    Scales x/y from 1km simulation space to full BCC canyon area.
+    Trajectories are already in real meters over the BCC area (no scaling).
     Uses real sensor confidence scores if provided.
     """
     trajectories = swarm_result["trajectories"]  # [drone, time, 3]
     n_drones, n_steps, _ = trajectories.shape
-
-    x_scale = SIM_WIDTH_M  / 1000.0
-    y_scale = SIM_HEIGHT_M / 1000.0
 
     positions = []
     for drone_id in range(n_drones):
@@ -157,8 +172,8 @@ def extract_positions(
             positions.append({
                 "drone_id":   drone_id,
                 "timestep":   step,
-                "x":          float(x) * x_scale,
-                "y":          float(y) * y_scale,
+                "x":          float(x),
+                "y":          float(y),
                 "z":          float(z),
                 "confidence": conf,
             })
@@ -169,20 +184,32 @@ def extract_positions(
 def run_simulation(
     n_drones:      int   = 10,
     pattern:       str   = "perimeter_sweep",
-    duration:      float = 60.0,
+    duration:      float = DEFAULT_DURATION_S,
     timestep:      float = 0.5,
     drone_type:    str   = "small",
     output_prefix: str   = "bcc",
     use_sensor:    bool  = True,
+    seed:          int   = None,
+    fov_deg:       float = DEFAULT_FOV_DEG,
+    altitude_mode: str   = "agl",
+    max_mapping_agl: float = DEFAULT_MAX_MAPPING_AGL,
+    build_map:     bool  = True,
 ) -> dict:
     """
     Run the full drone swarm GIS simulation pipeline.
 
     Parameters
     ----------
-    use_sensor : if True, compute real sensor confidence scores
-                 if False, use flat 0.65 default (faster)
+    use_sensor    : if True, compute real sensor confidence scores
+                    if False, use flat 0.65 default (faster)
+    seed          : seeds NumPy's global RNG before anything random happens;
+                    the same seed gives identical reports. None = unseeded.
+    fov_deg       : camera field of view used for the coverage footprint
+    altitude_mode : "agl" (terrain following) or "msl" (fixed altitude)
+    build_map     : skip the Folium map (slow for long missions) if False
     """
+    if seed is not None:
+        np.random.seed(seed)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     prefix    = f"{output_prefix}_{n_drones}drones_{pattern}_{timestamp}"
 
@@ -195,6 +222,8 @@ def run_simulation(
     print(f"Timestep:  {timestep}s")
     print(f"Drone:     {drone_type}")
     print(f"Sensor:    {'real confidence' if use_sensor else 'default 0.65'}")
+    print(f"Seed:      {seed}")
+    print(f"Coverage:  camera footprint, FOV {fov_deg}°, altitude mode {altitude_mode}")
     print("=" * 55)
 
     # ── Step 1: Run swarm simulation ──────────────────────────
@@ -235,20 +264,43 @@ def run_simulation(
     heatmap.add_batch_readings(positions)
     raster_paths = heatmap.save_all_rasters(prefix=prefix)
 
+    # ── Step 3b: Camera-footprint coverage ───────────────────
+    print("\n[3b] Computing camera-footprint coverage...")
+    footprint = FootprintCoverage(
+        transformer, fov_deg=fov_deg, altitude_mode=altitude_mode,
+        max_mapping_agl=max_mapping_agl,
+    )
+    footprint.add_trajectories(trajectories)
+
     # ── Step 4: Analyze coverage ──────────────────────────────
     print("\n[4/5] Analyzing coverage...")
-    analyzer = CoverageAnalyzer(transformer=transformer, heatmap=heatmap)
+    analyzer = CoverageAnalyzer(transformer=transformer, heatmap=heatmap,
+                                footprint=footprint)
+    frac_path = heatmap._save_raster(
+        analyzer.get_coverage_fraction_raster(), f"{prefix}_footprint_coverage.tif"
+    )
+    raster_paths["footprint_coverage"] = frac_path
+    print(f"Saved footprint coverage raster → {frac_path}")
     analyzer.print_report()
     analyzer.export_coverage_gaps(filename=f"{prefix}_gaps.geojson")
     analyzer.export_flight_paths(positions, filename=f"{prefix}_paths.geojson")
 
     # ── Step 5: Build interactive map ────────────────────────
-    print("\n[5/5] Building interactive map...")
-    fm       = FoliumMap(transformer=transformer, heatmap=heatmap, analyzer=analyzer)
-    map_path = fm.build(positions, filename=f"{prefix}_map.html")
+    map_path = None
+    if build_map:
+        print("\n[5/5] Building interactive map...")
+        fm       = FoliumMap(transformer=transformer, heatmap=heatmap, analyzer=analyzer)
+        map_path = fm.build(positions, filename=f"{prefix}_map.html")
 
     # ── Save coverage report ──────────────────────────────────
     report      = analyzer.generate_report()
+    report["run_config"] = {
+        "n_drones": n_drones, "pattern": pattern, "duration_s": duration,
+        "timestep_s": timestep, "drone_type": drone_type, "seed": seed,
+        "use_sensor": use_sensor, "fov_deg": fov_deg,
+        "altitude_mode": altitude_mode, "max_mapping_agl_m": max_mapping_agl,
+        "sim_bounds_m": [BCC_SIM_BOUNDS.x_max, BCC_SIM_BOUNDS.y_max],
+    }
     report_path = os.path.join(
         "results/simulation_outputs", f"{prefix}_report.json"
     )
@@ -279,12 +331,21 @@ def parse_args():
     parser.add_argument("--drones",      type=int,   default=10)
     parser.add_argument("--pattern",     type=str,   default="perimeter_sweep",
                         choices=list(PATTERN_MAP.keys()))
-    parser.add_argument("--duration",    type=float, default=60.0)
+    parser.add_argument("--duration",    type=float, default=DEFAULT_DURATION_S,
+                        help="Mission duration in seconds (default 1800 = 30 min)")
     parser.add_argument("--timestep",    type=float, default=0.5)
     parser.add_argument("--drone-type",  type=str,   default="small",
                         choices=["micro", "small", "medium"])
     parser.add_argument("--no-sensor",   action="store_true",
                         help="Skip sensor confidence (faster, uses default 0.65)")
+    parser.add_argument("--seed",        type=int,   default=None,
+                        help="Random seed; same seed gives identical results")
+    parser.add_argument("--fov",         type=float, default=DEFAULT_FOV_DEG,
+                        help="Camera field of view for the coverage footprint (deg)")
+    parser.add_argument("--altitude-mode", type=str, default="agl",
+                        choices=["agl", "msl"])
+    parser.add_argument("--no-map",      action="store_true",
+                        help="Skip the interactive Folium map")
     return parser.parse_args()
 
 
@@ -297,4 +358,8 @@ if __name__ == "__main__":
         timestep   = args.timestep,
         drone_type = args.drone_type,
         use_sensor = not args.no_sensor,
+        seed       = args.seed,
+        fov_deg    = args.fov,
+        altitude_mode = args.altitude_mode,
+        build_map  = not args.no_map,
     )

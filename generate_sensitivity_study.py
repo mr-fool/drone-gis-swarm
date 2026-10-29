@@ -7,7 +7,7 @@ measuring how coverage metrics respond to each change.
 
 Studies:
   Study 1 — Swarm size sensitivity (5, 10, 20, 30, 50 drones)
-  Study 2 — Duration sensitivity (30, 60, 90, 120 seconds)
+  Study 2 — Duration sensitivity (10, 20, 30, 40 minutes)
   Study 3 — Drone type sensitivity (micro, small, medium)
 
 All studies use perimeter_sweep as the baseline pattern since it
@@ -24,6 +24,7 @@ Usage:
     python generate_sensitivity_study.py
     python generate_sensitivity_study.py --study swarm_size
     python generate_sensitivity_study.py --no-sensor
+    python generate_sensitivity_study.py --seed 42
 """
 
 import os
@@ -44,14 +45,16 @@ from run_gis_simulation import run_simulation
 BASELINE = {
     "pattern":    "perimeter_sweep",
     "n_drones":   20,
-    "duration":   60.0,
+    "duration":   1800.0,   # 30-minute mission at real scale
     "drone_type": "small",
     "timestep":   0.5,
 }
 
+SEED = 42  # overridden by --seed; every case uses the same seed
+
 # ── Parameter ranges ───────────────────────────────────────────
 SWARM_SIZES  = [5, 10, 20, 30, 50]
-DURATIONS    = [30, 60, 90, 120]
+DURATIONS    = [600, 1200, 1800, 2400]   # seconds (10–40 min)
 DRONE_TYPES  = ["micro", "small", "medium"]
 
 RESULTS_DIR = "results/sensitivity"
@@ -78,6 +81,7 @@ def run_study_case(label: str, overrides: dict, use_sensor: bool) -> dict:
         drone_type    = params["drone_type"],
         output_prefix = f"sens_{label.replace(' ', '_')}",
         use_sensor    = use_sensor,
+        seed          = SEED,
     )
 
     with open(outputs["report"]) as f:
@@ -91,7 +95,10 @@ def run_study_case(label: str, overrides: dict, use_sensor: bool) -> dict:
         "n_drones":               params["n_drones"],
         "duration_s":             params["duration"],
         "drone_type":             params["drone_type"],
+        "seed":                   SEED,
         "coverage_pct":           oc["coverage_pct"],
+        "imaged_km2":             oc["imaged_km2"],
+        "legacy_point_sample_coverage_pct": oc["legacy_point_sample_coverage_pct"],
         "mean_confidence":        oc["mean_confidence"],
         "gap_zones":              report["coverage_gaps"]["n_gap_zones"],
         "total_gap_km2":          report["coverage_gaps"]["total_gap_km2"],
@@ -420,12 +427,14 @@ def parse_args():
         "--no-sensor", action="store_true",
         help="Skip sensor confidence calculation (faster)"
     )
+    parser.add_argument("--seed", type=int, default=42)
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args       = parse_args()
     use_sensor = not args.no_sensor
+    SEED       = args.seed
     timestamp  = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     os.makedirs(RESULTS_DIR, exist_ok=True)

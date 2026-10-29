@@ -26,13 +26,13 @@ drone-gis-swarm/
 │   │                                       # Clips DEM to Big Cottonwood Canyon bounds
 │   ├── sensor_heatmap.py                   # Maps sensor readings → raster layer
 │   ├── coverage_analyzer.py                # Gap detection and coverage statistics
+│   ├── footprint_coverage.py               # Camera-footprint (area) coverage at DEM resolution
 │   └── folium_map.py                       # Generates interactive web map output
 │
 ├── src/                                    # Drone swarm simulation core
 │   ├── __init__.py
 │   ├── drone_trajectory_generator.py       # Flight path generation
-│   ├── sensor_simulation.py                # Sensor array modeling with real confidence scores
-│   └── volumetric_detection.py             # 3D detection pipeline
+│   └── sensor_simulation.py                # Sensor array modeling with real confidence scores
 │
 ├── paper/
 │   ├── draft.md                            # Research paper draft
@@ -50,6 +50,7 @@ drone-gis-swarm/
 │       ├── rasters/                        # Generated GeoTIFF outputs
 │       └── maps/                           # Folium HTML map outputs
 │
+├── tests/test_coverage_metric.py          # Coverage-metric regression tests
 ├── app.py                                  # Gradio UI entry point
 ├── run_gis_simulation.py                   # Headless pipeline runner (no GUI)
 ├── generate_paper_results.py               # Runs all 5 patterns, saves comparison table
@@ -143,7 +144,7 @@ Opens an interactive interface at `http://localhost:7860` with drone swarm contr
 
 ```bash
 # Step 1 — run a single simulation and verify outputs
-python run_gis_simulation.py --drones 20 --pattern perimeter_sweep --duration 60
+python run_gis_simulation.py --drones 20 --pattern perimeter_sweep --duration 1800 --seed 42
 
 # Step 2 — run all 5 patterns and generate comparison table
 python generate_paper_results.py
@@ -244,11 +245,41 @@ Modules were built and tested in this order:
 - **CRS:** DEM is NAD83 (EPSG:4269). Outputs (GeoJSON, Folium) use WGS84 (EPSG:4326). Difference < 1m in continental US.
 - **DEM clipping:** `coordinate_transformer.py` clips the full 394MB tile to the BCC bounding box on load — only ~10MB held in memory during simulation.
 - **Elevation validated:** Range 1,375.6m–3,500.3m matches known Big Cottonwood Canyon topography.
-- **Coordinate scaling:** Swarm simulation uses 1km × 1km space. Positions are scaled to full BCC area (19.3km × 13.3km) before GIS processing.
+- **Coordinate scaling:** Swarm simulation runs in real meters over the full BCC area (19.3km × 13.3km); no post-hoc scaling.
 - **Sensor confidence:** Real detection confidence computed via `VirtualSensorArray` with 8-camera perimeter array. Use `--no-sensor` flag for faster runs with default 0.65 confidence.
 - **Git LFS:** The 394MB DEM file is stored via Git LFS. Run `git lfs pull` after cloning.
 
 ---
+
+## Coverage metric and simulation scale (changed)
+
+- **Real scale.** Trajectories are simulated directly in real meters over the full
+  BCC bounding box (~19.3 km x 13.3 km) at the drones' physical speeds. Previously a
+  1 km box was simulated and positions were scaled ~19x afterwards, which made
+  drones fly at 150–330 m/s and produced an artificial coverage plateau when they
+  were clamped against the far edge. Drones now reflect off the boundary;
+  perimeter sweep and formation traverse turn around, and perimeter sweep shifts
+  one lane (`lane_spacing_m`, default 200 m) per turn (boustrophedon).
+- **Area-based coverage.** Coverage is the fraction of ground area imaged by a
+  nadir camera (default 60° FOV, footprint radius = AGL·tan(FOV/2)) along each
+  drone's continuous path, computed at DEM resolution (`gis/footprint_coverage.py`).
+  The old metric (a 0.001° cell is covered if any position sample falls in it) is
+  still reported as `legacy_point_sample_coverage_pct` for comparison only.
+- **Altitude modes.** `--altitude-mode agl` (default) treats z as height above
+  ground (ideal terrain following); `msl` flies at a fixed altitude above the
+  highest terrain, so footprint size depends on the terrain below. Occlusion is
+  not modeled.
+- **Seeds.** `--seed N` on all scripts gives identical results; the sensor
+  observations now run serially so confidences are reproducible too.
+- **Default mission:** 1800 s (30 min). Sensitivity durations: 600–2400 s.
+- **Tests:** `pytest tests/` checks timestep invariance, altitude sensitivity,
+  no boundary pile-up and seed reproducibility.
+
+Not yet addressed: the gap-zone count (`get_coverage_gaps`) still splits gap
+regions into strips because of floating-point cell edges; the sensor
+"confidence" is computed for a camera ring around the area and is mostly the
+0.1 no-detection value at real scale; the inherited wind model adds a constant
++0.05 m/s climb (~+90 m over 30 min), which widens footprints later in a flight.
 
 ## Known Limitations
 
@@ -257,14 +288,8 @@ These limitations are acknowledged in the paper's methodology and limitations se
 **1. Terrain occlusion not modeled**
 The sensor confidence model assumes unobstructed line-of-sight between cameras and drones. Canyon walls and ridgelines that would block detection in reality are not accounted for. This may overestimate detection confidence in areas of steep relief. Future work: incorporate ray-casting against the DEM.
 
-**2. Trajectories are not terrain-following**
-Drone flight paths are generated in a normalized 1km × 1km virtual space with simple altitude constraints. The DEM is used to compute altitude above ground level (AGL) after the fact, but drone altitude is not adjusted to maintain constant AGL or avoid terrain obstacles. A drone crossing a 200m ridge at a set altitude of 100m will be 100m AGL on the ridge but 300m AGL in the adjacent valley.
+**2. Terrain following is idealized**
+Trajectories are generated in real meters without reference to the DEM. In the default `agl` coverage mode, z is treated as height above ground (perfect terrain following); in `msl` mode drones hold a fixed altitude above the highest terrain and the footprint varies with the ground below. Neither mode plans altitude around ridgelines or avoids terrain.
 
-**3. Aspect ratio distortion from coordinate scaling**
-The 1km × 1km simulation space is linearly scaled to the 19.3km × 13.3km canyon area, producing a 1:0.69 aspect ratio transformation. Flight pattern geometry is stretched accordingly — a square perimeter sweep in virtual space becomes a rectangle in real space. This is documented but not corrected in the current implementation.
-
-**4. Sensor confidence is single-view not multi-view fused**
+**3. Sensor confidence is single-view not multi-view fused**
 Detection confidence is computed per camera observation and averaged. A proper multi-view fusion model would weight confidence by triangulation geometry and camera overlap. The current approach is appropriate for a coverage heatmap but does not reflect optimal sensor fusion.
-
-**5. volumetric_detection.py is not integrated**
-`src/volumetric_detection.py` is carried over from the prior JDMS publication on counter-drone detection. It is not part of the GIS pipeline and is not called by `run_gis_simulation.py`. It is retained for reference only.

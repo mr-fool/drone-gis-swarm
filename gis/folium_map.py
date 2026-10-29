@@ -195,6 +195,10 @@ class FoliumMap:
 
             coords = [[row["lat"], row["lon"]]
                       for _, row in drone_df.iterrows()]
+            # Thin very long paths (30-min missions) to keep the HTML light
+            if len(coords) > 2000:
+                step = int(np.ceil(len(coords) / 2000))
+                coords = coords[::step] + [coords[-1]]
 
             folium.PolyLine(
                 locations = coords,
@@ -244,8 +248,8 @@ class FoliumMap:
 
     def _add_summary_panel(self, m: folium.Map):
         """Add a summary statistics panel to the map."""
-        stats  = self.heatmap.get_coverage_stats()
         report = self.analyzer.generate_report()
+        stats  = report["overall_coverage"]
         now    = datetime.now().strftime("%Y-%m-%d %H:%M")
 
         elev_rows = ""

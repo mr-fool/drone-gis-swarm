@@ -37,8 +37,23 @@ class DroneSwarmGenerator:
     Optimized for desktop simulation with configurable complexity.
     """
     
-    def __init__(self, bounds: SimulationBounds):
+    def __init__(self, bounds: SimulationBounds, lane_spacing_m: float = 200.0):
+        """
+        Args:
+            bounds: simulation volume in REAL meters (x east, y north, z AGL).
+                    Pattern geometry (start points, center, ring radius) is
+                    defined as fractions of these bounds; spacings, speeds
+                    and accelerations are physical meters and m/s.
+            lane_spacing_m: lateral offset applied when a sweeping drone turns
+                    at a boundary (boustrophedon lane change). Should be about
+                    one camera swath width.
+        """
         self.bounds = bounds
+        self.lane_spacing_m = lane_spacing_m
+        self._width  = bounds.x_max - bounds.x_min
+        self._height = bounds.y_max - bounds.y_min
+        # Per-drone pattern state (sweep direction, lane target), reset per swarm
+        self._drone_state = {}
         
         # Predefined drone types
         self.drone_types = {
@@ -72,6 +87,13 @@ class DroneSwarmGenerator:
         """
         spec = self.drone_types[drone_type]
         time_steps = int(duration / timestep)
+
+        # Clear per-swarm state so a given random seed always yields the same
+        # trajectories, regardless of what was generated earlier.
+        self._drone_state = {}
+        if hasattr(self, '_evasive_direction'):
+            del self._evasive_direction
+        self._num_drones = num_drones
         times = np.linspace(0, duration, time_steps)
         
         # Initialize trajectory storage
@@ -103,45 +125,84 @@ class DroneSwarmGenerator:
     def _generate_initial_positions(self, num_drones: int, pattern: FlightPattern) -> np.ndarray:
         """Generate starting positions based on flight pattern"""
         positions = np.zeros((num_drones, 3))
-        
+        b = self.bounds
+        cx, cy = self._center()
+
         if pattern == FlightPattern.COORDINATED_ATTACK:
-            # Start from perimeter, converge to center
+            # Start from a ring at 40% of the shorter side, converge to center
+            # (originally a 400 m ring in a 1 km box)
             angles = np.linspace(0, 2*np.pi, num_drones, endpoint=False)
-            radius = 400.0  # Start 400m from center
-            center_x, center_y = 500.0, 500.0
-            
-            positions[:, 0] = center_x + radius * np.cos(angles)
-            positions[:, 1] = center_y + radius * np.sin(angles)
+            radius = 0.4 * min(self._width, self._height)
+
+            positions[:, 0] = cx + radius * np.cos(angles)
+            positions[:, 1] = cy + radius * np.sin(angles)
             positions[:, 2] = np.random.uniform(100, 300, num_drones)
-            
+
         elif pattern == FlightPattern.FORMATION_FLYING:
-            # V-formation or grid formation
+            # V-formation or grid formation (physical spacing in meters)
             if num_drones <= 10:
                 # V-formation
                 positions = self._generate_v_formation(num_drones)
             else:
                 # Grid formation
                 positions = self._generate_grid_formation(num_drones)
-                
+
         elif pattern == FlightPattern.RANDOM_DISPERSAL:
             # Random starting positions
-            positions[:, 0] = np.random.uniform(self.bounds.x_min + 50, self.bounds.x_max - 50, num_drones)
-            positions[:, 1] = np.random.uniform(self.bounds.y_min + 50, self.bounds.y_max - 50, num_drones)
-            positions[:, 2] = np.random.uniform(self.bounds.z_min + 20, self.bounds.z_max - 20, num_drones)
-            
+            positions[:, 0] = np.random.uniform(b.x_min + 50, b.x_max - 50, num_drones)
+            positions[:, 1] = np.random.uniform(b.y_min + 50, b.y_max - 50, num_drones)
+            positions[:, 2] = np.random.uniform(b.z_min + 20, b.z_max - 20, num_drones)
+
         elif pattern == FlightPattern.EVASIVE_MANEUVERS:
-            # Start clustered, then spread out
-            center = np.array([200.0, 200.0, 200.0])
+            # Start clustered (50 m radius) at 20% / 20% of the area, then spread out
+            center = np.array([b.x_min + 0.2 * self._width,
+                               b.y_min + 0.2 * self._height, 200.0])
             cluster_radius = 50.0
             positions = center + np.random.normal(0, cluster_radius, (num_drones, 3))
-            
+
         elif pattern == FlightPattern.PERIMETER_SWEEP:
-            # Start along one edge
-            positions[:, 0] = self.bounds.x_min + 20
-            positions[:, 1] = np.linspace(self.bounds.y_min + 50, self.bounds.y_max - 50, num_drones)
+            # Start along the west edge, one lane per drone
+            positions[:, 0] = b.x_min + 20
+            positions[:, 1] = np.linspace(b.y_min + 50, b.y_max - 50, num_drones)
             positions[:, 2] = np.random.uniform(150, 250, num_drones)
-            
+
         return positions
+
+    def _center(self) -> Tuple[float, float]:
+        return ((self.bounds.x_min + self.bounds.x_max) / 2,
+                (self.bounds.y_min + self.bounds.y_max) / 2)
+
+    def _turn_margin(self, spec: DroneSpec) -> float:
+        """Distance from an x-boundary at which a sweeping drone starts its turn."""
+        return 0.5 * spec.max_velocity ** 2 / spec.max_acceleration + 50.0
+
+    def _sweep_state(self, drone_id: int, pos: np.ndarray) -> dict:
+        """Per-drone sweep direction and lane target, created on first use."""
+        st = self._drone_state.get(drone_id)
+        if st is None:
+            n = max(getattr(self, '_num_drones', 1), 1)
+            strip = (self._height - 100.0) / n   # lateral strip owned by this drone
+            st = {'dir': 1.0, 'lane_y': float(pos[1]), 'lane_step': 1.0,
+                  'strip_lo': float(pos[1]) - strip / 2, 'strip_hi': float(pos[1]) + strip / 2}
+            self._drone_state[drone_id] = st
+        return st
+
+    def _update_sweep_direction(self, st: dict, pos: np.ndarray, spec: DroneSpec,
+                                lane_change: bool) -> None:
+        """Reverse the x direction near the east/west boundary instead of
+        piling up against it; optionally move to the next lane (boustrophedon)."""
+        m = self._turn_margin(spec)
+        turned = False
+        if st['dir'] > 0 and pos[0] >= self.bounds.x_max - m:
+            st['dir'] = -1.0; turned = True
+        elif st['dir'] < 0 and pos[0] <= self.bounds.x_min + m:
+            st['dir'] = 1.0; turned = True
+        if turned and lane_change:
+            nxt = st['lane_y'] + st['lane_step'] * self.lane_spacing_m
+            if nxt > st['strip_hi'] or nxt < st['strip_lo']:
+                st['lane_step'] *= -1.0
+                nxt = st['lane_y'] + st['lane_step'] * self.lane_spacing_m
+            st['lane_y'] = float(np.clip(nxt, self.bounds.y_min + 20, self.bounds.y_max - 20))
     
     def _generate_single_trajectory(self, drone_id: int, start_pos: np.ndarray, 
                                   spec: DroneSpec, pattern: FlightPattern,
@@ -172,9 +233,10 @@ class DroneSwarmGenerator:
             # Update position
             current_pos += effective_vel * dt
             current_vel = effective_vel
-            
-            # Apply boundary constraints
-            current_pos = self._apply_boundary_constraints(current_pos)
+
+            # Apply boundary constraints (reflect instead of clamping, so drones
+            # turn around rather than accumulating against the boundary)
+            current_pos, current_vel = self._apply_boundary_constraints(current_pos, current_vel)
             
             # Add sensor noise
             noisy_pos = current_pos + np.random.normal(0, self.noise_std, 3)
@@ -191,21 +253,27 @@ class DroneSwarmGenerator:
         
         if pattern == FlightPattern.COORDINATED_ATTACK:
             # Move toward center with slight spiral
-            center = np.array([500.0, 500.0, 200.0])
+            cx, cy = self._center()
+            center = np.array([cx, cy, 200.0])
             to_center = center - pos
             distance = np.linalg.norm(to_center)
-            
+
             if distance > 50:
-                # Add spiral component
-                spiral_vel = np.array([-to_center[1], to_center[0], 0]) * 0.1
+                # Spiral component. Originally 0.1 * distance in a 1 km box; the
+                # distance is expressed in those normalized units so the spiral
+                # keeps the same shape at real scale.
+                norm = 1000.0 / min(self._width, self._height)
+                spiral_vel = np.array([-to_center[1], to_center[0], 0]) * 0.1 * norm
                 desired = (to_center / distance) * spec.max_velocity * 0.7 + spiral_vel
             else:
                 # Hover near center
                 desired = np.random.normal(0, 2.0, 3)
                 
         elif pattern == FlightPattern.FORMATION_FLYING:
-            # Maintain formation while moving forward
-            formation_vel = np.array([spec.max_velocity * 0.6, 0, 0])
+            # Maintain formation while moving forward; turn back at the boundary
+            st = self._sweep_state(drone_id, pos)
+            self._update_sweep_direction(st, pos, spec, lane_change=False)
+            formation_vel = np.array([st['dir'] * spec.max_velocity * 0.6, 0, 0])
             
             # Add formation-keeping forces
             neighbor_force = self._calculate_formation_forces(drone_id, pos)
@@ -231,11 +299,18 @@ class DroneSwarmGenerator:
             desired = base_vel + zigzag
             
         elif pattern == FlightPattern.PERIMETER_SWEEP:
-            # Sweep across the area
-            sweep_vel = np.array([spec.max_velocity * 0.5, 0, 0])
-            
+            # Sweep across the area; at each boundary turn back and shift one
+            # lane within this drone's strip (boustrophedon)
+            st = self._sweep_state(drone_id, pos)
+            self._update_sweep_direction(st, pos, spec, lane_change=True)
+            sweep_vel = np.array([st['dir'] * spec.max_velocity * 0.5, 0, 0])
+
+            # Steer laterally toward the current lane
+            lane_vel = np.clip(0.2 * (st['lane_y'] - pos[1]),
+                               -0.3 * spec.max_velocity, 0.3 * spec.max_velocity)
+
             # Add slight weaving
-            weave = np.array([0, np.sin(t + drone_id) * 3, 0])
+            weave = np.array([0, np.sin(t + drone_id) * 3 + lane_vel, 0])
             desired = sweep_vel + weave
             
         else:
@@ -261,12 +336,20 @@ class DroneSwarmGenerator:
             
         return new_vel
     
-    def _apply_boundary_constraints(self, pos: np.ndarray) -> np.ndarray:
-        """Keep drones within simulation boundaries"""
-        pos[0] = np.clip(pos[0], self.bounds.x_min + 10, self.bounds.x_max - 10)
-        pos[1] = np.clip(pos[1], self.bounds.y_min + 10, self.bounds.y_max - 10)
-        pos[2] = np.clip(pos[2], self.bounds.z_min + 10, self.bounds.z_max - 10)
-        return pos
+    def _apply_boundary_constraints(self, pos: np.ndarray,
+                                    vel: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """Keep drones within simulation boundaries by reflecting off them.
+
+        The original version clamped positions, which made drones accumulate
+        on the boundary (and produced an artificial coverage plateau)."""
+        lo = np.array([self.bounds.x_min, self.bounds.y_min, self.bounds.z_min]) + 10
+        hi = np.array([self.bounds.x_max, self.bounds.y_max, self.bounds.z_max]) - 10
+        for k in range(3):
+            if pos[k] < lo[k]:
+                pos[k] = min(2 * lo[k] - pos[k], hi[k]); vel[k] = abs(vel[k])
+            elif pos[k] > hi[k]:
+                pos[k] = max(2 * hi[k] - pos[k], lo[k]); vel[k] = -abs(vel[k])
+        return pos, vel
     
     def _calculate_formation_forces(self, drone_id: int, pos: np.ndarray) -> np.ndarray:
         """Calculate forces to maintain formation (simplified)"""
@@ -277,17 +360,19 @@ class DroneSwarmGenerator:
         """Generate V-formation starting positions"""
         positions = np.zeros((num_drones, 3))
         
-        # Leader at front
-        positions[0] = [200, 500, 200]
-        
+        # Leader at front (20% across, mid-height; spacing in physical meters)
+        lx = self.bounds.x_min + 0.2 * self._width
+        ly = self._center()[1]
+        positions[0] = [lx, ly, 200]
+
         # Followers in V shape
         for i in range(1, num_drones):
             side = 1 if i % 2 == 0 else -1  # Alternate sides
             row = (i + 1) // 2
-            
+
             positions[i] = [
-                200 - row * 20,  # Move back
-                500 + side * row * 15,  # Move to side
+                lx - row * 20,  # Move back
+                ly + side * row * 15,  # Move to side
                 200 + np.random.uniform(-10, 10)  # Small altitude variation
             ]
             
@@ -299,7 +384,8 @@ class DroneSwarmGenerator:
         positions = np.zeros((num_drones, 3))
         
         spacing = 30.0  # meters between drones
-        start_x, start_y = 200.0, 200.0
+        start_x = self.bounds.x_min + 0.2 * self._width
+        start_y = self.bounds.y_min + 0.2 * self._height
         
         for i in range(num_drones):
             row = i // grid_size

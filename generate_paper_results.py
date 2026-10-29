@@ -9,21 +9,25 @@ and produces a summary comparison table as JSON and CSV.
 
 Usage:
     python generate_paper_results.py
+    python generate_paper_results.py --seed 42
 """
 
 import os
 import sys
 import json
 import csv
+import argparse
 from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(__file__))
 
 from run_gis_simulation import run_simulation
 
-# Consistent parameters across all runs for fair comparison
+# Consistent parameters across all runs for fair comparison.
+# Real-scale simulation: 1800 s = 30-minute mission (the earlier 60 s value
+# only "worked" because positions were scaled ~19x after simulation).
 N_DRONES   = 20
-DURATION   = 60.0
+DURATION   = 1800.0
 TIMESTEP   = 0.5
 DRONE_TYPE = "small"
 
@@ -38,7 +42,7 @@ PATTERNS = [
 RESULTS_DIR = "results/paper"
 
 
-def run_all_patterns() -> list[dict]:
+def run_all_patterns(seed: int = 42) -> list[dict]:
     """Run simulation for all patterns and collect results."""
     os.makedirs(RESULTS_DIR, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -46,7 +50,7 @@ def run_all_patterns() -> list[dict]:
 
     print("=" * 60)
     print("Generating all paper results")
-    print(f"Drones: {N_DRONES} | Duration: {DURATION}s | Type: {DRONE_TYPE}")
+    print(f"Drones: {N_DRONES} | Duration: {DURATION}s | Type: {DRONE_TYPE} | Seed: {seed}")
     print("=" * 60)
 
     for i, pattern in enumerate(PATTERNS):
@@ -60,6 +64,7 @@ def run_all_patterns() -> list[dict]:
             timestep      = TIMESTEP,
             drone_type    = DRONE_TYPE,
             output_prefix = f"paper_{pattern}",
+            seed          = seed,   # same seed for every pattern (common random numbers)
         )
 
         with open(outputs["report"]) as f:
@@ -73,7 +78,10 @@ def run_all_patterns() -> list[dict]:
             "n_drones":            N_DRONES,
             "duration_s":          DURATION,
             "n_positions":         outputs["n_positions"],
+            "seed":                seed,
             "coverage_pct":        oc["coverage_pct"],
+            "imaged_km2":          oc["imaged_km2"],
+            "legacy_point_sample_coverage_pct": oc["legacy_point_sample_coverage_pct"],
             "mean_confidence":     oc["mean_confidence"],
             "covered_cells":       oc["covered_cells"],
             "gap_cells":           oc["gap_cells"],
@@ -141,7 +149,9 @@ def print_summary_table(results: list[dict]):
 
 
 if __name__ == "__main__":
-    results, timestamp = run_all_patterns()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--seed", type=int, default=42)
+    results, timestamp = run_all_patterns(seed=ap.parse_args().seed)
     save_comparison_table(results, timestamp)
     print_summary_table(results)
 

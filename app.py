@@ -38,18 +38,19 @@ def format_report(report: dict) -> str:
         f"| Total cells | {oc['total_cells']:,} |",
         f"| Covered cells | {oc['covered_cells']:,} |",
         f"| Coverage | {oc['coverage_pct']}% |",
-        f"| Mean confidence | {oc['mean_confidence']} |",
+        f"| Median GSD | {oc.get('median_gsd_cm')} cm/pixel |",
+        f"| Imaged at <= {oc.get('gsd_threshold_cm')} cm/pixel | {oc.get('quality_coverage_pct')}% |",
         f"| Gap cells | {oc['gap_cells']:,} ({oc['gap_pct']}%) |",
         "",
         "### Coverage by Elevation Band",
-        "| Zone | Elevation | Coverage | Confidence |",
-        "|------|-----------|----------|------------|",
+        "| Zone | Elevation | Coverage | Median GSD (cm/px) |",
+        "|------|-----------|----------|--------------------|",
     ]
 
     for band, stats in report["elevation_band_coverage"].items():
         lines.append(
             f"| {band} | {stats['elevation_range_m']}m | "
-            f"{stats['coverage_pct']}% | {stats['mean_confidence']} |"
+            f"{stats['coverage_pct']}% | {stats.get('median_gsd_cm')} |"
         )
 
     lines += [

@@ -9,15 +9,16 @@
       "coverage_pct": 9.34,
       "imaged_km2": 24.0235,
       "legacy_point_sample_coverage_pct": 5.64,
-      "mean_confidence": 0.118,
+      "median_gsd_cm": 14.09,
+      "quality_coverage_pct": 6.25,
       "gap_zones": 4,
       "total_gap_km2": 237.0813,
       "valley_coverage_pct": 7.46,
       "midslope_coverage_pct": 9.75,
       "alpine_coverage_pct": 9.45,
-      "valley_confidence": 0.1216,
-      "midslope_confidence": 0.1125,
-      "alpine_confidence": 0.1213
+      "valley_median_gsd_cm": 14.13,
+      "midslope_median_gsd_cm": 14.11,
+      "alpine_median_gsd_cm": 14.0
     },
     {
       "label": "10drones",
@@ -28,15 +29,16 @@
       "coverage_pct": 19.36,
       "imaged_km2": 49.822,
       "legacy_point_sample_coverage_pct": 9.67,
-      "mean_confidence": 0.1098,
+      "median_gsd_cm": 13.59,
+      "quality_coverage_pct": 14.05,
       "gap_zones": 9,
       "total_gap_km2": 208.5033,
       "valley_coverage_pct": 15.99,
       "midslope_coverage_pct": 18.67,
       "alpine_coverage_pct": 20.76,
-      "valley_confidence": 0.1013,
-      "midslope_confidence": 0.1094,
-      "alpine_confidence": 0.1116
+      "valley_median_gsd_cm": 13.53,
+      "midslope_median_gsd_cm": 14.16,
+      "alpine_median_gsd_cm": 13.38
     },
     {
       "label": "20drones",
@@ -47,15 +49,16 @@
       "coverage_pct": 38.99,
       "imaged_km2": 100.3289,
       "legacy_point_sample_coverage_pct": 21.28,
-      "mean_confidence": 0.1112,
+      "median_gsd_cm": 13.19,
+      "quality_coverage_pct": 29.74,
       "gap_zones": 19,
       "total_gap_km2": 156.4102,
       "valley_coverage_pct": 34.64,
       "midslope_coverage_pct": 35.12,
       "alpine_coverage_pct": 43.25,
-      "valley_confidence": 0.104,
-      "midslope_confidence": 0.1123,
-      "alpine_confidence": 0.1118
+      "valley_median_gsd_cm": 13.7,
+      "midslope_median_gsd_cm": 12.65,
+      "alpine_median_gsd_cm": 13.37
     },
     {
       "label": "30drones",
@@ -66,15 +69,16 @@
       "coverage_pct": 58.53,
       "imaged_km2": 150.6175,
       "legacy_point_sample_coverage_pct": 31.13,
-      "mean_confidence": 0.109,
+      "median_gsd_cm": 12.95,
+      "quality_coverage_pct": 46.89,
       "gap_zones": 58,
       "total_gap_km2": 100.708,
       "valley_coverage_pct": 49.8,
       "midslope_coverage_pct": 53.26,
       "alpine_coverage_pct": 65.03,
-      "valley_confidence": 0.1071,
-      "midslope_confidence": 0.1082,
-      "alpine_confidence": 0.11
+      "valley_median_gsd_cm": 12.72,
+      "midslope_median_gsd_cm": 12.69,
+      "alpine_median_gsd_cm": 13.25
     },
     {
       "label": "50drones",
@@ -85,15 +89,16 @@
       "coverage_pct": 87.72,
       "imaged_km2": 225.7476,
       "legacy_point_sample_coverage_pct": 47.08,
-      "mean_confidence": 0.1091,
+      "median_gsd_cm": 12.85,
+      "quality_coverage_pct": 70.77,
       "gap_zones": 36,
       "total_gap_km2": 10.6572,
       "valley_coverage_pct": 84.76,
       "midslope_coverage_pct": 86.54,
       "alpine_coverage_pct": 89.43,
-      "valley_confidence": 0.1047,
-      "midslope_confidence": 0.1091,
-      "alpine_confidence": 0.11
+      "valley_median_gsd_cm": 13.07,
+      "midslope_median_gsd_cm": 13.19,
+      "alpine_median_gsd_cm": 12.58
     }
   ],
   "duration": [
@@ -106,15 +111,16 @@
       "coverage_pct": 13.54,
       "imaged_km2": 34.8565,
       "legacy_point_sample_coverage_pct": 7.25,
-      "mean_confidence": 0.1138,
+      "median_gsd_cm": 13.27,
+      "quality_coverage_pct": 10.12,
       "gap_zones": 1,
       "total_gap_km2": 222.3028,
       "valley_coverage_pct": 34.65,
       "midslope_coverage_pct": 17.68,
       "alpine_coverage_pct": 4.95,
-      "valley_confidence": 0.1041,
-      "midslope_confidence": 0.1164,
-      "alpine_confidence": 0.1228
+      "valley_median_gsd_cm": 13.7,
+      "midslope_median_gsd_cm": 13.04,
+      "alpine_median_gsd_cm": 13.37
     },
     {
       "label": "1200s",
@@ -125,15 +131,16 @@
       "coverage_pct": 26.94,
       "imaged_km2": 69.3256,
       "legacy_point_sample_coverage_pct": 14.5,
-      "mean_confidence": 0.1137,
+      "median_gsd_cm": 13.27,
+      "quality_coverage_pct": 20.15,
       "gap_zones": 1,
       "total_gap_km2": 187.5709,
       "valley_coverage_pct": 34.65,
       "midslope_coverage_pct": 30.15,
       "alpine_coverage_pct": 22.39,
-      "valley_confidence": 0.1037,
-      "midslope_confidence": 0.1139,
-      "alpine_confidence": 0.1173
+      "valley_median_gsd_cm": 13.7,
+      "midslope_median_gsd_cm": 12.64,
+      "alpine_median_gsd_cm": 13.7
     },
     {
       "label": "1800s",
@@ -144,15 +151,16 @@
       "coverage_pct": 38.99,
       "imaged_km2": 100.3289,
       "legacy_point_sample_coverage_pct": 21.28,
-      "mean_confidence": 0.1112,
+      "median_gsd_cm": 13.19,
+      "quality_coverage_pct": 29.74,
       "gap_zones": 19,
       "total_gap_km2": 156.4102,
       "valley_coverage_pct": 34.64,
       "midslope_coverage_pct": 35.12,
       "alpine_coverage_pct": 43.25,
-      "valley_confidence": 0.104,
-      "midslope_confidence": 0.1123,
-      "alpine_confidence": 0.1118
+      "valley_median_gsd_cm": 13.7,
+      "midslope_median_gsd_cm": 12.65,
+      "alpine_median_gsd_cm": 13.37
     },
     {
       "label": "2400s",
@@ -163,15 +171,16 @@
       "coverage_pct": 49.78,
       "imaged_km2": 128.0953,
       "legacy_point_sample_coverage_pct": 27.66,
-      "mean_confidence": 0.1106,
+      "median_gsd_cm": 13.1,
+      "quality_coverage_pct": 39.01,
       "gap_zones": 19,
       "total_gap_km2": 128.5502,
       "valley_coverage_pct": 34.65,
       "midslope_coverage_pct": 44.99,
       "alpine_coverage_pct": 57.44,
-      "valley_confidence": 0.1037,
-      "midslope_confidence": 0.1105,
-      "alpine_confidence": 0.1116
+      "valley_median_gsd_cm": 13.7,
+      "midslope_median_gsd_cm": 12.54,
+      "alpine_median_gsd_cm": 13.34
     }
   ],
   "drone_type": [
@@ -184,15 +193,16 @@
       "coverage_pct": 24.61,
       "imaged_km2": 63.3431,
       "legacy_point_sample_coverage_pct": 13.22,
-      "mean_confidence": 0.1092,
+      "median_gsd_cm": 13.25,
+      "quality_coverage_pct": 18.49,
       "gap_zones": 1,
       "total_gap_km2": 193.8366,
       "valley_coverage_pct": 34.76,
       "midslope_coverage_pct": 28.54,
       "alpine_coverage_pct": 18.88,
-      "valley_confidence": 0.104,
-      "midslope_confidence": 0.1108,
-      "alpine_confidence": 0.1096
+      "valley_median_gsd_cm": 13.69,
+      "midslope_median_gsd_cm": 12.65,
+      "alpine_median_gsd_cm": 13.69
     },
     {
       "label": "small",
@@ -203,15 +213,16 @@
       "coverage_pct": 38.99,
       "imaged_km2": 100.3289,
       "legacy_point_sample_coverage_pct": 21.28,
-      "mean_confidence": 0.1112,
+      "median_gsd_cm": 13.19,
+      "quality_coverage_pct": 29.74,
       "gap_zones": 19,
       "total_gap_km2": 156.4102,
       "valley_coverage_pct": 34.64,
       "midslope_coverage_pct": 35.12,
       "alpine_coverage_pct": 43.25,
-      "valley_confidence": 0.104,
-      "midslope_confidence": 0.1123,
-      "alpine_confidence": 0.1118
+      "valley_median_gsd_cm": 13.7,
+      "midslope_median_gsd_cm": 12.65,
+      "alpine_median_gsd_cm": 13.37
     },
     {
       "label": "medium",
@@ -222,15 +233,16 @@
       "coverage_pct": 51.7,
       "imaged_km2": 133.0444,
       "legacy_point_sample_coverage_pct": 28.88,
-      "mean_confidence": 0.11,
+      "median_gsd_cm": 13.1,
+      "quality_coverage_pct": 40.54,
       "gap_zones": 12,
       "total_gap_km2": 123.2259,
       "valley_coverage_pct": 34.52,
       "midslope_coverage_pct": 47.8,
       "alpine_coverage_pct": 59.14,
-      "valley_confidence": 0.104,
-      "midslope_confidence": 0.1098,
-      "alpine_confidence": 0.111
+      "valley_median_gsd_cm": 13.7,
+      "midslope_median_gsd_cm": 12.56,
+      "alpine_median_gsd_cm": 13.34
     }
   ]
 }

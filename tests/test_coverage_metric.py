@@ -165,3 +165,35 @@ def test_wind_does_not_compound():
         disp.append((t[:, -1, :2] - t[:, 0, :2]).mean(0))
     drift = np.mean(disp, axis=0) / 600.0
     assert abs(drift[0]) < 1.0 and abs(drift[1]) < 1.0
+
+
+def test_gsd_matches_camera_geometry(ct):
+    from gis.footprint_coverage import FootprintCoverage
+    t = np.zeros((1, 2, 3))
+    t[0, :, 1] = 6000.0
+    t[0, 0, 0], t[0, 1, 0] = 4000.0, 14000.0
+    t[0, :, 2] = 200.0
+    fp = _coverage(ct, t)
+    nadir_cm = 2 * 200.0 * np.tan(np.radians(30)) / 1920 * 100      # 12.03 cm/px
+    g = fp.best_gsd[fp.imaged] * 100
+    assert g.min() == pytest.approx(nadir_cm, rel=0.02)
+    assert g.max() <= nadir_cm * (1 + np.tan(np.radians(30)) ** 2) * 1.02   # edge of image
+    # Pixels imaged across the swath, uniformly: mean of 1 + u^2 tan^2(30), u in [0, 1]
+    assert fp.gsd_stats()["mean_gsd_cm"] == pytest.approx(nadir_cm * (1 + np.tan(np.radians(30)) ** 2 / 3), rel=0.05)
+
+
+def test_gsd_scales_with_altitude(ct):
+    base = _traj()
+    med = []
+    for z in (100.0, 200.0):
+        t = base.copy(); t[..., 2] = z
+        med.append(_coverage(ct, t).gsd_stats()["median_gsd_cm"])
+    assert med[1] == pytest.approx(2 * med[0], rel=0.05)
+
+
+def test_quality_coverage_threshold(ct):
+    t = _traj(); t[..., 2] = 200.0          # nadir 12 cm, edge 16 cm
+    loose  = _coverage(ct, t, gsd_threshold_cm=100.0)
+    strict = _coverage(ct, t, gsd_threshold_cm=12.5)
+    assert loose.gsd_stats()["quality_coverage_pct"] == pytest.approx(loose.coverage_pct(), abs=0.01)
+    assert strict.gsd_stats()["quality_coverage_pct"] < strict.coverage_pct()

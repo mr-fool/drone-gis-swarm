@@ -31,8 +31,8 @@ Reported
   duration and drone type, plus paired differences between adjacent levels.
 
 Coverage is the camera-footprint area metric (gis/footprint_coverage.py),
-terrain-following ("agl") mode, 60-degree FOV. Sensor confidence is not
-computed (it is not a mapping metric).
+terrain-following ("agl") mode, 60-degree FOV. Mapping quality is the
+median ground sample distance (GSD, cm/pixel) of the imaged ground.
 
 Usage
 -----
@@ -83,7 +83,7 @@ DURATIONS   = [600, 1200, 1800, 2400]
 DRONE_TYPES = ["micro", "small", "medium"]
 
 METRICS = ["coverage_pct", "valley_pct", "mid_slope_pct", "alpine_pct",
-           "gap_zones", "imaged_km2"]
+           "gap_zones", "imaged_km2", "median_gsd_cm", "quality_coverage_pct"]
 BANDS = ["valley_pct", "mid_slope_pct", "alpine_pct"]
 
 C_VALLEY, C_MIDSLOPE, C_ALPINE, C_OVERALL = "#1565C0", "#E65100", "#6A1B9A", "#2E7D32"
@@ -126,6 +126,7 @@ def run_case(task: dict) -> dict:
         "mid_slope_pct": bands["mid_slope"]["coverage_pct"],
         "alpine_pct":    bands["alpine"]["coverage_pct"],
         "gap_zones":     gaps,
+        **{k: fp.gsd_stats()[k] for k in ("median_gsd_cm", "quality_coverage_pct")},
     }
 
 

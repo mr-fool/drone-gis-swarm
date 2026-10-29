@@ -289,20 +289,23 @@ def fig4_terrain_overview():
 
 
 def fig5_coverage_rasters(results):
-    """Detection confidence rasters showing flight path geometry per pattern."""
+    """Ground resolution (GSD) rasters per pattern: where each pattern imaged
+    the ground, and how finely. Uses the rasters written by the same runs as
+    the results table (matched through each run's report path)."""
     raster_data = []
     for r in results:
-        pattern_glob = glob.glob(
-            f"results/simulation_outputs/rasters/*{r['pattern']}*confidence.tif"
-        )
-        if pattern_glob:
-            with rasterio.open(sorted(pattern_glob)[-1]) as src:
-                data = src.read(1)
-                raster_data.append((r["pattern"], data))
+        prefix = os.path.basename(r.get("report_path", "")).replace("_report.json", "")
+        path = os.path.join("results/simulation_outputs/rasters", f"{prefix}_gsd_cm.tif")
+        if prefix and os.path.exists(path):
+            with rasterio.open(path) as src:
+                raster_data.append((r["pattern"], src.read(1)))
 
     if not raster_data:
-        print("No raster files found — skipping Figure 5.")
+        print("No GSD rasters found for these results — skipping Figure 5. "
+              "Re-run generate_paper_results.py first.")
         return None
+
+    vmax = max(float(np.percentile(d[d > 0], 98)) for _, d in raster_data if (d > 0).any())
 
     n    = len(raster_data)
     cols = min(3, n)
@@ -319,10 +322,11 @@ def fig5_coverage_rasters(results):
         ax       = axes[row][col]
 
         masked = np.ma.masked_where(data == 0, data)
-        im = ax.imshow(masked, cmap="plasma", vmin=0, vmax=1, aspect="auto")
+        ax.imshow(np.zeros_like(data), cmap="Greys", vmin=0, vmax=1, aspect="auto")
+        im = ax.imshow(masked, cmap="viridis_r", vmin=0, vmax=vmax, aspect="auto")
         ax.set_title(pattern_label(pattern), fontsize=10, fontweight="bold")
         ax.axis("off")
-        plt.colorbar(im, ax=ax, label="Confidence", shrink=0.8)
+        plt.colorbar(im, ax=ax, label="GSD (cm/pixel)", shrink=0.8)
 
     # Hide empty subplots
     for idx in range(n, rows * cols):
@@ -330,8 +334,8 @@ def fig5_coverage_rasters(results):
         axes[row][col].axis("off")
 
     plt.suptitle(
-        "Detection Confidence Rasters by Flight Pattern\n"
-        "Big Cottonwood Canyon — shows spatial coverage geometry per pattern",
+        "Ground Resolution by Flight Pattern (lower = finer; white = not imaged)\n"
+        "Big Cottonwood Canyon — mean finest GSD per 0.001° cell",
         fontsize=13, fontweight="bold"
     )
     plt.tight_layout()

@@ -142,6 +142,12 @@ class CoverageAnalyzer:
         hm = self.heatmap
         return self.footprint.coarse_fraction(hm.n_rows, hm.n_cols, hm.bounds, hm.resolution)
 
+    def get_gsd_raster(self) -> np.ndarray:
+        """Mean finest GSD (cm/pixel) of the imaged ground in each coarse
+        cell; 0 where nothing was imaged (footprint metric only)."""
+        hm = self.heatmap
+        return self.footprint.coarse_gsd_cm(hm.n_rows, hm.n_cols, hm.bounds, hm.resolution)
+
     def _coverage_raster(self) -> np.ndarray:
         """Coarse-grid raster that is > 0 where a cell counts as covered."""
         if self.footprint is None:
@@ -174,9 +180,6 @@ class CoverageAnalyzer:
 
             band_cells    = 0
             covered_cells = 0
-            confidence_vals = []
-
-            confidence = self.heatmap.get_confidence_raster()
 
             for row in range(h_heat):
                 for col in range(w_heat):
@@ -188,19 +191,15 @@ class CoverageAnalyzer:
                         band_cells += 1
                         if coverage[row, col] > 0:
                             covered_cells += 1
-                            confidence_vals.append(confidence[row, col])
 
             coverage_pct = (covered_cells / band_cells * 100) \
                            if band_cells > 0 else 0.0
-            mean_conf    = float(np.mean(confidence_vals)) \
-                           if confidence_vals else 0.0
 
             results[band_name] = {
                 "elevation_range_m": f"{elev_min}–{elev_max}",
                 "total_cells":       band_cells,
                 "covered_cells":     covered_cells,
                 "coverage_pct":      round(coverage_pct, 2),
-                "mean_confidence":   round(mean_conf, 4),
             }
 
         if self.footprint is not None:
@@ -211,7 +210,9 @@ class CoverageAnalyzer:
                 r["legacy_covered_cells"] = r.pop("covered_cells")
                 r["total_pixels"]  = fp[band_name]["total_pixels"]
                 r["imaged_pixels"] = fp[band_name]["imaged_pixels"]
-                r["coverage_pct"]  = fp[band_name]["coverage_pct"]
+                for k in ("coverage_pct", "mean_gsd_cm", "median_gsd_cm",
+                          "p90_gsd_cm", "quality_coverage_pct"):
+                    r[k] = fp[band_name][k]
 
         return results
 
@@ -303,8 +304,6 @@ class CoverageAnalyzer:
                 "covered_cell_definition": f">= {COARSE_COVERED_FRACTION:.0%} of 0.001-degree cell imaged",
                 "gap_cells":     total - int(covered.sum()),
                 "gap_pct":       round(100 - self.footprint.coverage_pct(), 2),
-                "mean_confidence": legacy["mean_confidence"],
-                "max_confidence":  legacy["max_confidence"],
                 "legacy_point_sample_coverage_pct": legacy["coverage_pct"],
                 "legacy_point_sample_covered_cells": legacy["covered_cells"],
             }
@@ -345,14 +344,18 @@ class CoverageAnalyzer:
             print(f"  Imaged area:      {oc['imaged_km2']} of {oc['total_km2']} km² "
                   f"(footprint, FOV {oc['fov_deg']}°, {oc['altitude_mode']})")
             print(f"  Legacy point-sample coverage: {oc['legacy_point_sample_coverage_pct']}%")
-        print(f"  Mean confidence:  {oc['mean_confidence']}")
+        if oc.get("median_gsd_cm") is not None:
+            print(f"  GSD (cm/pixel):   median {oc['median_gsd_cm']}, mean {oc['mean_gsd_cm']}, "
+                  f"90th pct {oc['p90_gsd_cm']}")
+            print(f"  Imaged at <= {oc['gsd_threshold_cm']} cm/pixel: {oc['quality_coverage_pct']}%")
         print(f"  Gap cells:        {oc['gap_cells']:,} ({oc['gap_pct']}%)")
 
         print(f"\nCoverage by Elevation Band:")
         for band, stats in report["elevation_band_coverage"].items():
             print(f"  {band:12} ({stats['elevation_range_m']}m): "
-                  f"{stats['coverage_pct']}% covered, "
-                  f"confidence={stats['mean_confidence']}")
+                  f"{stats['coverage_pct']}% covered"
+                  + (f", median GSD {stats['median_gsd_cm']} cm/px"
+                     if stats.get("median_gsd_cm") is not None else ""))
 
         gaps = report["coverage_gaps"]
         print(f"\nCoverage Gaps:")
@@ -383,7 +386,6 @@ if __name__ == "__main__":
                 "x":         (step / 50) * SIM_WIDTH_M,
                 "y":         y_start + random.uniform(-500, 500),
                 "z":         random.uniform(100, 400),
-                "confidence": random.uniform(0.4, 0.9),
             })
 
     hm.add_batch_readings(positions)

@@ -4,9 +4,8 @@ sensor_heatmap.py
 Converts drone swarm sensor readings into georeferenced raster layers
 (GeoTIFF) over the Big Cottonwood Canyon simulation area.
 
-Takes drone position + detection confidence data from the swarm simulation
+Takes drone positions from the swarm simulation
 and produces:
-  - Detection confidence heatmap (GeoTIFF)
   - Coverage density map (GeoTIFF)
   - Altitude above ground layer (GeoTIFF)
 
@@ -66,8 +65,6 @@ class SensorHeatmap:
         )
 
         # Initialize accumulator grids
-        self._confidence_sum   = np.zeros((self.n_rows, self.n_cols), dtype=np.float32)
-        self._confidence_count = np.zeros((self.n_rows, self.n_cols), dtype=np.int32)
         self._altitude_sum     = np.zeros((self.n_rows, self.n_cols), dtype=np.float32)
         self._visit_count      = np.zeros((self.n_rows, self.n_cols), dtype=np.int32)
 
@@ -90,7 +87,6 @@ class SensorHeatmap:
         x_m: float,
         y_m: float,
         z_m: float,
-        confidence: float
     ):
         """
         Record a single drone sensor reading at simulation position (x, y, z).
@@ -100,7 +96,6 @@ class SensorHeatmap:
         x_m        : eastward position in meters from SW corner
         y_m        : northward position in meters from SW corner
         z_m        : altitude above ground in meters
-        confidence : detection confidence from swarm simulation (0.0 – 1.0)
         """
         lat, lon = self.transformer.sim_to_latlon(x_m, y_m)
         row, col = self._latlon_to_pixel(lat, lon)
@@ -108,8 +103,6 @@ class SensorHeatmap:
         if row == -1:
             return
 
-        self._confidence_sum[row, col]   += confidence
-        self._confidence_count[row, col] += 1
         self._altitude_sum[row, col]     += z_m
         self._visit_count[row, col]      += 1
 
@@ -117,7 +110,7 @@ class SensorHeatmap:
         """
         Add multiple drone readings at once.
 
-        Each dict should have: x, y, z, confidence
+        Each dict should have: x, y, z
         Convenience wrapper around add_drone_reading for bulk processing.
         """
         for pos in positions:
@@ -125,21 +118,7 @@ class SensorHeatmap:
                 x_m        = pos["x"],
                 y_m        = pos["y"],
                 z_m        = pos.get("z", 0.0),
-                confidence = pos.get("confidence", 0.0)
             )
-
-    def get_confidence_raster(self) -> np.ndarray:
-        """
-        Return mean detection confidence per cell.
-        Cells with no readings return 0.0.
-        """
-        with np.errstate(invalid="ignore", divide="ignore"):
-            result = np.where(
-                self._confidence_count > 0,
-                self._confidence_sum / self._confidence_count,
-                0.0
-            )
-        return result.astype(np.float32)
 
     def get_coverage_raster(self) -> np.ndarray:
         """
@@ -198,10 +177,6 @@ class SensorHeatmap:
         """
         saved = {}
 
-        confidence = self.get_confidence_raster()
-        path = self._save_raster(confidence, f"{prefix}_confidence.tif")
-        saved["confidence"] = path
-        print(f"Saved confidence raster → {path}")
 
         coverage = self.get_coverage_raster()
         path = self._save_raster(coverage, f"{prefix}_coverage.tif")
@@ -224,16 +199,12 @@ class SensorHeatmap:
         covered_cells  = int(np.sum(self._visit_count > 0))
         coverage_pct   = (covered_cells / total_cells) * 100
 
-        confidence     = self.get_confidence_raster()
         covered_mask   = self._visit_count > 0
 
         return {
             "total_cells":        total_cells,
             "covered_cells":      covered_cells,
             "coverage_pct":       round(coverage_pct, 2),
-            "mean_confidence":    round(float(confidence[covered_mask].mean()), 4)
-                                  if covered_cells > 0 else 0.0,
-            "max_confidence":     round(float(confidence.max()), 4),
             "mean_visits":        round(float(self._visit_count[covered_mask].mean()), 2)
                                   if covered_cells > 0 else 0.0,
             "gap_cells":          total_cells - covered_cells,
@@ -242,8 +213,6 @@ class SensorHeatmap:
 
     def reset(self):
         """Clear all accumulated readings."""
-        self._confidence_sum[:]   = 0
-        self._confidence_count[:] = 0
         self._altitude_sum[:]     = 0
         self._visit_count[:]      = 0
 
@@ -265,7 +234,6 @@ if __name__ == "__main__":
             "x":          random.uniform(0, SIM_WIDTH_M),
             "y":          random.uniform(0, SIM_HEIGHT_M),
             "z":          random.uniform(50, 300),
-            "confidence": random.uniform(0.3, 0.9),
         }
         for _ in range(500)
     ]

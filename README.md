@@ -24,7 +24,7 @@ drone-gis-swarm/
 │   ├── __init__.py
 │   ├── coordinate_transformer.py           # Converts simulation x/y meters → real lat/lon
 │   │                                       # Clips DEM to Big Cottonwood Canyon bounds
-│   ├── sensor_heatmap.py                   # Maps sensor readings → raster layer
+│   ├── sensor_heatmap.py                   # Visit-count and altitude rasters
 │   ├── coverage_analyzer.py                # Gap detection and coverage statistics
 │   ├── footprint_coverage.py               # Camera-footprint (area) coverage at DEM resolution
 │   └── folium_map.py                       # Generates interactive web map output
@@ -32,7 +32,7 @@ drone-gis-swarm/
 ├── src/                                    # Drone swarm simulation core
 │   ├── __init__.py
 │   ├── drone_trajectory_generator.py       # Flight path generation
-│   └── sensor_simulation.py                # Sensor array modeling with real confidence scores
+│   └── mission_orientation.py              # Start edge / heading of a mission
 │
 ├── paper/
 │   ├── draft.md                            # Research paper draft
@@ -162,14 +162,17 @@ python generate_replicate_study.py
 ### run_gis_simulation.py options
 
 ```bash
-# Default: 10 drones, perimeter_sweep, 60 seconds, real sensor confidence
+# Default: 10 drones, perimeter_sweep, 30 minutes, orientation 0 (west -> east)
 python run_gis_simulation.py
 
 # Custom parameters
-python run_gis_simulation.py --drones 20 --pattern formation_flying --duration 90
+python run_gis_simulation.py --drones 20 --pattern formation_flying --duration 1800 --seed 42
 
-# Skip sensor confidence for speed
-python run_gis_simulation.py --no-sensor
+# Other start edge / heading (0-7), camera and resolution settings
+python run_gis_simulation.py --orientation 4 --fov 60 --image-width 1920 --gsd-threshold 15
+
+# Skip the interactive map (faster)
+python run_gis_simulation.py --no-map
 
 # Available patterns (internal code names → paper names)
 # perimeter_sweep      → Perimeter Sweep
@@ -185,16 +188,14 @@ python run_gis_simulation.py --no-sensor
 ### generate_sensitivity_study.py options
 
 ```bash
-# Run all three studies (~30 minutes)
-python generate_sensitivity_study.py
+# Run all three studies
+python generate_sensitivity_study.py --seed 42
 
 # Run one study at a time
 python generate_sensitivity_study.py --study swarm_size
 python generate_sensitivity_study.py --study duration
 python generate_sensitivity_study.py --study drone_type
 
-# Skip sensor confidence for speed
-python generate_sensitivity_study.py --no-sensor
 ```
 
 ---
@@ -204,11 +205,11 @@ python generate_sensitivity_study.py --no-sensor
 ```
 Drone swarm simulation (src/)
         ↓
-Sensor confidence scoring: VirtualSensorArray — real detection confidence per position
-        ↓
 Coordinate transformation: x/y meters → lat/lon (gis/coordinate_transformer.py)
         ↓
-Sensor heatmap: confidence + visit count → raster layer (gis/sensor_heatmap.py)
+Camera-footprint coverage and ground resolution (GSD) at DEM resolution (gis/footprint_coverage.py)
+        ↓
+Visit-count and altitude rasters (gis/sensor_heatmap.py)
         ↓
 Coverage analysis: gap detection, elevation band breakdown (gis/coverage_analyzer.py)
         ↓
@@ -249,7 +250,7 @@ Modules were built and tested in this order:
 - **DEM clipping:** `coordinate_transformer.py` clips the full 394MB tile to the BCC bounding box on load — only ~10MB held in memory during simulation.
 - **Elevation validated:** Range 1,375.6m–3,500.3m matches known Big Cottonwood Canyon topography.
 - **Coordinate scaling:** Swarm simulation runs in real meters over the full BCC area (19.3km × 13.3km); no post-hoc scaling.
-- **Sensor confidence:** Real detection confidence computed via `VirtualSensorArray` with 8-camera perimeter array. Use `--no-sensor` flag for faster runs with default 0.65 confidence.
+- **Mapping quality:** Ground sample distance (GSD) from camera geometry and height above ground; see the GSD notes below.
 - **Git LFS:** The 394MB DEM file is stored via Git LFS. Run `git lfs pull` after cloning.
 
 ---
@@ -272,8 +273,7 @@ Modules were built and tested in this order:
   ground (ideal terrain following); `msl` flies at a fixed altitude above the
   highest terrain, so footprint size depends on the terrain below. Occlusion is
   not modeled.
-- **Seeds.** `--seed N` on all scripts gives identical results; the sensor
-  observations now run serially so confidences are reproducible too.
+- **Seeds.** `--seed N` on all scripts gives identical results.
 - **Default mission:** 1800 s (30 min). Sensitivity durations: 600–2400 s.
 - **Tests:** `pytest tests/` checks timestep invariance, altitude sensitivity,
   no boundary pile-up and seed reproducibility.
@@ -293,18 +293,27 @@ Modules were built and tested in this order:
   per-orientation means and two figures to `results/replicates/` and
   `paper/figures/`.
 
-Not yet addressed: the sensor "confidence" is computed for a camera ring around
-the area and is mostly the 0.1 no-detection value at real scale.
+- **Mapping quality = ground sample distance (GSD).** Each ground pixel keeps
+  the finest GSD (cm per image pixel) of any pass that imaged it:
+  GSD = 2·AGL·tan(FOV/2) / image width at nadir, growing by 1 + (d/AGL)² toward
+  the image edge. Reports give the mean, median and 90th percentile GSD
+  overall and per elevation band, plus `quality_coverage_pct`: the share of
+  the area imaged at or below `--gsd-threshold` (default 15 cm/pixel). A GSD
+  raster (`*_gsd_cm.tif`) is written per run and Figure 5 maps it.
+  This replaces the earlier "detection confidence", which came from a ring of
+  ground cameras watching the drones (carried over from counter-drone work)
+  and did not measure mapping quality; `src/sensor_simulation.py` has been
+  removed.
 
 ## Known Limitations
 
 These limitations are acknowledged in the paper's methodology and limitations section.
 
 **1. Terrain occlusion not modeled**
-The sensor confidence model assumes unobstructed line-of-sight between cameras and drones. Canyon walls and ridgelines that would block detection in reality are not accounted for. This may overestimate detection confidence in areas of steep relief. Future work: incorporate ray-casting against the DEM.
+The camera footprint assumes every ground point inside it is visible. Canyon walls and ridgelines that would hide parts of the ground from a drone are not accounted for, which overestimates coverage in steep terrain. GSD is computed for flat ground below the drone and ignores slope. Future work: viewshed (ray-casting) against the DEM.
 
 **2. Terrain following is idealized**
 Trajectories are generated in real meters without reference to the DEM. In the default `agl` coverage mode, z is treated as height above ground (perfect terrain following); in `msl` mode drones hold a fixed altitude above the highest terrain and the footprint varies with the ground below. Neither mode plans altitude around ridgelines or avoids terrain.
 
-**3. Sensor confidence is single-view not multi-view fused**
-Detection confidence is computed per camera observation and averaged. A proper multi-view fusion model would weight confidence by triangulation geometry and camera overlap. The current approach is appropriate for a coverage heatmap but does not reflect optimal sensor fusion.
+**3. Imaging model is geometric only**
+Coverage and GSD come from camera geometry (field of view, pixel count, height above ground). Image overlap needed for photogrammetry, motion blur, lighting and weather are not modeled.

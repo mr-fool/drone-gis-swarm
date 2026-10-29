@@ -23,7 +23,6 @@ Outputs:
 Usage:
     python generate_sensitivity_study.py
     python generate_sensitivity_study.py --study swarm_size
-    python generate_sensitivity_study.py --no-sensor
     python generate_sensitivity_study.py --seed 42
 """
 
@@ -68,7 +67,7 @@ C_ALPINE    = "#6A1B9A"
 C_OVERALL   = "#2E7D32"
 
 
-def run_study_case(label: str, overrides: dict, use_sensor: bool) -> dict:
+def run_study_case(label: str, overrides: dict) -> dict:
     """Run one simulation case with baseline + overrides."""
     params = {**BASELINE, **overrides}
     print(f"\n  Running: {label}")
@@ -80,7 +79,6 @@ def run_study_case(label: str, overrides: dict, use_sensor: bool) -> dict:
         timestep      = params["timestep"],
         drone_type    = params["drone_type"],
         output_prefix = f"sens_{label.replace(' ', '_')}",
-        use_sensor    = use_sensor,
         seed          = SEED,
     )
 
@@ -99,19 +97,20 @@ def run_study_case(label: str, overrides: dict, use_sensor: bool) -> dict:
         "coverage_pct":           oc["coverage_pct"],
         "imaged_km2":             oc["imaged_km2"],
         "legacy_point_sample_coverage_pct": oc["legacy_point_sample_coverage_pct"],
-        "mean_confidence":        oc["mean_confidence"],
+        "median_gsd_cm":          oc["median_gsd_cm"],
+        "quality_coverage_pct":   oc["quality_coverage_pct"],
         "gap_zones":              report["coverage_gaps"]["n_gap_zones"],
         "total_gap_km2":          report["coverage_gaps"]["total_gap_km2"],
         "valley_coverage_pct":    eb["valley"]["coverage_pct"],
         "midslope_coverage_pct":  eb["mid_slope"]["coverage_pct"],
         "alpine_coverage_pct":    eb["alpine"]["coverage_pct"],
-        "valley_confidence":      eb["valley"]["mean_confidence"],
-        "midslope_confidence":    eb["mid_slope"]["mean_confidence"],
-        "alpine_confidence":      eb["alpine"]["mean_confidence"],
+        "valley_median_gsd_cm":   eb["valley"]["median_gsd_cm"],
+        "midslope_median_gsd_cm": eb["mid_slope"]["median_gsd_cm"],
+        "alpine_median_gsd_cm":   eb["alpine"]["median_gsd_cm"],
     }
 
 
-def study_swarm_size(use_sensor: bool) -> list[dict]:
+def study_swarm_size() -> list[dict]:
     """Study 1 — vary swarm size, hold everything else constant."""
     print("\n" + "=" * 55)
     print("Study 1: Swarm Size Sensitivity")
@@ -123,16 +122,15 @@ def study_swarm_size(use_sensor: bool) -> list[dict]:
         r = run_study_case(
             label      = f"{n}drones",
             overrides  = {"n_drones": n},
-            use_sensor = use_sensor,
         )
         results.append(r)
         print(f"    Coverage: {r['coverage_pct']}% | "
-              f"Confidence: {r['mean_confidence']}")
+              f"Median GSD: {r['median_gsd_cm']} cm/px")
 
     return results
 
 
-def study_duration(use_sensor: bool) -> list[dict]:
+def study_duration() -> list[dict]:
     """Study 2 — vary duration, hold everything else constant."""
     print("\n" + "=" * 55)
     print("Study 2: Duration Sensitivity")
@@ -144,16 +142,15 @@ def study_duration(use_sensor: bool) -> list[dict]:
         r = run_study_case(
             label      = f"{d}s",
             overrides  = {"duration": float(d)},
-            use_sensor = use_sensor,
         )
         results.append(r)
         print(f"    Coverage: {r['coverage_pct']}% | "
-              f"Confidence: {r['mean_confidence']}")
+              f"Median GSD: {r['median_gsd_cm']} cm/px")
 
     return results
 
 
-def study_drone_type(use_sensor: bool) -> list[dict]:
+def study_drone_type() -> list[dict]:
     """Study 3 — vary drone type, hold everything else constant."""
     print("\n" + "=" * 55)
     print("Study 3: Drone Type Sensitivity")
@@ -165,11 +162,10 @@ def study_drone_type(use_sensor: bool) -> list[dict]:
         r = run_study_case(
             label      = dt,
             overrides  = {"drone_type": dt},
-            use_sensor = use_sensor,
         )
         results.append(r)
         print(f"    Coverage: {r['coverage_pct']}% | "
-              f"Confidence: {r['mean_confidence']}")
+              f"Median GSD: {r['median_gsd_cm']} cm/px")
 
     return results
 
@@ -313,20 +309,22 @@ def plot_drone_type(results: list[dict]) -> str:
     ax1.legend(fontsize=10)
     ax1.grid(axis="y", alpha=0.3)
 
-    # Right: overall coverage + confidence
+    # Right: overall coverage + ground resolution
     overall    = [r["coverage_pct"] for r in results]
-    confidence = [r["mean_confidence"] for r in results]
+    gsd        = [r["median_gsd_cm"] for r in results]
 
     ax2b = ax2.twinx()
     bars = ax2.bar(x, overall, 0.4, color=C_OVERALL, alpha=0.75,
                    label="Overall coverage (%)")
-    ax2b.plot(x, confidence, "D--", color="#C62828", linewidth=2,
-              markersize=9, label="Mean confidence")
+    ax2b.plot(x, gsd, "D--", color="#C62828", linewidth=2,
+              markersize=9, label="Median GSD (cm/pixel)")
 
     ax2.set_xlabel("Drone type", fontsize=12)
     ax2.set_ylabel("Overall coverage (%)", fontsize=12, color=C_OVERALL)
-    ax2b.set_ylabel("Mean confidence", fontsize=12, color="#C62828")
-    ax2.set_title("Overall Coverage and Confidence by Drone Type",
+    ax2b.set_ylabel("Median GSD (cm/pixel)", fontsize=12, color="#C62828")
+    ax2b.set_ylim(0, max(gsd) * 1.4 if gsd and max(gsd) else 1)
+    ax2.set_ylim(0, max(overall) * 1.3)   # headroom so legends clear the bars
+    ax2.set_title("Overall Coverage and Ground Resolution by Drone Type",
                   fontsize=12, fontweight="bold")
     ax2.set_xticks(x)
     ax2.set_xticklabels([t.title() for t in types], fontsize=11)
@@ -403,11 +401,11 @@ def print_sensitivity_summary(all_results: dict):
 
     if "drone_type" in all_results:
         print("\nStudy 3 — Drone Type:")
-        print(f"  {'Type':<10} {'Coverage':>10} {'Confidence':>12} "
+        print(f"  {'Type':<10} {'Coverage':>10} {'GSD cm/px':>12} "
               f"{'Valley':>8} {'Alpine':>8}")
         for r in all_results["drone_type"]:
             print(f"  {r['drone_type']:<10} {r['coverage_pct']:>9.2f}% "
-                  f"{r['mean_confidence']:>11.4f} "
+                  f"{r['median_gsd_cm']:>11.2f} "
                   f"{r['valley_coverage_pct']:>7.2f}% "
                   f"{r['alpine_coverage_pct']:>7.2f}%")
 
@@ -423,17 +421,12 @@ def parse_args():
         choices=["all", "swarm_size", "duration", "drone_type"],
         help="Which study to run (default: all)"
     )
-    parser.add_argument(
-        "--no-sensor", action="store_true",
-        help="Skip sensor confidence calculation (faster)"
-    )
     parser.add_argument("--seed", type=int, default=42)
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args       = parse_args()
-    use_sensor = not args.no_sensor
     SEED       = args.seed
     timestamp  = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -442,21 +435,20 @@ if __name__ == "__main__":
 
     print("=" * 55)
     print("Drone Swarm GIS — Sensitivity Study")
-    print(f"Sensor confidence: {'enabled' if use_sensor else 'disabled'}")
     print("=" * 55)
 
     all_results = {}
 
     if args.study in ("all", "swarm_size"):
-        all_results["swarm_size"] = study_swarm_size(use_sensor)
+        all_results["swarm_size"] = study_swarm_size()
         plot_swarm_size(all_results["swarm_size"])
 
     if args.study in ("all", "duration"):
-        all_results["duration"] = study_duration(use_sensor)
+        all_results["duration"] = study_duration()
         plot_duration(all_results["duration"])
 
     if args.study in ("all", "drone_type"):
-        all_results["drone_type"] = study_drone_type(use_sensor)
+        all_results["drone_type"] = study_drone_type()
         plot_drone_type(all_results["drone_type"])
 
     save_results(all_results, timestamp)

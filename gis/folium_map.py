@@ -4,7 +4,7 @@ folium_map.py
 Generates an interactive HTML web map combining all simulation outputs:
   - USGS terrain elevation as a heatmap base layer
   - Drone flight paths as colored polylines
-  - Coverage confidence heatmap overlay
+  - Imaged-area (camera footprint coverage) overlay
   - Coverage gap polygons
   - Clickable drone position markers with metadata
 
@@ -41,7 +41,7 @@ class FoliumMap:
       1. OpenStreetMap base
       2. Terrain elevation heatmap
       3. Drone flight paths (one color per drone)
-      4. Detection confidence heatmap
+      4. Imaged area (camera footprint coverage)
       5. Coverage gap polygons
     """
 
@@ -132,22 +132,24 @@ class FoliumMap:
             },
         ).add_to(m)
 
-    def _add_confidence_heatmap(self, m: folium.Map):
-        """Add detection confidence as a heatmap layer."""
-        confidence = self.heatmap.get_confidence_raster()
-        bounds     = self.bounds
-        h, w       = confidence.shape
+    def _add_imaged_area(self, m: folium.Map):
+        """Add the fraction of each grid cell imaged by drone cameras."""
+        if self.analyzer.footprint is None:
+            return
+        frac   = self.analyzer.get_coverage_fraction_raster()
+        bounds = self.bounds
+        h, w   = frac.shape
 
         points = []
         for row in range(h):
             for col in range(w):
-                val = float(confidence[row, col])
+                val = float(frac[row, col])
                 if val <= 0:
                     continue
-                lat = bounds["north"] - (row / h) * (
+                lat = bounds["north"] - ((row + 0.5) / h) * (
                     bounds["north"] - bounds["south"]
                 )
-                lon = bounds["west"]  + (col / w) * (
+                lon = bounds["west"]  + ((col + 0.5) / w) * (
                     bounds["east"]  - bounds["west"]
                 )
                 points.append([lat, lon, val])
@@ -155,7 +157,7 @@ class FoliumMap:
         if points:
             HeatMap(
                 points,
-                name        = "Detection confidence",
+                name        = "Imaged area",
                 min_opacity = 0.3,
                 radius      = 20,
                 blur        = 15,
@@ -258,7 +260,7 @@ class FoliumMap:
                 f"<tr><td>{band}</td>"
                 f"<td>{s['elevation_range_m']}m</td>"
                 f"<td>{s['coverage_pct']}%</td>"
-                f"<td>{s['mean_confidence']}</td></tr>"
+                f"<td>{s.get('median_gsd_cm', '–')}</td></tr>"
             )
 
         html = f"""
@@ -281,7 +283,7 @@ class FoliumMap:
             <hr style="margin:6px 0">
             <b>Overall Coverage</b><br>
             Coverage: {stats['coverage_pct']}% &nbsp;|&nbsp;
-            Confidence: {stats['mean_confidence']}<br>
+            Median GSD: {stats.get('median_gsd_cm', '–')} cm/px<br>
             Gap zones: {report['coverage_gaps']['n_gap_zones']} &nbsp;|&nbsp;
             Gap area: {report['coverage_gaps']['total_gap_km2']} km²
             <hr style="margin:6px 0">
@@ -289,7 +291,7 @@ class FoliumMap:
             <table style="width:100%;border-collapse:collapse;font-size:11px">
                 <tr style="background:#f5f5f5">
                     <th>Zone</th><th>Elevation</th>
-                    <th>Coverage</th><th>Confidence</th>
+                    <th>Coverage</th><th>GSD (cm/px)</th>
                 </tr>
                 {elev_rows}
             </table>
@@ -321,8 +323,8 @@ class FoliumMap:
         print("  Adding terrain elevation layer...")
         self._add_elevation_heatmap(m)
 
-        print("  Adding detection confidence layer...")
-        self._add_confidence_heatmap(m)
+        print("  Adding imaged-area layer...")
+        self._add_imaged_area(m)
 
         print("  Adding flight paths...")
         self._add_flight_paths(m, positions)
@@ -364,7 +366,6 @@ if __name__ == "__main__":
                 "x":          (step / 50) * SIM_WIDTH_M,
                 "y":          y_start + random.uniform(-500, 500),
                 "z":          random.uniform(100, 400),
-                "confidence": random.uniform(0.4, 0.9),
             })
 
     hm.add_batch_readings(positions)

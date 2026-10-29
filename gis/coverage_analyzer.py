@@ -71,6 +71,14 @@ class CoverageAnalyzer:
 
         os.makedirs(self.geojson_dir, exist_ok=True)
 
+    def count_gap_zones(self, min_gap_cells: int = 4) -> int:
+        """Number of gap zones (same definition as get_coverage_gaps,
+        without building polygons)."""
+        labels, n = ndimage.label(self._coverage_raster() == 0)
+        if n == 0:
+            return 0
+        return int((np.bincount(labels.ravel())[1:] >= min_gap_cells).sum())
+
     def get_coverage_gaps(
         self, min_gap_cells: int = 4
     ) -> gpd.GeoDataFrame:

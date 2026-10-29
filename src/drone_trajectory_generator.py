@@ -234,21 +234,25 @@ class DroneSwarmGenerator:
             # widened camera footprints later in each flight.)
             wind_effect = self.wind_velocity * 0.1
             wind_effect[2] = 0.0
-            effective_vel = desired_vel + wind_effect
-            
-            # Update position
-            current_pos += effective_vel * dt
-            current_vel = effective_vel
+            ground_vel = desired_vel + wind_effect
+
+            # Update position with the ground velocity...
+            current_pos += ground_vel * dt
+            # ...but carry forward only the air-relative velocity the autopilot
+            # controls. (Carrying the ground velocity let the wind feed back
+            # through the momentum term of random dispersal and compound to a
+            # ~4.5 m/s drift instead of the intended 0.2 m/s.)
+            current_vel = desired_vel.copy()
 
             # Apply boundary constraints (reflect instead of clamping, so drones
             # turn around rather than accumulating against the boundary)
             current_pos, current_vel = self._apply_boundary_constraints(current_pos, current_vel)
-            
+
             # Add sensor noise
             noisy_pos = current_pos + np.random.normal(0, self.noise_std, 3)
-            
+
             trajectory[i] = noisy_pos
-            velocity[i] = current_vel
+            velocity[i] = current_vel + wind_effect   # ground velocity
             
         return trajectory, velocity
     

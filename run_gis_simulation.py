@@ -31,6 +31,7 @@ from src.drone_trajectory_generator import (
     DroneSwarmGenerator, SimulationBounds, FlightPattern
 )
 from src.sensor_simulation import VirtualSensorArray, SensorType
+from src.mission_orientation import generate_oriented_swarm, ORIENTATION_NAMES
 from gis.coordinate_transformer import CoordinateTransformer, SIM_WIDTH_M, SIM_HEIGHT_M
 from gis.sensor_heatmap import SensorHeatmap
 from gis.coverage_analyzer import CoverageAnalyzer
@@ -181,6 +182,36 @@ def extract_positions(
     return positions
 
 
+def generate_trajectories(
+    n_drones:    int,
+    pattern:     str,
+    duration:    float,
+    timestep:    float,
+    drone_type:  str,
+    orientation: int = 0,
+) -> dict:
+    """
+    Generate swarm trajectories in the world frame (real meters over the BCC
+    area) for one of the 8 mission orientations (see src/mission_orientation.py).
+    Orientation 0 is west -> east, the original fixed orientation.
+    """
+    generator, to_world = generate_oriented_swarm(
+        DroneSwarmGenerator, BCC_SIM_BOUNDS, orientation
+    )
+    flight_pattern = PATTERN_MAP.get(pattern, FlightPattern.PERIMETER_SWEEP)
+    swarm_result = generator.generate_swarm_trajectories(
+        num_drones  = n_drones,
+        pattern     = flight_pattern,
+        duration    = duration,
+        timestep    = timestep,
+        drone_type  = drone_type,
+    )
+    swarm_result["trajectories"] = to_world(swarm_result["trajectories"])
+    swarm_result["bounds"]       = BCC_SIM_BOUNDS
+    swarm_result["orientation"]  = orientation
+    return swarm_result
+
+
 def run_simulation(
     n_drones:      int   = 10,
     pattern:       str   = "perimeter_sweep",
@@ -194,6 +225,7 @@ def run_simulation(
     altitude_mode: str   = "agl",
     max_mapping_agl: float = DEFAULT_MAX_MAPPING_AGL,
     build_map:     bool  = True,
+    orientation:   int   = 0,
 ) -> dict:
     """
     Run the full drone swarm GIS simulation pipeline.
@@ -207,6 +239,8 @@ def run_simulation(
     fov_deg       : camera field of view used for the coverage footprint
     altitude_mode : "agl" (terrain following) or "msl" (fixed altitude)
     build_map     : skip the Folium map (slow for long missions) if False
+    orientation   : 0-7, which edge the mission starts from and its heading
+                    (0 = west -> east; see src/mission_orientation.py)
     """
     if seed is not None:
         np.random.seed(seed)
@@ -223,20 +257,14 @@ def run_simulation(
     print(f"Drone:     {drone_type}")
     print(f"Sensor:    {'real confidence' if use_sensor else 'default 0.65'}")
     print(f"Seed:      {seed}")
+    print(f"Orientation: {orientation} ({ORIENTATION_NAMES[orientation]})")
     print(f"Coverage:  camera footprint, FOV {fov_deg}°, altitude mode {altitude_mode}")
     print("=" * 55)
 
     # ── Step 1: Run swarm simulation ──────────────────────────
     print("\n[1/5] Running swarm simulation...")
-    generator      = DroneSwarmGenerator(BCC_SIM_BOUNDS)
-    flight_pattern = PATTERN_MAP.get(pattern, FlightPattern.PERIMETER_SWEEP)
-
-    swarm_result = generator.generate_swarm_trajectories(
-        num_drones  = n_drones,
-        pattern     = flight_pattern,
-        duration    = duration,
-        timestep    = timestep,
-        drone_type  = drone_type,
+    swarm_result = generate_trajectories(
+        n_drones, pattern, duration, timestep, drone_type, orientation
     )
 
     trajectories = swarm_result["trajectories"]
@@ -297,6 +325,7 @@ def run_simulation(
     report["run_config"] = {
         "n_drones": n_drones, "pattern": pattern, "duration_s": duration,
         "timestep_s": timestep, "drone_type": drone_type, "seed": seed,
+        "orientation": orientation,
         "use_sensor": use_sensor, "fov_deg": fov_deg,
         "altitude_mode": altitude_mode, "max_mapping_agl_m": max_mapping_agl,
         "sim_bounds_m": [BCC_SIM_BOUNDS.x_max, BCC_SIM_BOUNDS.y_max],
@@ -340,6 +369,9 @@ def parse_args():
                         help="Skip sensor confidence (faster, uses default 0.65)")
     parser.add_argument("--seed",        type=int,   default=None,
                         help="Random seed; same seed gives identical results")
+    parser.add_argument("--orientation", type=int,   default=0, choices=range(8),
+                        help="Mission orientation 0-7 (0 = west->east); "
+                             "see src/mission_orientation.py")
     parser.add_argument("--fov",         type=float, default=DEFAULT_FOV_DEG,
                         help="Camera field of view for the coverage footprint (deg)")
     parser.add_argument("--altitude-mode", type=str, default="agl",
@@ -359,6 +391,7 @@ if __name__ == "__main__":
         drone_type = args.drone_type,
         use_sensor = not args.no_sensor,
         seed       = args.seed,
+        orientation = args.orientation,
         fov_deg    = args.fov,
         altitude_mode = args.altitude_mode,
         build_map  = not args.no_map,

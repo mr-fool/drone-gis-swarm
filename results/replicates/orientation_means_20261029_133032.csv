@@ -1,0 +1,41 @@
+condition,orientation,orientation_name,coverage_pct,valley_pct,mid_slope_pct,alpine_pct
+Perimeter Sweep,0,W->E,40.04,35.16,36.79,43.92
+Perimeter Sweep,1,E->W,38.83,57.44,38.44,34.6
+Perimeter Sweep,2,W->E (lanes N->S),38.53,33.61,35.08,42.58
+Perimeter Sweep,3,E->W (lanes N->S),38.6,56.97,38.45,34.23
+Perimeter Sweep,4,S->N,37.13,39.74,37.34,36.31
+Perimeter Sweep,5,N->S,36.87,41.13,35.24,37.19
+Perimeter Sweep,6,S->N (lanes E->W),37.49,38.82,37.7,37
+Perimeter Sweep,7,N->S (lanes E->W),37.47,38.67,35.52,38.79
+Formation Traverse,0,W->E,2.68,0.05,3.89,2.31
+Formation Traverse,1,E->W,2.66,4.18,4.46,0.81
+Formation Traverse,2,W->E (lanes N->S),2.64,0,4.88,1.44
+Formation Traverse,3,E->W (lanes N->S),2.53,1.71,5.35,0.39
+Formation Traverse,4,S->N,2.64,1.83,5.84,0.17
+Formation Traverse,5,N->S,2.62,1.95,5.48,0.4
+Formation Traverse,6,S->N (lanes E->W),2.68,0,1.1,4.65
+Formation Traverse,7,N->S (lanes E->W),2.68,0,1.31,4.48
+Stochastic Dispersal,0,W->E,9.13,5.89,11.38,8.06
+Stochastic Dispersal,1,E->W,9.3,6.24,11.52,8.21
+Stochastic Dispersal,2,W->E (lanes N->S),9.94,8.61,11.86,8.68
+Stochastic Dispersal,3,E->W (lanes N->S),9.89,7.01,10.17,10.36
+Stochastic Dispersal,4,S->N,9.75,5.73,9.96,10.57
+Stochastic Dispersal,5,N->S,10.18,11.32,10.58,9.59
+Stochastic Dispersal,6,S->N (lanes E->W),10.23,8.65,10.38,10.5
+Stochastic Dispersal,7,N->S (lanes E->W),9.66,13.11,10.57,8.06
+Sinusoidal Dispersal,0,W->E,14.05,28.74,19.83,5.67
+Sinusoidal Dispersal,1,E->W,12.98,0,1.45,25.7
+Sinusoidal Dispersal,2,W->E (lanes N->S),13.66,20.91,22.92,4.23
+Sinusoidal Dispersal,3,E->W (lanes N->S),11.82,0,13.01,13.73
+Sinusoidal Dispersal,4,S->N,12.64,24.78,18.93,4.44
+Sinusoidal Dispersal,5,N->S,14.36,20.71,23.64,5.11
+Sinusoidal Dispersal,6,S->N (lanes E->W),13.32,0,2.64,25.42
+Sinusoidal Dispersal,7,N->S (lanes E->W),13.47,0,15.66,14.96
+Centripetal Convergence,0,W->E,15.36,0.92,18.33,16.45
+Centripetal Convergence,1,E->W,15.1,0.96,18.05,16.12
+Centripetal Convergence,2,W->E (lanes N->S),14.5,1.06,17.06,15.67
+Centripetal Convergence,3,E->W (lanes N->S),14.99,0.81,17.77,16.16
+Centripetal Convergence,4,S->N,15.01,0.96,18.05,15.94
+Centripetal Convergence,5,N->S,14.84,0.82,17.97,15.69
+Centripetal Convergence,6,S->N (lanes E->W),15.31,1.16,18.4,16.21
+Centripetal Convergence,7,N->S (lanes E->W),15.36,1.1,18.16,16.54

@@ -154,6 +154,9 @@ python generate_paper_figures.py
 
 # Step 4 — run sensitivity study (swarm size, duration, drone type)
 python generate_sensitivity_study.py
+
+# Step 5 — replicated runs with confidence intervals and tests (~30 min on 2 cores)
+python generate_replicate_study.py
 ```
 
 ### run_gis_simulation.py options
@@ -279,6 +282,16 @@ Modules were built and tested in this order:
   (at least 4 cells), found on the raster. An empty map is one gap zone.
 - **Altitude hold.** Wind is applied horizontally only; previously its vertical
   component made every drone climb ~90 m per 30 minutes.
+
+- **Mission orientation.** `--orientation 0-7` flies any pattern from any edge
+  and heading (`src/mission_orientation.py`; 0 = west -> east, the original).
+  Wind stays fixed in the world frame.
+- **Replicate study.** `python generate_replicate_study.py` runs every pattern and
+  sensitivity condition 32 times (seed varies, orientation cycles through all 8),
+  and writes means with 95% confidence intervals, paired pattern comparisons
+  (paired t and Wilcoxon, Holm-adjusted), within-pattern elevation-band tests,
+  per-orientation means and two figures to `results/replicates/` and
+  `paper/figures/`.
 
 Not yet addressed: the sensor "confidence" is computed for a camera ring around
 the area and is mostly the 0.1 no-detection value at real scale.

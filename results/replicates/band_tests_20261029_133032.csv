@@ -1,0 +1,16 @@
+pattern,a,b,mean_diff,ci_low,ci_high,n,t_p,wilcoxon_p,a_greater_in_runs,b_greater_in_runs,t_p_holm,wilcoxon_p_holm
+Perimeter Sweep,alpine_pct,valley_pct,-4.61406,-8.84453,-0.383598,32,0.0335344,0.0983879,11,21,0.268275,0.590328
+Perimeter Sweep,mid_slope_pct,valley_pct,-5.87375,-8.75226,-2.99524,32,0.000232576,0.000121573,9,23,0.00255834,0.0013373
+Perimeter Sweep,alpine_pct,mid_slope_pct,1.25969,-0.306357,2.82573,32,0.111004,0.170139,16,15,0.555018,0.680555
+Formation Traverse,alpine_pct,valley_pct,0.615937,-0.421664,1.65354,32,0.235165,0.2425,16,16,0.940658,0.727501
+Formation Traverse,mid_slope_pct,valley_pct,2.82437,2.24933,3.39942,32,3.07612e-11,8.74168e-07,31,1,3.69135e-10,1.19161e-05
+Formation Traverse,alpine_pct,mid_slope_pct,-2.20844,-3.46392,-0.952951,32,0.00113223,0.000762991,8,24,0.0113223,0.00762991
+Stochastic Dispersal,alpine_pct,valley_pct,0.93375,-1.18382,3.05132,32,0.375409,0.133639,20,12,1,0.668195
+Stochastic Dispersal,mid_slope_pct,valley_pct,2.4825,0.0653962,4.8996,32,0.0444652,0.0194481,24,8,0.311256,0.175033
+Stochastic Dispersal,alpine_pct,mid_slope_pct,-1.54875,-2.84915,-0.248352,32,0.0211312,0.0497694,13,19,0.19018,0.398155
+Sinusoidal Dispersal,alpine_pct,valley_pct,0.515937,-6.96651,7.99839,32,0.889072,0.962714,16,16,1,1
+Sinusoidal Dispersal,mid_slope_pct,valley_pct,2.86656,-0.373343,6.10647,32,0.0808776,0.0649837,24,8,0.485266,0.454886
+Sinusoidal Dispersal,alpine_pct,mid_slope_pct,-2.35062,-8.42127,3.72002,32,0.435689,0.732882,12,20,1,1
+Centripetal Convergence,alpine_pct,valley_pct,15.1247,14.9053,15.344,32,4.66727e-45,7.94849e-07,32,0,7.00091e-44,1.19161e-05
+Centripetal Convergence,mid_slope_pct,valley_pct,17.0009,16.7329,17.2689,32,6.14721e-44,7.94849e-07,32,0,8.60609e-43,1.19161e-05
+Centripetal Convergence,alpine_pct,mid_slope_pct,-1.87625,-2.13166,-1.62084,32,9.57734e-16,7.94409e-07,0,32,1.24505e-14,1.19161e-05

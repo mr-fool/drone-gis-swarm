@@ -1,0 +1,86 @@
+{
+  "simulation_area": {
+    "bounds": {
+      "south": 40.55,
+      "north": 40.67,
+      "west": -111.81,
+      "east": -111.58
+    },
+    "location": "Big Cottonwood Canyon, Wasatch Range, Utah",
+    "width_m": 19320.000000000335,
+    "height_m": 13320.000000000506
+  },
+  "overall_coverage": {
+    "metric": "camera footprint area (DEM-pixel resolution)",
+    "fov_deg": 60.0,
+    "altitude_mode": "agl",
+    "max_mapping_agl_m": null,
+    "imaged_km2": 69.3283,
+    "total_km2": 257.3424,
+    "coverage_pct": 26.94,
+    "footprint_samples": 48000,
+    "ground_contact_samples": 0,
+    "above_mapping_agl_samples": 0,
+    "total_cells": 27600,
+    "covered_cells": 7483,
+    "covered_cell_definition": ">= 50% of 0.001-degree cell imaged",
+    "gap_cells": 20117,
+    "gap_pct": 73.06,
+    "mean_confidence": 0.1138,
+    "max_confidence": 0.5883,
+    "legacy_point_sample_coverage_pct": 14.5,
+    "legacy_point_sample_covered_cells": 4002
+  },
+  "elevation_band_coverage": {
+    "valley": {
+      "elevation_range_m": "1375\u20131800",
+      "mean_confidence": 0.1036,
+      "legacy_point_sample_coverage_pct": 18.0,
+      "legacy_total_cells": 3322,
+      "legacy_covered_cells": 598,
+      "total_pixels": 380164,
+      "imaged_pixels": 131737,
+      "coverage_pct": 34.65
+    },
+    "mid_slope": {
+      "elevation_range_m": "1800\u20132600",
+      "mean_confidence": 0.1139,
+      "legacy_point_sample_coverage_pct": 16.46,
+      "legacy_total_cells": 11036,
+      "legacy_covered_cells": 1817,
+      "total_pixels": 1286176,
+      "imaged_pixels": 387759,
+      "coverage_pct": 30.15
+    },
+    "alpine": {
+      "elevation_range_m": "2600\u20133500",
+      "mean_confidence": 0.1175,
+      "legacy_point_sample_coverage_pct": 11.98,
+      "legacy_total_cells": 13242,
+      "legacy_covered_cells": 1587,
+      "total_pixels": 1552922,
+      "imaged_pixels": 347777,
+      "coverage_pct": 22.4
+    }
+  },
+  "coverage_gaps": {
+    "n_gap_zones": 1,
+    "total_gap_km2": 187.5709
+  },
+  "run_config": {
+    "n_drones": 20,
+    "pattern": "perimeter_sweep",
+    "duration_s": 1200.0,
+    "timestep_s": 0.5,
+    "drone_type": "small",
+    "seed": 42,
+    "use_sensor": true,
+    "fov_deg": 60.0,
+    "altitude_mode": "agl",
+    "max_mapping_agl_m": 500.0,
+    "sim_bounds_m": [
+      19320.000000000335,
+      13320.000000000506
+    ]
+  }
+}

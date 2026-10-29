@@ -1,0 +1,6 @@
+pattern,n_drones,duration_s,n_positions,seed,coverage_pct,imaged_km2,legacy_point_sample_coverage_pct,mean_confidence,covered_cells,gap_cells,gap_pct,gap_zones,total_gap_km2,valley_coverage_pct,midslope_coverage_pct,alpine_coverage_pct,valley_confidence,midslope_confidence,alpine_confidence
+perimeter_sweep,20,1800.0,72000,42,38.99,100.3477,21.28,0.1112,10828,16772,61.01,19,156.3824,34.64,35.12,43.27,0.104,0.1123,0.1118
+formation_flying,20,1800.0,72000,42,2.82,7.2501,2.11,0.1024,784,26816,97.18,1,250.0324,0.05,4.09,2.44,0.0,0.1022,0.1027
+random_dispersal,20,1800.0,72000,42,21.8,56.1089,8.84,0.1111,6063,21537,78.2,13,200.6244,4.23,22.7,25.36,0.1,0.1084,0.1136
+evasive_maneuvers,20,1800.0,72000,42,16.23,41.761,10.0,0.1095,4503,23097,83.77,12,215.1606,8.96,20.99,14.07,0.1156,0.1152,0.1002
+coordinated_attack,20,1800.0,72000,42,14.8,38.0954,7.87,0.1,4099,23501,85.2,2,218.8996,0.57,17.47,16.08,0.1,0.1,0.1

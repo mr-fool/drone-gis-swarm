@@ -1,0 +1,545 @@
+study,condition,run,seed,orientation,pattern,n_drones,duration,drone_type,timestep,coverage_pct,imaged_km2,valley_pct,mid_slope_pct,alpine_pct,gap_zones,median_gsd_cm,quality_coverage_pct
+patterns,Perimeter Sweep,0,1000,0,perimeter_sweep,20,1800,small,0.5,40.08,103.133,34.7,36.92,44.01,20,13.73,28.36
+patterns,Perimeter Sweep,1,1001,1,perimeter_sweep,20,1800,small,0.5,37.2,95.7352,56.27,36.64,33,21,12.39,30.83
+patterns,Perimeter Sweep,2,1002,2,perimeter_sweep,20,1800,small,0.5,37.77,97.2022,33.08,34.29,41.81,19,12.44,33.73
+patterns,Perimeter Sweep,3,1003,3,perimeter_sweep,20,1800,small,0.5,37.53,96.5922,57.07,37.84,32.5,19,12.73,31.7
+patterns,Perimeter Sweep,4,1004,4,perimeter_sweep,20,1800,small,0.5,38.1,98.0531,41.14,37.91,37.52,19,13.54,29.66
+patterns,Perimeter Sweep,5,1005,5,perimeter_sweep,20,1800,small,0.5,37.45,96.3876,39.94,35.19,38.73,19,13.05,31.46
+patterns,Perimeter Sweep,6,1006,6,perimeter_sweep,20,1800,small,0.5,38.7,99.5871,45.76,38.04,37.51,19,13.68,28.33
+patterns,Perimeter Sweep,7,1007,7,perimeter_sweep,20,1800,small,0.5,38.04,97.9045,42.67,35.72,38.83,19,13.45,30.67
+patterns,Perimeter Sweep,8,1008,0,perimeter_sweep,20,1800,small,0.5,39.75,102.282,34.59,35.55,44.49,19,13.36,29.97
+patterns,Perimeter Sweep,9,1009,1,perimeter_sweep,20,1800,small,0.5,38.06,97.9372,57.39,37.26,33.98,20,13.06,30.37
+patterns,Perimeter Sweep,10,1010,2,perimeter_sweep,20,1800,small,0.5,38.47,98.9955,33.72,35.26,42.29,19,12.66,33.89
+patterns,Perimeter Sweep,11,1011,3,perimeter_sweep,20,1800,small,0.5,39.01,100.382,58.25,39.38,33.99,20,13.55,29.58
+patterns,Perimeter Sweep,12,1012,4,perimeter_sweep,20,1800,small,0.5,37.86,97.4179,39.63,38.01,37.29,19,12.98,32.85
+patterns,Perimeter Sweep,13,1013,5,perimeter_sweep,20,1800,small,0.5,37.04,95.3146,39.28,35.03,38.15,19,12.63,31.73
+patterns,Perimeter Sweep,14,1014,6,perimeter_sweep,20,1800,small,0.5,38.74,99.6904,43.77,38.56,37.66,19,13.9,28.2
+patterns,Perimeter Sweep,15,1015,7,perimeter_sweep,20,1800,small,0.5,38.66,99.4948,44.48,35.84,39.57,19,13.97,28.42
+patterns,Perimeter Sweep,16,1016,0,perimeter_sweep,20,1800,small,0.5,40.62,104.533,35.71,36.77,45.01,19,13.74,30.91
+patterns,Perimeter Sweep,17,1017,1,perimeter_sweep,20,1800,small,0.5,41.28,106.222,60.77,41.26,36.51,20,14.26,27.25
+patterns,Perimeter Sweep,18,1018,2,perimeter_sweep,20,1800,small,0.5,39.01,100.385,33.5,35.53,43.24,20,12.8,33.73
+patterns,Perimeter Sweep,19,1019,3,perimeter_sweep,20,1800,small,0.5,38.04,97.904,56.63,37.55,33.9,19,12.81,31.33
+patterns,Perimeter Sweep,20,1020,4,perimeter_sweep,20,1800,small,0.5,37.71,97.0559,39.53,36.79,38.04,19,13.13,29.93
+patterns,Perimeter Sweep,21,1021,5,perimeter_sweep,20,1800,small,0.5,38.55,99.1972,44.89,36.04,39.07,19,13.52,29.89
+patterns,Perimeter Sweep,22,1022,6,perimeter_sweep,20,1800,small,0.5,37.8,97.2665,45.75,37.3,36.26,19,13.05,30.86
+patterns,Perimeter Sweep,23,1023,7,perimeter_sweep,20,1800,small,0.5,37.74,97.1308,46.7,34.59,38.16,19,13.5,29.81
+patterns,Perimeter Sweep,24,1024,0,perimeter_sweep,20,1800,small,0.5,40.78,104.953,35.64,37.91,44.42,20,13.8,28.84
+patterns,Perimeter Sweep,25,1025,1,perimeter_sweep,20,1800,small,0.5,39.7,102.17,59.46,39.64,34.92,20,13.44,30.17
+patterns,Perimeter Sweep,26,1026,2,perimeter_sweep,20,1800,small,0.5,39.97,102.849,34.16,36.39,44.35,19,13.42,30.26
+patterns,Perimeter Sweep,27,1027,3,perimeter_sweep,20,1800,small,0.5,40.75,104.86,59.48,40.29,36.54,19,14.08,25.99
+patterns,Perimeter Sweep,28,1028,4,perimeter_sweep,20,1800,small,0.5,37.67,96.942,38.65,37.14,37.87,19,12.94,30.22
+patterns,Perimeter Sweep,29,1029,5,perimeter_sweep,20,1800,small,0.5,37.24,95.8364,40.42,35.43,37.96,19,12.91,29.91
+patterns,Perimeter Sweep,30,1030,6,perimeter_sweep,20,1800,small,0.5,37.65,96.8945,44.63,36.88,36.58,19,13.15,29.97
+patterns,Perimeter Sweep,31,1031,7,perimeter_sweep,20,1800,small,0.5,38.32,98.6021,45.2,35.94,38.6,19,13.71,29.63
+patterns,Formation Traverse,0,1000,0,formation_flying,20,1800,small,0.5,2.68,6.8884,0.1,3.89,2.3,1,9.84,2.41
+patterns,Formation Traverse,1,1001,1,formation_flying,20,1800,small,0.5,2.88,7.4153,4.58,4.79,0.89,1,10.84,2.31
+patterns,Formation Traverse,2,1002,2,formation_flying,20,1800,small,0.5,2.59,6.6748,0,4.81,1.39,1,10.17,2.35
+patterns,Formation Traverse,3,1003,3,formation_flying,20,1800,small,0.5,2.59,6.6772,1.81,5.5,0.38,1,10.98,2.37
+patterns,Formation Traverse,4,1004,4,formation_flying,20,1800,small,0.5,2.61,6.7193,1.8,5.81,0.16,2,10.91,2.39
+patterns,Formation Traverse,5,1005,5,formation_flying,20,1800,small,0.5,2.52,6.4803,1.96,5.3,0.35,2,9.85,2.29
+patterns,Formation Traverse,6,1006,6,formation_flying,20,1800,small,0.5,2.72,6.9947,0,1.12,4.71,2,10.2,2.34
+patterns,Formation Traverse,7,1007,7,formation_flying,20,1800,small,0.5,2.63,6.7804,0,1.24,4.43,2,9.86,2.23
+patterns,Formation Traverse,8,1008,0,formation_flying,20,1800,small,0.5,2.86,7.3718,0.07,4.18,2.46,1,10.83,2.51
+patterns,Formation Traverse,9,1009,1,formation_flying,20,1800,small,0.5,2.81,7.2331,4.04,4.79,0.87,1,10.95,2.5
+patterns,Formation Traverse,10,1010,2,formation_flying,20,1800,small,0.5,2.62,6.7431,0,4.87,1.4,1,10.63,2.33
+patterns,Formation Traverse,11,1011,3,formation_flying,20,1800,small,0.5,2.7,6.9386,1.77,5.77,0.37,1,10.27,2.23
+patterns,Formation Traverse,12,1012,4,formation_flying,20,1800,small,0.5,2.54,6.5389,1.77,5.65,0.16,2,10.2,2.33
+patterns,Formation Traverse,13,1013,5,formation_flying,20,1800,small,0.5,2.75,7.078,2.07,5.79,0.4,2,9.9,2.39
+patterns,Formation Traverse,14,1014,6,formation_flying,20,1800,small,0.5,2.78,7.1533,0,1.15,4.81,2,10.75,2.43
+patterns,Formation Traverse,15,1015,7,formation_flying,20,1800,small,0.5,2.7,6.94,0,1.29,4.52,2,10.55,2.37
+patterns,Formation Traverse,16,1016,0,formation_flying,20,1800,small,0.5,2.56,6.5932,0.07,3.83,2.12,1,10.1,2.29
+patterns,Formation Traverse,17,1017,1,formation_flying,20,1800,small,0.5,2.93,7.5375,4.44,4.99,0.86,1,10.11,2.29
+patterns,Formation Traverse,18,1018,2,formation_flying,20,1800,small,0.5,2.89,7.437,0,5.28,1.62,1,10.7,2.39
+patterns,Formation Traverse,19,1019,3,formation_flying,20,1800,small,0.5,2.61,6.7166,1.78,5.43,0.48,1,10.45,2.36
+patterns,Formation Traverse,20,1020,4,formation_flying,20,1800,small,0.5,2.59,6.6617,1.77,5.76,0.16,2,10.01,2.16
+patterns,Formation Traverse,21,1021,5,formation_flying,20,1800,small,0.5,2.66,6.8375,2,5.58,0.4,2,10.46,2.45
+patterns,Formation Traverse,22,1022,6,formation_flying,20,1800,small,0.5,2.59,6.676,0,1.04,4.51,2,10,2.31
+patterns,Formation Traverse,23,1023,7,formation_flying,20,1800,small,0.5,2.7,6.9592,0,1.31,4.52,2,10.57,2.42
+patterns,Formation Traverse,24,1024,0,formation_flying,20,1800,small,0.5,2.66,6.8331,0.08,3.92,2.24,1,9.74,2.13
+patterns,Formation Traverse,25,1025,1,formation_flying,20,1800,small,0.5,2.78,7.1589,4.39,4.65,0.84,1,10.14,2.4
+patterns,Formation Traverse,26,1026,2,formation_flying,20,1800,small,0.5,2.69,6.9272,0,5.01,1.43,1,10.69,2.3
+patterns,Formation Traverse,27,1027,3,formation_flying,20,1800,small,0.5,2.79,7.1821,1.92,5.83,0.48,1,11.22,2.16
+patterns,Formation Traverse,28,1028,4,formation_flying,20,1800,small,0.5,2.55,6.5726,1.81,5.66,0.17,2,9.99,2.36
+patterns,Formation Traverse,29,1029,5,formation_flying,20,1800,small,0.5,3.01,7.7356,2.26,6.28,0.48,2,11.33,2.6
+patterns,Formation Traverse,30,1030,6,formation_flying,20,1800,small,0.5,2.63,6.7559,0,1.06,4.57,2,10.55,2.38
+patterns,Formation Traverse,31,1031,7,formation_flying,20,1800,small,0.5,2.73,7.0132,0,1.3,4.57,2,10.39,2.51
+patterns,Stochastic Dispersal,0,1000,0,random_dispersal,20,1800,small,0.5,6.61,16.9976,3.88,7.39,6.62,2,12.26,5.91
+patterns,Stochastic Dispersal,1,1001,1,random_dispersal,20,1800,small,0.5,6.92,17.8001,6.28,6.21,7.66,3,12.58,6.08
+patterns,Stochastic Dispersal,2,1002,2,random_dispersal,20,1800,small,0.5,8.04,20.69,9.45,10.43,5.72,3,13.88,6.25
+patterns,Stochastic Dispersal,3,1003,3,random_dispersal,20,1800,small,0.5,7.34,18.8997,3.31,8.12,7.69,3,12.94,6.14
+patterns,Stochastic Dispersal,4,1004,4,random_dispersal,20,1800,small,0.5,7.26,18.6776,0.34,10.28,6.45,1,12.63,6.44
+patterns,Stochastic Dispersal,5,1005,5,random_dispersal,20,1800,small,0.5,7.79,20.0556,6.66,8.46,7.52,3,13.52,6.1
+patterns,Stochastic Dispersal,6,1006,6,random_dispersal,20,1800,small,0.5,7.23,18.6124,5.04,8.59,6.64,1,12.32,6.4
+patterns,Stochastic Dispersal,7,1007,7,random_dispersal,20,1800,small,0.5,7.61,19.587,7.07,9.63,6.07,1,13.57,5.92
+patterns,Stochastic Dispersal,8,1008,0,random_dispersal,20,1800,small,0.5,6.67,17.171,7.63,8.18,5.19,1,13.09,5.47
+patterns,Stochastic Dispersal,9,1009,1,random_dispersal,20,1800,small,0.5,7.27,18.7112,2.92,7.2,8.39,2,12.48,6.01
+patterns,Stochastic Dispersal,10,1010,2,random_dispersal,20,1800,small,0.5,7.55,19.4176,5.84,9.58,6.28,4,12.41,6.49
+patterns,Stochastic Dispersal,11,1011,3,random_dispersal,20,1800,small,0.5,6.78,17.4399,2.86,6.98,7.57,1,13.47,5.1
+patterns,Stochastic Dispersal,12,1012,4,random_dispersal,20,1800,small,0.5,7.6,19.5599,2.3,7.35,9.1,1,12.31,6.51
+patterns,Stochastic Dispersal,13,1013,5,random_dispersal,20,1800,small,0.5,7.2,18.5403,9.91,8.4,5.55,1,13.65,5.46
+patterns,Stochastic Dispersal,14,1014,6,random_dispersal,20,1800,small,0.5,9.22,23.728,8.47,8.47,10.02,4,13.69,6.93
+patterns,Stochastic Dispersal,15,1015,7,random_dispersal,20,1800,small,0.5,7.56,19.4642,11.81,6.34,7.54,3,13.3,6.16
+patterns,Stochastic Dispersal,16,1016,0,random_dispersal,20,1800,small,0.5,6.93,17.829,3.45,8.45,6.52,5,12.09,6.21
+patterns,Stochastic Dispersal,17,1017,1,random_dispersal,20,1800,small,0.5,7.4,19.0475,4.5,10.06,5.91,3,12.33,6.34
+patterns,Stochastic Dispersal,18,1018,2,random_dispersal,20,1800,small,0.5,7.29,18.7629,2.03,9.37,6.86,3,12.88,5.79
+patterns,Stochastic Dispersal,19,1019,3,random_dispersal,20,1800,small,0.5,8.86,22.8123,0.63,9.65,10.23,4,13.27,7.08
+patterns,Stochastic Dispersal,20,1020,4,random_dispersal,20,1800,small,0.5,7.43,19.1241,6,7.21,7.96,6,12.31,6.56
+patterns,Stochastic Dispersal,21,1021,5,random_dispersal,20,1800,small,0.5,7.7,19.8211,6.66,7.35,8.25,4,12.89,6.21
+patterns,Stochastic Dispersal,22,1022,6,random_dispersal,20,1800,small,0.5,7.36,18.9386,4.31,7.1,8.32,1,12.72,6.34
+patterns,Stochastic Dispersal,23,1023,7,random_dispersal,20,1800,small,0.5,6.94,17.8472,18.99,5.84,4.89,4,12.6,5.86
+patterns,Stochastic Dispersal,24,1024,0,random_dispersal,20,1800,small,0.5,7.7,19.8123,2.12,11.45,5.96,2,13.73,5.77
+patterns,Stochastic Dispersal,25,1025,1,random_dispersal,20,1800,small,0.5,6.53,16.8044,3.46,10.68,3.84,2,12.14,5.6
+patterns,Stochastic Dispersal,26,1026,2,random_dispersal,20,1800,small,0.5,7.65,19.6962,8.23,6.62,8.37,2,14.09,5.53
+patterns,Stochastic Dispersal,27,1027,3,random_dispersal,20,1800,small,0.5,7.18,18.4817,13.76,5.93,6.61,3,12.61,6.24
+patterns,Stochastic Dispersal,28,1028,4,random_dispersal,20,1800,small,0.5,7.11,18.2941,8.23,4.31,9.15,2,12.27,6.19
+patterns,Stochastic Dispersal,29,1029,5,random_dispersal,20,1800,small,0.5,8.19,21.0727,11.35,6.19,9.07,2,13.11,6.47
+patterns,Stochastic Dispersal,30,1030,6,random_dispersal,20,1800,small,0.5,7.75,19.9324,8.18,8.47,7.04,2,13.88,5.74
+patterns,Stochastic Dispersal,31,1031,7,random_dispersal,20,1800,small,0.5,6.8,17.5094,1.87,10.38,5.05,2,11.88,6.11
+patterns,Sinusoidal Dispersal,0,1000,0,evasive_maneuvers,20,1800,small,0.5,14.19,36.5117,27.16,19.07,6.97,16,12.47,12.37
+patterns,Sinusoidal Dispersal,1,1001,1,evasive_maneuvers,20,1800,small,0.5,17.39,44.7639,0,2.38,34.09,26,13.62,13.72
+patterns,Sinusoidal Dispersal,2,1002,2,evasive_maneuvers,20,1800,small,0.5,17.95,46.2022,36.49,26.71,6.16,26,13.21,14.68
+patterns,Sinusoidal Dispersal,3,1003,3,evasive_maneuvers,20,1800,small,0.5,13.77,35.433,0,16.62,14.78,10,11.74,11.02
+patterns,Sinusoidal Dispersal,4,1004,4,evasive_maneuvers,20,1800,small,0.5,14.07,36.2014,37.61,17.05,5.84,17,11.37,11.77
+patterns,Sinusoidal Dispersal,5,1005,5,evasive_maneuvers,20,1800,small,0.5,15.29,39.3511,28.54,23.96,4.87,27,11.8,13.99
+patterns,Sinusoidal Dispersal,6,1006,6,evasive_maneuvers,20,1800,small,0.5,13.84,35.6153,0,1.27,27.64,20,11.04,13.51
+patterns,Sinusoidal Dispersal,7,1007,7,evasive_maneuvers,20,1800,small,0.5,16.6,42.7177,0,18.55,19.05,29,12.37,14.39
+patterns,Sinusoidal Dispersal,8,1008,0,evasive_maneuvers,20,1800,small,0.5,14.54,37.4088,31.84,19.38,6.29,17,11.65,12.22
+patterns,Sinusoidal Dispersal,9,1009,1,evasive_maneuvers,20,1800,small,0.5,12.23,31.4719,0,1.63,24,11,11.81,10.57
+patterns,Sinusoidal Dispersal,10,1010,2,evasive_maneuvers,20,1800,small,0.5,17.3,44.5255,31,25.98,6.76,31,12.12,14.54
+patterns,Sinusoidal Dispersal,11,1011,3,evasive_maneuvers,20,1800,small,0.5,11.11,28.5795,0,12.04,13.05,16,11.53,10.64
+patterns,Sinusoidal Dispersal,12,1012,4,evasive_maneuvers,20,1800,small,0.5,14.46,37.203,35.4,20.26,4.52,18,11.14,14.04
+patterns,Sinusoidal Dispersal,13,1013,5,evasive_maneuvers,20,1800,small,0.5,17.37,44.7061,29.67,26.88,6.49,29,11.17,16.27
+patterns,Sinusoidal Dispersal,14,1014,6,evasive_maneuvers,20,1800,small,0.5,17.03,43.8353,0,6.29,30.1,24,12.36,13.59
+patterns,Sinusoidal Dispersal,15,1015,7,evasive_maneuvers,20,1800,small,0.5,14.5,37.3255,0,16.62,16.3,15,12.37,12.49
+patterns,Sinusoidal Dispersal,16,1016,0,evasive_maneuvers,20,1800,small,0.5,16.67,42.9056,40.14,20.77,7.53,27,11.87,15.32
+patterns,Sinusoidal Dispersal,17,1017,1,evasive_maneuvers,20,1800,small,0.5,14.9,38.3538,0,2.9,28.49,20,12.72,12.77
+patterns,Sinusoidal Dispersal,18,1018,2,evasive_maneuvers,20,1800,small,0.5,12.78,32.8813,17.89,21.36,4.42,15,11.22,11.98
+patterns,Sinusoidal Dispersal,19,1019,3,evasive_maneuvers,20,1800,small,0.5,15.04,38.7147,0,15.63,18.24,19,12.83,11.8
+patterns,Sinusoidal Dispersal,20,1020,4,evasive_maneuvers,20,1800,small,0.5,15.75,40.5364,33.91,22.52,5.7,26,12.73,13.5
+patterns,Sinusoidal Dispersal,21,1021,5,evasive_maneuvers,20,1800,small,0.5,15.17,39.0466,28.15,25.32,3.59,23,11.59,13.49
+patterns,Sinusoidal Dispersal,22,1022,6,evasive_maneuvers,20,1800,small,0.5,15.86,40.8238,0,4.72,28.98,21,12.55,13.55
+patterns,Sinusoidal Dispersal,23,1023,7,evasive_maneuvers,20,1800,small,0.5,14.86,38.2398,0,17,16.72,13,11.82,14.01
+patterns,Sinusoidal Dispersal,24,1024,0,evasive_maneuvers,20,1800,small,0.5,17.51,45.0531,32.11,25.7,7.14,18,12.64,14.14
+patterns,Sinusoidal Dispersal,25,1025,1,evasive_maneuvers,20,1800,small,0.5,14.69,37.7942,0,1.47,29.22,21,12.08,13.19
+patterns,Sinusoidal Dispersal,26,1026,2,evasive_maneuvers,20,1800,small,0.5,13.53,34.8312,24.92,22.86,3.02,11,11.63,12.11
+patterns,Sinusoidal Dispersal,27,1027,3,evasive_maneuvers,20,1800,small,0.5,14.02,36.0763,0,14.41,17.13,14,11.58,12.95
+patterns,Sinusoidal Dispersal,28,1028,4,evasive_maneuvers,20,1800,small,0.5,14.17,36.4733,27.8,18.81,6.99,13,12.91,12.5
+patterns,Sinusoidal Dispersal,29,1029,5,evasive_maneuvers,20,1800,small,0.5,17.3,44.5155,26.88,28.77,5.45,30,11.72,15.54
+patterns,Sinusoidal Dispersal,30,1030,6,evasive_maneuvers,20,1800,small,0.5,13.29,34.2084,0,1.13,26.62,13,11.95,11.89
+patterns,Sinusoidal Dispersal,31,1031,7,evasive_maneuvers,20,1800,small,0.5,15.17,39.0291,0,15.79,18.37,18,12.68,13.52
+patterns,Centripetal Convergence,0,1000,0,coordinated_attack,20,1800,small,0.5,15.23,39.1922,0.8,18.24,16.27,1,13.84,10.6
+patterns,Centripetal Convergence,1,1001,1,coordinated_attack,20,1800,small,0.5,14.28,36.7513,0.91,17.15,15.18,1,12.42,11.75
+patterns,Centripetal Convergence,2,1002,2,coordinated_attack,20,1800,small,0.5,14.18,36.4795,1.09,16.56,15.4,2,12.47,12.54
+patterns,Centripetal Convergence,3,1003,3,coordinated_attack,20,1800,small,0.5,14.58,37.5305,0.91,17.32,15.66,1,12.79,12.07
+patterns,Centripetal Convergence,4,1004,4,coordinated_attack,20,1800,small,0.5,15.21,39.1461,0.98,18.66,15.84,1,13.72,11.12
+patterns,Centripetal Convergence,5,1005,5,coordinated_attack,20,1800,small,0.5,14.94,38.4449,0.88,18.3,15.59,1,13.28,11.83
+patterns,Centripetal Convergence,6,1006,6,coordinated_attack,20,1800,small,0.5,15.52,39.9467,1.01,18.78,16.38,1,13.89,10.68
+patterns,Centripetal Convergence,7,1007,7,coordinated_attack,20,1800,small,0.5,15.18,39.0583,1.11,18.07,16.22,1,13.59,11.56
+patterns,Centripetal Convergence,8,1008,0,coordinated_attack,20,1800,small,0.5,15.12,38.9008,1.04,17.99,16.18,1,13.54,11.17
+patterns,Centripetal Convergence,9,1009,1,coordinated_attack,20,1800,small,0.5,14.8,38.097,0.89,17.96,15.6,1,13.18,11.45
+patterns,Centripetal Convergence,10,1010,2,coordinated_attack,20,1800,small,0.5,14.54,37.4169,1.06,17.53,15.36,1,12.7,12.57
+patterns,Centripetal Convergence,11,1011,3,coordinated_attack,20,1800,small,0.5,15.16,39.0131,0.96,18.53,15.85,1,13.65,11.23
+patterns,Centripetal Convergence,12,1012,4,coordinated_attack,20,1800,small,0.5,14.89,38.3068,0.96,17.77,15.9,2,13.09,12.38
+patterns,Centripetal Convergence,13,1013,5,coordinated_attack,20,1800,small,0.5,14.58,37.5248,0.78,18.01,15.12,1,12.79,11.96
+patterns,Centripetal Convergence,14,1014,6,coordinated_attack,20,1800,small,0.5,15.54,39.9881,1.1,18.65,16.5,2,14.08,10.69
+patterns,Centripetal Convergence,15,1015,7,coordinated_attack,20,1800,small,0.5,15.61,40.1829,1.07,18.61,16.69,1,14.16,10.73
+patterns,Centripetal Convergence,16,1016,0,coordinated_attack,20,1800,small,0.5,15.4,39.6391,0.82,18.39,16.5,1,13.79,11.37
+patterns,Centripetal Convergence,17,1017,1,coordinated_attack,20,1800,small,0.5,15.93,40.9916,1.15,19.05,16.96,2,14.28,10.49
+patterns,Centripetal Convergence,18,1018,2,coordinated_attack,20,1800,small,0.5,14.78,38.0456,1.02,17.34,16.04,1,12.85,12.44
+patterns,Centripetal Convergence,19,1019,3,coordinated_attack,20,1800,small,0.5,14.64,37.6715,0.82,17.27,15.84,1,12.87,11.87
+patterns,Centripetal Convergence,20,1020,4,coordinated_attack,20,1800,small,0.5,15.03,38.6857,1.08,17.66,16.27,1,13.31,11.17
+patterns,Centripetal Convergence,21,1021,5,coordinated_attack,20,1800,small,0.5,15.35,39.4949,1.06,18.3,16.4,1,13.67,11.2
+patterns,Centripetal Convergence,22,1022,6,coordinated_attack,20,1800,small,0.5,14.96,38.4888,1,17.53,16.24,1,13.29,11.62
+patterns,Centripetal Convergence,23,1023,7,coordinated_attack,20,1800,small,0.5,15.21,39.1401,1.11,17.7,16.6,1,13.72,11.12
+patterns,Centripetal Convergence,24,1024,0,coordinated_attack,20,1800,small,0.5,15.43,39.6965,0.96,18.41,16.5,2,13.85,10.71
+patterns,Centripetal Convergence,25,1025,1,coordinated_attack,20,1800,small,0.5,15.35,39.5114,1.03,18.09,16.6,1,13.54,11.55
+patterns,Centripetal Convergence,26,1026,2,coordinated_attack,20,1800,small,0.5,15.07,38.7769,1.03,17.78,16.26,1,13.44,11.32
+patterns,Centripetal Convergence,27,1027,3,coordinated_attack,20,1800,small,0.5,15.66,40.291,0.68,18.28,17.15,2,14.05,9.91
+patterns,Centripetal Convergence,28,1028,4,coordinated_attack,20,1800,small,0.5,14.96,38.4984,0.94,17.72,16.1,2,13.22,11.28
+patterns,Centripetal Convergence,29,1029,5,coordinated_attack,20,1800,small,0.5,14.73,37.8963,0.66,17.5,15.87,1,13.06,11.24
+patterns,Centripetal Convergence,30,1030,6,coordinated_attack,20,1800,small,0.5,14.99,38.5723,1.07,18.39,15.58,2,13.42,11.24
+patterns,Centripetal Convergence,31,1031,7,coordinated_attack,20,1800,small,0.5,15.19,39.0991,0.99,17.96,16.38,1,13.79,11.19
+swarm_size,5 drones,0,1000,0,perimeter_sweep,5,1800,small,0.5,9.53,24.5283,7.36,9.39,10.18,4,14.34,6.46
+swarm_size,5 drones,1,1001,1,perimeter_sweep,5,1800,small,0.5,8.06,20.737,11.94,8.78,6.51,4,11.53,8.04
+swarm_size,5 drones,2,1002,2,perimeter_sweep,5,1800,small,0.5,8.79,22.6174,6.72,8.83,9.26,4,12.51,8.1
+swarm_size,5 drones,3,1003,3,perimeter_sweep,5,1800,small,0.5,8.69,22.3507,12.39,9.37,7.21,3,13.1,7.1
+swarm_size,5 drones,4,1004,4,perimeter_sweep,5,1800,small,0.5,9.4,24.1813,13.3,7.77,9.79,4,14.35,6.3
+swarm_size,5 drones,5,1005,5,perimeter_sweep,5,1800,small,0.5,8.78,22.5982,15.19,6.25,9.31,4,13.03,7.28
+swarm_size,5 drones,6,1006,6,perimeter_sweep,5,1800,small,0.5,9.24,23.7848,15.6,7.74,8.93,4,14.06,6.69
+swarm_size,5 drones,7,1007,7,perimeter_sweep,5,1800,small,0.5,9.02,23.2009,15.22,7.3,8.92,4,13.67,7.21
+swarm_size,5 drones,8,1008,0,perimeter_sweep,5,1800,small,0.5,9.3,23.9283,7.13,9.49,9.67,4,13.44,6.86
+swarm_size,5 drones,9,1009,1,perimeter_sweep,5,1800,small,0.5,8.5,21.8853,12.4,9,7.14,4,12.56,7.71
+swarm_size,5 drones,10,1010,2,perimeter_sweep,5,1800,small,0.5,8.1,20.8495,6.07,7.96,8.72,4,11.45,8.1
+swarm_size,5 drones,11,1011,3,perimeter_sweep,5,1800,small,0.5,8.86,22.7901,12.58,9.39,7.5,4,13.24,7.45
+swarm_size,5 drones,12,1012,4,perimeter_sweep,5,1800,small,0.5,8.97,23.0767,13.29,7.38,9.23,4,13.53,7.11
+swarm_size,5 drones,13,1013,5,perimeter_sweep,5,1800,small,0.5,8.75,22.5112,14.93,6.18,9.36,4,12.53,7.46
+swarm_size,5 drones,14,1014,6,perimeter_sweep,5,1800,small,0.5,8.69,22.3542,15.28,6.8,8.64,4,12.97,7.69
+swarm_size,5 drones,15,1015,7,perimeter_sweep,5,1800,small,0.5,9.04,23.2731,15.98,7.29,8.79,4,13.57,7.4
+swarm_size,5 drones,16,1016,0,perimeter_sweep,5,1800,small,0.5,10.07,25.9034,7.83,10.16,10.53,4,14.33,6.38
+swarm_size,5 drones,17,1017,1,perimeter_sweep,5,1800,small,0.5,9.52,24.5082,13.36,10.5,7.78,4,14.15,6.49
+swarm_size,5 drones,18,1018,2,perimeter_sweep,5,1800,small,0.5,9.39,24.1596,7.36,9.77,9.57,4,13.78,6.54
+swarm_size,5 drones,19,1019,3,perimeter_sweep,5,1800,small,0.5,8.64,22.2411,12.35,9.24,7.24,3,12.89,6.77
+swarm_size,5 drones,20,1020,4,perimeter_sweep,5,1800,small,0.5,8.69,22.3624,15.31,6.76,8.67,4,12.87,7.64
+swarm_size,5 drones,21,1021,5,perimeter_sweep,5,1800,small,0.5,9.31,23.9523,15.57,7.18,9.54,4,14.35,6.39
+swarm_size,5 drones,22,1022,6,perimeter_sweep,5,1800,small,0.5,8.7,22.3783,13.14,7.15,8.89,4,11.58,6.84
+swarm_size,5 drones,23,1023,7,perimeter_sweep,5,1800,small,0.5,8.61,22.1651,13.21,6.71,9.07,4,12.88,7.18
+swarm_size,5 drones,24,1024,0,perimeter_sweep,5,1800,small,0.5,9.98,25.6924,7.75,10.17,10.37,4,14.15,6.01
+swarm_size,5 drones,25,1025,1,perimeter_sweep,5,1800,small,0.5,8.82,22.6904,12.74,9.6,7.21,4,12.83,7.8
+swarm_size,5 drones,26,1026,2,perimeter_sweep,5,1800,small,0.5,9.51,24.4801,7.44,9.72,9.85,4,14.09,6.43
+swarm_size,5 drones,27,1027,3,perimeter_sweep,5,1800,small,0.5,8.99,23.1277,12.68,9.6,7.58,4,14.58,5.71
+swarm_size,5 drones,28,1028,4,perimeter_sweep,5,1800,small,0.5,8.63,22.2049,15.27,6.63,8.66,4,12.67,7.79
+swarm_size,5 drones,29,1029,5,perimeter_sweep,5,1800,small,0.5,8.9,22.8911,13.25,6.85,9.52,4,12.74,7.2
+swarm_size,5 drones,30,1030,6,perimeter_sweep,5,1800,small,0.5,8.98,23.1053,16.17,7.3,8.61,4,12.97,7.28
+swarm_size,5 drones,31,1031,7,perimeter_sweep,5,1800,small,0.5,8.58,22.0826,15.63,6.94,8.22,4,12,8.03
+swarm_size,10 drones,0,1000,0,perimeter_sweep,10,1800,small,0.5,19.19,49.3802,15.79,17.37,21.52,9,13.08,14.7
+swarm_size,10 drones,1,1001,1,perimeter_sweep,10,1800,small,0.5,17.46,44.939,25.4,17.75,15.28,9,11.9,16.78
+swarm_size,10 drones,2,1002,2,perimeter_sweep,10,1800,small,0.5,18.92,48.6982,15.48,18.05,20.49,9,12.71,16.51
+swarm_size,10 drones,3,1003,3,perimeter_sweep,10,1800,small,0.5,19.07,49.0666,28.23,19.3,16.63,8,13.65,14.1
+swarm_size,10 drones,4,1004,4,perimeter_sweep,10,1800,small,0.5,18.53,47.6833,19.68,19.58,17.37,9,13.45,14.72
+swarm_size,10 drones,5,1005,5,perimeter_sweep,10,1800,small,0.5,17.83,45.8893,20.61,17.23,17.65,9,12.33,15.64
+swarm_size,10 drones,6,1006,6,perimeter_sweep,10,1800,small,0.5,18.98,48.8544,23.2,18.81,18.1,9,13.74,14.7
+swarm_size,10 drones,7,1007,7,perimeter_sweep,10,1800,small,0.5,18.92,48.6884,24.89,17.75,18.43,9,13.58,15.31
+swarm_size,10 drones,8,1008,0,perimeter_sweep,10,1800,small,0.5,19.82,50.993,16.05,19.04,21.38,9,13.66,14.35
+swarm_size,10 drones,9,1009,1,perimeter_sweep,10,1800,small,0.5,19.07,49.0707,27.17,19.69,16.57,9,13.1,15.64
+swarm_size,10 drones,10,1010,2,perimeter_sweep,10,1800,small,0.5,18.45,47.4776,15.22,16.68,20.7,9,12.33,17.07
+swarm_size,10 drones,11,1011,3,perimeter_sweep,10,1800,small,0.5,19.97,51.4039,29.03,20,17.73,9,13.93,13.78
+swarm_size,10 drones,12,1012,4,perimeter_sweep,10,1800,small,0.5,18.63,47.9473,19.43,19.4,17.8,9,13.02,15.86
+swarm_size,10 drones,13,1013,5,perimeter_sweep,10,1800,small,0.5,17.52,45.0952,20.27,16.91,17.36,9,12.03,15.84
+swarm_size,10 drones,14,1014,6,perimeter_sweep,10,1800,small,0.5,19.34,49.7669,24.22,19.67,17.87,9,14.12,13.57
+swarm_size,10 drones,15,1015,7,perimeter_sweep,10,1800,small,0.5,19.2,49.3984,24.7,18.06,18.79,9,14.13,14
+swarm_size,10 drones,16,1016,0,perimeter_sweep,10,1800,small,0.5,20.98,53.9903,17.38,19.9,22.75,9,14.29,14.01
+swarm_size,10 drones,17,1017,1,perimeter_sweep,10,1800,small,0.5,20.13,51.8152,28.1,20.35,18.01,9,13.98,14.28
+swarm_size,10 drones,18,1018,2,perimeter_sweep,10,1800,small,0.5,19.34,49.78,15.59,18.43,21.02,9,13,15.58
+swarm_size,10 drones,19,1019,3,perimeter_sweep,10,1800,small,0.5,17.95,46.1829,27.25,18.17,15.48,9,11.7,15.61
+swarm_size,10 drones,20,1020,4,perimeter_sweep,10,1800,small,0.5,17.79,45.7817,20.62,18.18,16.77,9,12.27,15.58
+swarm_size,10 drones,21,1021,5,perimeter_sweep,10,1800,small,0.5,18.9,48.6488,22.51,18.79,18.12,9,13.71,14.34
+swarm_size,10 drones,22,1022,6,perimeter_sweep,10,1800,small,0.5,18.18,46.7957,22.36,17.9,17.4,9,12.09,15.1
+swarm_size,10 drones,23,1023,7,perimeter_sweep,10,1800,small,0.5,18.5,47.6092,23.93,17.29,18.18,9,13.6,14.33
+swarm_size,10 drones,24,1024,0,perimeter_sweep,10,1800,small,0.5,19.67,50.625,16.46,17.8,22.01,9,13.5,14.19
+swarm_size,10 drones,25,1025,1,perimeter_sweep,10,1800,small,0.5,18.9,48.6309,26.81,19.01,16.86,9,13.17,15.58
+swarm_size,10 drones,26,1026,2,perimeter_sweep,10,1800,small,0.5,19.14,49.2497,15.32,17.94,21.06,9,13.22,14.52
+swarm_size,10 drones,27,1027,3,perimeter_sweep,10,1800,small,0.5,20.14,51.822,29.06,20.11,17.97,9,14.56,12.13
+swarm_size,10 drones,28,1028,4,perimeter_sweep,10,1800,small,0.5,17.9,46.0764,20.4,18.1,17.13,9,12.55,16.47
+swarm_size,10 drones,29,1029,5,perimeter_sweep,10,1800,small,0.5,18.52,47.6695,19.47,18.43,18.37,9,12.82,14.83
+swarm_size,10 drones,30,1030,6,perimeter_sweep,10,1800,small,0.5,18.82,48.4285,21.72,18.92,18.02,9,13.28,15.05
+swarm_size,10 drones,31,1031,7,perimeter_sweep,10,1800,small,0.5,18.77,48.3021,25.59,17.87,17.85,9,13.57,14.54
+swarm_size,20 drones,0,1000,0,perimeter_sweep,20,1800,small,0.5,40.08,103.133,34.7,36.92,44.01,20,13.73,28.36
+swarm_size,20 drones,1,1001,1,perimeter_sweep,20,1800,small,0.5,37.2,95.7352,56.27,36.64,33,21,12.39,30.83
+swarm_size,20 drones,2,1002,2,perimeter_sweep,20,1800,small,0.5,37.77,97.2022,33.08,34.29,41.81,19,12.44,33.73
+swarm_size,20 drones,3,1003,3,perimeter_sweep,20,1800,small,0.5,37.53,96.5922,57.07,37.84,32.5,19,12.73,31.7
+swarm_size,20 drones,4,1004,4,perimeter_sweep,20,1800,small,0.5,38.1,98.0531,41.14,37.91,37.52,19,13.54,29.66
+swarm_size,20 drones,5,1005,5,perimeter_sweep,20,1800,small,0.5,37.45,96.3876,39.94,35.19,38.73,19,13.05,31.46
+swarm_size,20 drones,6,1006,6,perimeter_sweep,20,1800,small,0.5,38.7,99.5871,45.76,38.04,37.51,19,13.68,28.33
+swarm_size,20 drones,7,1007,7,perimeter_sweep,20,1800,small,0.5,38.04,97.9045,42.67,35.72,38.83,19,13.45,30.67
+swarm_size,20 drones,8,1008,0,perimeter_sweep,20,1800,small,0.5,39.75,102.282,34.59,35.55,44.49,19,13.36,29.97
+swarm_size,20 drones,9,1009,1,perimeter_sweep,20,1800,small,0.5,38.06,97.9372,57.39,37.26,33.98,20,13.06,30.37
+swarm_size,20 drones,10,1010,2,perimeter_sweep,20,1800,small,0.5,38.47,98.9955,33.72,35.26,42.29,19,12.66,33.89
+swarm_size,20 drones,11,1011,3,perimeter_sweep,20,1800,small,0.5,39.01,100.382,58.25,39.38,33.99,20,13.55,29.58
+swarm_size,20 drones,12,1012,4,perimeter_sweep,20,1800,small,0.5,37.86,97.4179,39.63,38.01,37.29,19,12.98,32.85
+swarm_size,20 drones,13,1013,5,perimeter_sweep,20,1800,small,0.5,37.04,95.3146,39.28,35.03,38.15,19,12.63,31.73
+swarm_size,20 drones,14,1014,6,perimeter_sweep,20,1800,small,0.5,38.74,99.6904,43.77,38.56,37.66,19,13.9,28.2
+swarm_size,20 drones,15,1015,7,perimeter_sweep,20,1800,small,0.5,38.66,99.4948,44.48,35.84,39.57,19,13.97,28.42
+swarm_size,20 drones,16,1016,0,perimeter_sweep,20,1800,small,0.5,40.62,104.533,35.71,36.77,45.01,19,13.74,30.91
+swarm_size,20 drones,17,1017,1,perimeter_sweep,20,1800,small,0.5,41.28,106.222,60.77,41.26,36.51,20,14.26,27.25
+swarm_size,20 drones,18,1018,2,perimeter_sweep,20,1800,small,0.5,39.01,100.385,33.5,35.53,43.24,20,12.8,33.73
+swarm_size,20 drones,19,1019,3,perimeter_sweep,20,1800,small,0.5,38.04,97.904,56.63,37.55,33.9,19,12.81,31.33
+swarm_size,20 drones,20,1020,4,perimeter_sweep,20,1800,small,0.5,37.71,97.0559,39.53,36.79,38.04,19,13.13,29.93
+swarm_size,20 drones,21,1021,5,perimeter_sweep,20,1800,small,0.5,38.55,99.1972,44.89,36.04,39.07,19,13.52,29.89
+swarm_size,20 drones,22,1022,6,perimeter_sweep,20,1800,small,0.5,37.8,97.2665,45.75,37.3,36.26,19,13.05,30.86
+swarm_size,20 drones,23,1023,7,perimeter_sweep,20,1800,small,0.5,37.74,97.1308,46.7,34.59,38.16,19,13.5,29.81
+swarm_size,20 drones,24,1024,0,perimeter_sweep,20,1800,small,0.5,40.78,104.953,35.64,37.91,44.42,20,13.8,28.84
+swarm_size,20 drones,25,1025,1,perimeter_sweep,20,1800,small,0.5,39.7,102.17,59.46,39.64,34.92,20,13.44,30.17
+swarm_size,20 drones,26,1026,2,perimeter_sweep,20,1800,small,0.5,39.97,102.849,34.16,36.39,44.35,19,13.42,30.26
+swarm_size,20 drones,27,1027,3,perimeter_sweep,20,1800,small,0.5,40.75,104.86,59.48,40.29,36.54,19,14.08,25.99
+swarm_size,20 drones,28,1028,4,perimeter_sweep,20,1800,small,0.5,37.67,96.942,38.65,37.14,37.87,19,12.94,30.22
+swarm_size,20 drones,29,1029,5,perimeter_sweep,20,1800,small,0.5,37.24,95.8364,40.42,35.43,37.96,19,12.91,29.91
+swarm_size,20 drones,30,1030,6,perimeter_sweep,20,1800,small,0.5,37.65,96.8945,44.63,36.88,36.58,19,13.15,29.97
+swarm_size,20 drones,31,1031,7,perimeter_sweep,20,1800,small,0.5,38.32,98.6021,45.2,35.94,38.6,19,13.71,29.63
+swarm_size,30 drones,0,1000,0,perimeter_sweep,30,1800,small,0.5,60.33,155.263,52.45,55.7,66.1,55,13.73,42.88
+swarm_size,30 drones,1,1001,1,perimeter_sweep,30,1800,small,0.5,57.75,148.612,85.14,57.23,51.48,55,13.12,44.02
+swarm_size,30 drones,2,1002,2,perimeter_sweep,30,1800,small,0.5,57.02,146.746,49.79,53.02,62.11,57,12.44,49.99
+swarm_size,30 drones,3,1003,3,perimeter_sweep,30,1800,small,0.5,56.6,145.654,84.18,56.67,49.79,57,12.71,48.28
+swarm_size,30 drones,4,1004,4,perimeter_sweep,30,1800,small,0.5,57.14,147.042,60.1,56.98,56.55,30,13.31,46.04
+swarm_size,30 drones,5,1005,5,perimeter_sweep,30,1800,small,0.5,56.66,145.805,59.42,53.24,58.81,30,13.23,46.66
+swarm_size,30 drones,6,1006,6,perimeter_sweep,30,1800,small,0.5,57.92,149.047,64.11,57.67,56.61,30,13.51,43.81
+swarm_size,30 drones,7,1007,7,perimeter_sweep,30,1800,small,0.5,58.07,149.43,65.24,55.43,58.49,30,13.7,43.74
+swarm_size,30 drones,8,1008,0,perimeter_sweep,30,1800,small,0.5,59.72,153.675,51.01,55.18,65.61,57,13.5,45.03
+swarm_size,30 drones,9,1009,1,perimeter_sweep,30,1800,small,0.5,58.09,149.496,85.51,58.53,51.02,54,13.18,46.25
+swarm_size,30 drones,10,1010,2,perimeter_sweep,30,1800,small,0.5,58.76,151.224,51.11,54.61,64.08,56,12.82,50.1
+swarm_size,30 drones,11,1011,3,perimeter_sweep,30,1800,small,0.5,57.12,147.005,84.23,57.69,50.02,55,13.1,45.76
+swarm_size,30 drones,12,1012,4,perimeter_sweep,30,1800,small,0.5,57.67,148.398,58.1,58.1,57.2,30,13.43,46.08
+swarm_size,30 drones,13,1013,5,perimeter_sweep,30,1800,small,0.5,55.82,143.647,58.45,52.6,57.84,30,12.68,45.85
+swarm_size,30 drones,14,1014,6,perimeter_sweep,30,1800,small,0.5,57.9,149.006,62.1,58.03,56.77,30,13.62,43.89
+swarm_size,30 drones,15,1015,7,perimeter_sweep,30,1800,small,0.5,59,151.844,69.33,55.56,59.33,30,14.21,40.08
+swarm_size,30 drones,16,1016,0,perimeter_sweep,30,1800,small,0.5,61.04,157.077,51.82,56.12,67.37,56,13.75,46.51
+swarm_size,30 drones,17,1017,1,perimeter_sweep,30,1800,small,0.5,60.94,156.813,88.35,59.28,55.6,56,14.17,41.02
+swarm_size,30 drones,18,1018,2,perimeter_sweep,30,1800,small,0.5,59.75,153.765,51.8,55.22,65.45,56,13.17,47.61
+swarm_size,30 drones,19,1019,3,perimeter_sweep,30,1800,small,0.5,58.11,149.537,87.09,57.15,51.81,56,13.09,45.75
+swarm_size,30 drones,20,1020,4,perimeter_sweep,30,1800,small,0.5,57.28,147.394,57.35,56.67,57.76,30,13.33,44.95
+swarm_size,30 drones,21,1021,5,perimeter_sweep,30,1800,small,0.5,58.06,149.402,64.47,54.43,59.49,30,13.56,45.52
+swarm_size,30 drones,22,1022,6,perimeter_sweep,30,1800,small,0.5,56.57,145.566,61.5,56.65,55.29,30,12.86,46.53
+swarm_size,30 drones,23,1023,7,perimeter_sweep,30,1800,small,0.5,57.96,149.162,67.78,55.34,57.73,38,13.75,42.86
+swarm_size,30 drones,24,1024,0,perimeter_sweep,30,1800,small,0.5,60.59,155.924,52.75,55.32,66.88,56,13.81,43.3
+swarm_size,30 drones,25,1025,1,perimeter_sweep,30,1800,small,0.5,60.28,155.125,86.98,58.37,55.32,57,13.87,43.2
+swarm_size,30 drones,26,1026,2,perimeter_sweep,30,1800,small,0.5,61.17,157.409,53.21,55.73,67.62,56,13.68,45.12
+swarm_size,30 drones,27,1027,3,perimeter_sweep,30,1800,small,0.5,61.84,159.145,89.65,62.18,54.75,54,14.35,39.26
+swarm_size,30 drones,28,1028,4,perimeter_sweep,30,1800,small,0.5,57.73,148.554,56.46,57.42,58.29,31,13.27,45.27
+swarm_size,30 drones,29,1029,5,perimeter_sweep,30,1800,small,0.5,57.56,148.139,60.7,53.87,59.86,30,13.4,43.69
+swarm_size,30 drones,30,1030,6,perimeter_sweep,30,1800,small,0.5,57,146.69,62.56,56.88,55.74,30,13.26,44.56
+swarm_size,30 drones,31,1031,7,perimeter_sweep,30,1800,small,0.5,57.77,148.678,67.94,54.58,57.93,30,13.71,45.11
+swarm_size,50 drones,0,1000,0,perimeter_sweep,50,1800,small,0.5,88.63,228.092,87.61,86.11,90.98,14,13.29,66.52
+swarm_size,50 drones,1,1001,1,perimeter_sweep,50,1800,small,0.5,88.17,226.899,97.12,88.76,85.49,15,12.96,69.6
+swarm_size,50 drones,2,1002,2,perimeter_sweep,50,1800,small,0.5,86.9,223.625,84.28,84.95,89.15,14,12.56,74.58
+swarm_size,50 drones,3,1003,3,perimeter_sweep,50,1800,small,0.5,87.34,224.754,96.38,85.98,86.24,19,12.74,73.81
+swarm_size,50 drones,4,1004,4,perimeter_sweep,50,1800,small,0.5,87.81,225.98,88.42,88.6,87.01,68,13.16,75.55
+swarm_size,50 drones,5,1005,5,perimeter_sweep,50,1800,small,0.5,87.43,224.991,90.88,83.6,89.75,60,13.11,76.1
+swarm_size,50 drones,6,1006,6,perimeter_sweep,50,1800,small,0.5,87.67,225.605,85.55,88.98,87.1,71,12.93,74.21
+swarm_size,50 drones,7,1007,7,perimeter_sweep,50,1800,small,0.5,87.8,225.959,92.06,84.08,89.85,58,13.41,71.38
+swarm_size,50 drones,8,1008,0,perimeter_sweep,50,1800,small,0.5,90.86,233.827,88.28,91.07,91.32,28,13.59,66.71
+swarm_size,50 drones,9,1009,1,perimeter_sweep,50,1800,small,0.5,88.49,227.734,96.46,88.1,86.88,8,13.19,68.22
+swarm_size,50 drones,10,1010,2,perimeter_sweep,50,1800,small,0.5,88.58,227.95,86.21,87.21,90.29,9,12.86,73.08
+swarm_size,50 drones,11,1011,3,perimeter_sweep,50,1800,small,0.5,88.01,226.497,96.71,88.5,85.48,15,13.21,68.2
+swarm_size,50 drones,12,1012,4,perimeter_sweep,50,1800,small,0.5,87.83,226.016,88.1,89.15,86.66,66,13.19,72.86
+swarm_size,50 drones,13,1013,5,perimeter_sweep,50,1800,small,0.5,86.81,223.387,89.95,83.29,88.95,64,12.74,73.2
+swarm_size,50 drones,14,1014,6,perimeter_sweep,50,1800,small,0.5,88.35,227.363,89.97,89.45,87.05,63,13.56,70.1
+swarm_size,50 drones,15,1015,7,perimeter_sweep,50,1800,small,0.5,88.14,226.809,90.76,84.6,90.42,56,13.41,70.66
+swarm_size,50 drones,16,1016,0,perimeter_sweep,50,1800,small,0.5,90.69,233.384,89.14,89.96,91.67,7,13.65,70.63
+swarm_size,50 drones,17,1017,1,perimeter_sweep,50,1800,small,0.5,91.36,235.108,97.4,91.47,89.79,21,13.97,64.12
+swarm_size,50 drones,18,1018,2,perimeter_sweep,50,1800,small,0.5,88.9,228.767,86.81,86.83,91.12,3,13.04,69.93
+swarm_size,50 drones,19,1019,3,perimeter_sweep,50,1800,small,0.5,88.06,226.613,97.43,88.5,85.4,23,12.86,72.29
+swarm_size,50 drones,20,1020,4,perimeter_sweep,50,1800,small,0.5,87.73,225.76,86.24,88.96,87.07,65,13.25,73.95
+swarm_size,50 drones,21,1021,5,perimeter_sweep,50,1800,small,0.5,87.3,224.656,92.86,83.81,88.82,63,13.11,75.17
+swarm_size,50 drones,22,1022,6,perimeter_sweep,50,1800,small,0.5,87.58,225.373,87.21,89.17,86.35,67,12.9,75.87
+swarm_size,50 drones,23,1023,7,perimeter_sweep,50,1800,small,0.5,87.75,225.815,90.2,84.61,89.75,62,13.26,71
+swarm_size,50 drones,24,1024,0,perimeter_sweep,50,1800,small,0.5,90.18,232.078,88.02,88.18,92.37,9,13.55,66.9
+swarm_size,50 drones,25,1025,1,perimeter_sweep,50,1800,small,0.5,89.85,231.233,97.87,89.56,88.13,4,13.36,69.01
+swarm_size,50 drones,26,1026,2,perimeter_sweep,50,1800,small,0.5,92.29,237.497,90.43,90.93,93.87,1,13.71,67.94
+swarm_size,50 drones,27,1027,3,perimeter_sweep,50,1800,small,0.5,91.6,235.733,97.47,92.27,89.61,15,13.84,64.08
+swarm_size,50 drones,28,1028,4,perimeter_sweep,50,1800,small,0.5,87.74,225.801,86.36,89.07,86.99,63,13.07,72.68
+swarm_size,50 drones,29,1029,5,perimeter_sweep,50,1800,small,0.5,87.32,224.707,91.65,83.55,89.38,62,12.99,75.09
+swarm_size,50 drones,30,1030,6,perimeter_sweep,50,1800,small,0.5,87.76,225.831,88.83,88.95,86.5,67,13.07,74.28
+swarm_size,50 drones,31,1031,7,perimeter_sweep,50,1800,small,0.5,87.41,224.933,90.11,83.59,89.9,63,13.15,75.43
+duration,600 s,0,1000,0,perimeter_sweep,20,600,small,0.5,13.87,35.6897,34.7,18.43,4.99,1,13.95,9.56
+duration,600 s,1,1001,1,perimeter_sweep,20,600,small,0.5,12.64,32.5317,0,7.67,19.86,1,12.46,10.34
+duration,600 s,2,1002,2,perimeter_sweep,20,600,small,0.5,12.96,33.3504,33.08,16.89,4.78,1,12.56,11.42
+duration,600 s,3,1003,3,perimeter_sweep,20,600,small,0.5,12.76,32.8381,0,7.9,19.91,1,12.82,10.64
+duration,600 s,4,1004,4,perimeter_sweep,20,600,small,0.5,13.74,35.3621,16.07,9.62,16.58,1,13.76,9.98
+duration,600 s,5,1005,5,perimeter_sweep,20,600,small,0.5,13.2,33.9714,13.5,15.74,11.03,1,13.2,10.61
+duration,600 s,6,1006,6,perimeter_sweep,20,600,small,0.5,14,36.0188,16.67,9.76,16.85,1,13.9,9.57
+duration,600 s,7,1007,7,perimeter_sweep,20,600,small,0.5,13.55,34.8819,13.2,16.52,11.18,1,13.63,10.23
+duration,600 s,8,1008,0,perimeter_sweep,20,600,small,0.5,13.73,35.3295,34.57,17.91,5.17,1,13.47,10.13
+duration,600 s,9,1009,1,perimeter_sweep,20,600,small,0.5,12.97,33.3734,0,7.53,20.65,1,13.09,10.19
+duration,600 s,10,1010,2,perimeter_sweep,20,600,small,0.5,13.22,34.0291,33.73,17.56,4.61,1,12.72,11.47
+duration,600 s,11,1011,3,perimeter_sweep,20,600,small,0.5,13.33,34.3005,0,8.34,20.73,1,13.63,9.9
+duration,600 s,12,1012,4,perimeter_sweep,20,600,small,0.5,13.49,34.7214,14.99,9.63,16.32,1,13.1,11.14
+duration,600 s,13,1013,5,perimeter_sweep,20,600,small,0.5,12.98,33.4126,13.12,15.66,10.74,1,12.77,10.6
+duration,600 s,14,1014,6,perimeter_sweep,20,600,small,0.5,14.08,36.2434,15.47,9.95,17.17,1,14.14,9.52
+duration,600 s,15,1015,7,perimeter_sweep,20,600,small,0.5,13.88,35.7128,14.05,16.7,11.5,1,14.16,9.48
+duration,600 s,16,1016,0,perimeter_sweep,20,600,small,0.5,14.08,36.2299,35.72,18.54,5.08,1,13.79,10.48
+duration,600 s,17,1017,1,perimeter_sweep,20,600,small,0.5,14.21,36.5624,0,8.66,22.28,1,14.35,9.1
+duration,600 s,18,1018,2,perimeter_sweep,20,600,small,0.5,13.44,34.5807,33.48,17.61,5.07,1,12.86,11.45
+duration,600 s,19,1019,3,perimeter_sweep,20,600,small,0.5,12.95,33.3291,0,7.62,20.54,1,12.9,10.48
+duration,600 s,20,1020,4,perimeter_sweep,20,600,small,0.5,13.45,34.6229,14.7,8.92,16.9,1,13.27,10.2
+duration,600 s,21,1021,5,perimeter_sweep,20,600,small,0.5,13.75,35.3764,15.99,16.26,11.11,1,13.72,9.97
+duration,600 s,22,1022,6,perimeter_sweep,20,600,small,0.5,13.52,34.7824,16.54,9.56,16.05,1,13.3,10.48
+duration,600 s,23,1023,7,perimeter_sweep,20,600,small,0.5,13.43,34.5549,15.2,15.92,10.93,1,13.67,9.97
+duration,600 s,24,1024,0,perimeter_sweep,20,600,small,0.5,14.14,36.3925,35.67,18.92,4.91,1,13.9,9.72
+duration,600 s,25,1025,1,perimeter_sweep,20,600,small,0.5,13.59,34.9619,0,8.37,21.23,1,13.49,10.09
+duration,600 s,26,1026,2,perimeter_sweep,20,600,small,0.5,13.84,35.6066,34.17,18.33,5.13,1,13.56,10.22
+duration,600 s,27,1027,3,perimeter_sweep,20,600,small,0.5,14,36.0206,0,8.52,21.96,1,14.18,8.7
+duration,600 s,28,1028,4,perimeter_sweep,20,600,small,0.5,13.44,34.5771,14.17,9.29,16.69,1,13.13,10.33
+duration,600 s,29,1029,5,perimeter_sweep,20,600,small,0.5,13.14,33.8191,13.78,15.82,10.77,1,13.08,10.03
+duration,600 s,30,1030,6,perimeter_sweep,20,600,small,0.5,13.44,34.5953,15.76,9.16,16.42,1,13.38,10.17
+duration,600 s,31,1031,7,perimeter_sweep,20,600,small,0.5,13.68,35.1995,14.36,16.71,11,1,13.85,9.89
+duration,1200 s,0,1000,0,perimeter_sweep,20,1200,small,0.5,27.58,70.986,34.7,31.97,22.21,1,13.94,19.05
+duration,1200 s,1,1001,1,perimeter_sweep,20,1200,small,0.5,25.15,64.7117,0.78,23.29,32.65,1,12.45,20.58
+duration,1200 s,2,1002,2,perimeter_sweep,20,1200,small,0.5,25.78,66.3408,33.06,29.19,21.17,1,12.55,22.74
+duration,1200 s,3,1003,3,perimeter_sweep,20,1200,small,0.5,25.37,65.2916,0.94,24.36,32.19,1,12.81,21.18
+duration,1200 s,4,1004,4,perimeter_sweep,20,1200,small,0.5,26.71,68.7401,28.29,25.89,27,19,13.66,19.8
+duration,1200 s,5,1005,5,perimeter_sweep,20,1200,small,0.5,25.82,66.4479,25.81,24.88,26.6,19,13.17,21
+duration,1200 s,6,1006,6,perimeter_sweep,20,1200,small,0.5,27.17,69.9114,30.18,26.32,27.13,19,13.84,18.95
+duration,1200 s,7,1007,7,perimeter_sweep,20,1200,small,0.5,26.43,68.0216,25.78,25.85,27.07,19,13.58,20.31
+duration,1200 s,8,1008,0,perimeter_sweep,20,1200,small,0.5,27.3,70.2658,34.59,30.61,22.78,1,13.47,20.17
+duration,1200 s,9,1009,1,perimeter_sweep,20,1200,small,0.5,25.79,66.3693,0.69,23.73,33.64,1,13.08,20.3
+duration,1200 s,10,1010,2,perimeter_sweep,20,1200,small,0.5,26.29,67.6656,33.75,30.07,21.34,1,12.71,22.83
+duration,1200 s,11,1011,3,perimeter_sweep,20,1200,small,0.5,26.51,68.2277,0.9,25.49,33.63,1,13.63,19.72
+duration,1200 s,12,1012,4,perimeter_sweep,20,1200,small,0.5,26.31,67.7107,26.73,25.83,26.61,19,13.06,22.04
+duration,1200 s,13,1013,5,perimeter_sweep,20,1200,small,0.5,25.43,65.4305,25.17,24.84,25.97,19,12.74,21.04
+duration,1200 s,14,1014,6,perimeter_sweep,20,1200,small,0.5,27.29,70.2275,28.23,26.89,27.39,19,14.07,18.86
+duration,1200 s,15,1015,7,perimeter_sweep,20,1200,small,0.5,27,69.4935,27.22,25.99,27.79,19,14.12,18.82
+duration,1200 s,16,1016,0,perimeter_sweep,20,1200,small,0.5,27.99,72.0264,35.72,31.7,23.03,1,13.79,20.86
+duration,1200 s,17,1017,1,perimeter_sweep,20,1200,small,0.5,28.23,72.6537,0.88,26.73,36.17,1,14.35,18.12
+duration,1200 s,18,1018,2,perimeter_sweep,20,1200,small,0.5,26.72,68.7731,33.49,30.37,22.05,1,12.86,22.79
+duration,1200 s,19,1019,3,perimeter_sweep,20,1200,small,0.5,25.77,66.3149,0.72,23.71,33.61,1,12.9,20.88
+duration,1200 s,20,1020,4,perimeter_sweep,20,1200,small,0.5,26.23,67.491,26.28,24.7,27.48,19,13.22,20.15
+duration,1200 s,21,1021,5,perimeter_sweep,20,1200,small,0.5,26.8,68.9751,30.39,25.68,26.85,19,13.67,19.8
+duration,1200 s,22,1022,6,perimeter_sweep,20,1200,small,0.5,26.32,67.7247,30.12,25.59,25.99,19,13.27,20.72
+duration,1200 s,23,1023,7,perimeter_sweep,20,1200,small,0.5,26.19,67.3875,29.4,24.9,26.46,19,13.6,19.78
+duration,1200 s,24,1024,0,perimeter_sweep,20,1200,small,0.5,28.12,72.3716,35.67,32.73,22.46,1,13.9,19.36
+duration,1200 s,25,1025,1,perimeter_sweep,20,1200,small,0.5,27.02,69.5305,0.86,25.66,34.55,1,13.49,20.1
+duration,1200 s,26,1026,2,perimeter_sweep,20,1200,small,0.5,27.51,70.8076,34.16,31.42,22.66,1,13.55,20.36
+duration,1200 s,27,1027,3,perimeter_sweep,20,1200,small,0.5,27.85,71.6611,0.84,25.77,36.18,1,14.17,17.33
+duration,1200 s,28,1028,4,perimeter_sweep,20,1200,small,0.5,26.18,67.384,25.48,25.08,27.27,19,13.08,20.39
+duration,1200 s,29,1029,5,perimeter_sweep,20,1200,small,0.5,25.69,66.1217,26.33,25.17,25.97,19,13.03,19.89
+duration,1200 s,30,1030,6,perimeter_sweep,20,1200,small,0.5,26.18,67.3605,29.02,25.2,26.28,19,13.31,20.11
+duration,1200 s,31,1031,7,perimeter_sweep,20,1200,small,0.5,26.65,68.5842,27.86,26.09,26.82,19,13.82,19.63
+duration,1800 s,0,1000,0,perimeter_sweep,20,1800,small,0.5,40.08,103.133,34.7,36.92,44.01,20,13.73,28.36
+duration,1800 s,1,1001,1,perimeter_sweep,20,1800,small,0.5,37.2,95.7352,56.27,36.64,33,21,12.39,30.83
+duration,1800 s,2,1002,2,perimeter_sweep,20,1800,small,0.5,37.77,97.2022,33.08,34.29,41.81,19,12.44,33.73
+duration,1800 s,3,1003,3,perimeter_sweep,20,1800,small,0.5,37.53,96.5922,57.07,37.84,32.5,19,12.73,31.7
+duration,1800 s,4,1004,4,perimeter_sweep,20,1800,small,0.5,38.1,98.0531,41.14,37.91,37.52,19,13.54,29.66
+duration,1800 s,5,1005,5,perimeter_sweep,20,1800,small,0.5,37.45,96.3876,39.94,35.19,38.73,19,13.05,31.46
+duration,1800 s,6,1006,6,perimeter_sweep,20,1800,small,0.5,38.7,99.5871,45.76,38.04,37.51,19,13.68,28.33
+duration,1800 s,7,1007,7,perimeter_sweep,20,1800,small,0.5,38.04,97.9045,42.67,35.72,38.83,19,13.45,30.67
+duration,1800 s,8,1008,0,perimeter_sweep,20,1800,small,0.5,39.75,102.282,34.59,35.55,44.49,19,13.36,29.97
+duration,1800 s,9,1009,1,perimeter_sweep,20,1800,small,0.5,38.06,97.9372,57.39,37.26,33.98,20,13.06,30.37
+duration,1800 s,10,1010,2,perimeter_sweep,20,1800,small,0.5,38.47,98.9955,33.72,35.26,42.29,19,12.66,33.89
+duration,1800 s,11,1011,3,perimeter_sweep,20,1800,small,0.5,39.01,100.382,58.25,39.38,33.99,20,13.55,29.58
+duration,1800 s,12,1012,4,perimeter_sweep,20,1800,small,0.5,37.86,97.4179,39.63,38.01,37.29,19,12.98,32.85
+duration,1800 s,13,1013,5,perimeter_sweep,20,1800,small,0.5,37.04,95.3146,39.28,35.03,38.15,19,12.63,31.73
+duration,1800 s,14,1014,6,perimeter_sweep,20,1800,small,0.5,38.74,99.6904,43.77,38.56,37.66,19,13.9,28.2
+duration,1800 s,15,1015,7,perimeter_sweep,20,1800,small,0.5,38.66,99.4948,44.48,35.84,39.57,19,13.97,28.42
+duration,1800 s,16,1016,0,perimeter_sweep,20,1800,small,0.5,40.62,104.533,35.71,36.77,45.01,19,13.74,30.91
+duration,1800 s,17,1017,1,perimeter_sweep,20,1800,small,0.5,41.28,106.222,60.77,41.26,36.51,20,14.26,27.25
+duration,1800 s,18,1018,2,perimeter_sweep,20,1800,small,0.5,39.01,100.385,33.5,35.53,43.24,20,12.8,33.73
+duration,1800 s,19,1019,3,perimeter_sweep,20,1800,small,0.5,38.04,97.904,56.63,37.55,33.9,19,12.81,31.33
+duration,1800 s,20,1020,4,perimeter_sweep,20,1800,small,0.5,37.71,97.0559,39.53,36.79,38.04,19,13.13,29.93
+duration,1800 s,21,1021,5,perimeter_sweep,20,1800,small,0.5,38.55,99.1972,44.89,36.04,39.07,19,13.52,29.89
+duration,1800 s,22,1022,6,perimeter_sweep,20,1800,small,0.5,37.8,97.2665,45.75,37.3,36.26,19,13.05,30.86
+duration,1800 s,23,1023,7,perimeter_sweep,20,1800,small,0.5,37.74,97.1308,46.7,34.59,38.16,19,13.5,29.81
+duration,1800 s,24,1024,0,perimeter_sweep,20,1800,small,0.5,40.78,104.953,35.64,37.91,44.42,20,13.8,28.84
+duration,1800 s,25,1025,1,perimeter_sweep,20,1800,small,0.5,39.7,102.17,59.46,39.64,34.92,20,13.44,30.17
+duration,1800 s,26,1026,2,perimeter_sweep,20,1800,small,0.5,39.97,102.849,34.16,36.39,44.35,19,13.42,30.26
+duration,1800 s,27,1027,3,perimeter_sweep,20,1800,small,0.5,40.75,104.86,59.48,40.29,36.54,19,14.08,25.99
+duration,1800 s,28,1028,4,perimeter_sweep,20,1800,small,0.5,37.67,96.942,38.65,37.14,37.87,19,12.94,30.22
+duration,1800 s,29,1029,5,perimeter_sweep,20,1800,small,0.5,37.24,95.8364,40.42,35.43,37.96,19,12.91,29.91
+duration,1800 s,30,1030,6,perimeter_sweep,20,1800,small,0.5,37.65,96.8945,44.63,36.88,36.58,19,13.15,29.97
+duration,1800 s,31,1031,7,perimeter_sweep,20,1800,small,0.5,38.32,98.6021,45.2,35.94,38.6,19,13.71,29.63
+duration,2400 s,0,1000,0,perimeter_sweep,20,2400,small,0.5,51.44,132.387,34.72,46.9,59.3,20,13.58,37.63
+duration,2400 s,1,1001,1,perimeter_sweep,20,2400,small,0.5,48.86,125.742,59.04,53.5,42.53,25,12.32,41.38
+duration,2400 s,2,1002,2,perimeter_sweep,20,2400,small,0.5,49.1,126.359,33.06,44.24,57.05,19,12.38,44.61
+duration,2400 s,3,1003,3,perimeter_sweep,20,2400,small,0.5,49.28,126.822,59.2,54.93,42.17,18,12.67,42.45
+duration,2400 s,4,1004,4,perimeter_sweep,20,2400,small,0.5,49.43,127.203,52.79,48.24,49.59,20,13.5,39.49
+duration,2400 s,5,1005,5,perimeter_sweep,20,2400,small,0.5,48.86,125.743,47.82,49.54,48.56,20,13.01,41.75
+duration,2400 s,6,1006,6,perimeter_sweep,20,2400,small,0.5,50.16,129.083,60.78,47.74,49.57,20,13.61,37.7
+duration,2400 s,7,1007,7,perimeter_sweep,20,2400,small,0.5,49.49,127.37,53.43,50.21,47.94,20,13.39,40.88
+duration,2400 s,8,1008,0,perimeter_sweep,20,2400,small,0.5,51.16,131.649,34.56,45.66,59.77,19,13.28,39.69
+duration,2400 s,9,1009,1,perimeter_sweep,20,2400,small,0.5,49.77,128.07,60.33,54.11,43.58,20,12.99,40.69
+duration,2400 s,10,1010,2,perimeter_sweep,20,2400,small,0.5,49.9,128.416,33.73,45.31,57.66,19,12.61,44.88
+duration,2400 s,11,1011,3,perimeter_sweep,20,2400,small,0.5,50.73,130.543,60.5,56.51,43.54,20,13.49,39.78
+duration,2400 s,12,1012,4,perimeter_sweep,20,2400,small,0.5,49.32,126.934,51.33,48.47,49.54,20,12.95,43.62
+duration,2400 s,13,1013,5,perimeter_sweep,20,2400,small,0.5,48.42,124.604,47.13,49.31,48,20,12.59,42.22
+duration,2400 s,14,1014,6,perimeter_sweep,20,2400,small,0.5,50.15,129.07,58.95,48.24,49.58,20,13.82,37.54
+duration,2400 s,15,1015,7,perimeter_sweep,20,2400,small,0.5,50.13,129.008,55.12,50.35,48.73,20,13.87,37.87
+duration,2400 s,16,1016,0,perimeter_sweep,20,2400,small,0.5,52.06,133.966,35.71,47,60.25,19,13.68,40.77
+duration,2400 s,17,1017,1,perimeter_sweep,20,2400,small,0.5,53.06,136.553,63.58,58.42,46.05,20,14.17,36.76
+duration,2400 s,18,1018,2,perimeter_sweep,20,2400,small,0.5,50.4,129.688,33.48,45.61,58.5,20,12.72,44.47
+duration,2400 s,19,1019,3,perimeter_sweep,20,2400,small,0.5,49.82,128.214,58.93,54.69,43.56,19,12.7,42.16
+duration,2400 s,20,1020,4,perimeter_sweep,20,2400,small,0.5,49.11,126.387,51.58,47.09,50.18,20,13.07,39.67
+duration,2400 s,21,1021,5,perimeter_sweep,20,2400,small,0.5,50.07,128.848,52.73,50.54,49.03,20,13.47,39.82
+duration,2400 s,22,1022,6,perimeter_sweep,20,2400,small,0.5,49.18,126.562,60.52,47.05,48.17,20,13,40.96
+duration,2400 s,23,1023,7,perimeter_sweep,20,2400,small,0.5,49.06,126.253,57.23,48.92,47.17,20,13.44,39.65
+duration,2400 s,24,1024,0,perimeter_sweep,20,2400,small,0.5,52.22,134.38,35.65,48.16,59.63,20,13.69,38.33
+duration,2400 s,25,1025,1,perimeter_sweep,20,2400,small,0.5,51.51,132.552,62.36,56.76,44.5,20,13.38,40.6
+duration,2400 s,26,1026,2,perimeter_sweep,20,2400,small,0.5,51.31,132.033,34.17,46.45,59.52,19,13.32,40.1
+duration,2400 s,27,1027,3,perimeter_sweep,20,2400,small,0.5,52.46,135.002,61.64,57.36,46.15,19,13.87,34.88
+duration,2400 s,28,1028,4,perimeter_sweep,20,2400,small,0.5,49.03,126.176,50.61,47.41,49.98,20,12.87,40.01
+duration,2400 s,29,1029,5,perimeter_sweep,20,2400,small,0.5,48.53,124.884,47.98,49.77,47.63,20,12.83,39.77
+duration,2400 s,30,1030,6,perimeter_sweep,20,2400,small,0.5,49,126.088,59.16,46.53,48.55,20,13.09,39.81
+duration,2400 s,31,1031,7,perimeter_sweep,20,2400,small,0.5,49.75,128.036,55.92,50.46,47.66,20,13.64,39.48
+drone_type,micro,0,1000,0,perimeter_sweep,20,1800,micro,0.5,25.18,64.8036,34.77,30.18,18.69,1,13.93,17.5
+drone_type,micro,1,1001,1,perimeter_sweep,20,1800,micro,0.5,22.5,57.8936,0,18.94,30.95,1,12.43,18.43
+drone_type,micro,2,1002,2,perimeter_sweep,20,1800,micro,0.5,23.57,60.6684,33.23,27.59,17.89,1,12.53,20.82
+drone_type,micro,3,1003,3,perimeter_sweep,20,1800,micro,0.5,22.68,58.3728,0,19.87,30.57,1,12.79,19.01
+drone_type,micro,4,1004,4,perimeter_sweep,20,1800,micro,0.5,24.62,63.3559,27.35,24.07,24.41,19,13.71,18.08
+drone_type,micro,5,1005,5,perimeter_sweep,20,1800,micro,0.5,23.48,60.428,23.87,22.97,23.81,19,13.18,18.96
+drone_type,micro,6,1006,6,perimeter_sweep,20,1800,micro,0.5,25.05,64.4568,28.36,24.46,24.72,19,13.87,17.32
+drone_type,micro,7,1007,7,perimeter_sweep,20,1800,micro,0.5,24.14,62.1179,23.45,24.25,24.21,19,13.61,18.3
+drone_type,micro,8,1008,0,perimeter_sweep,20,1800,micro,0.5,24.95,64.2179,34.71,28.98,19.23,1,13.45,18.5
+drone_type,micro,9,1009,1,perimeter_sweep,20,1800,micro,0.5,23.11,59.4726,0,19.26,31.96,1,13.07,18.22
+drone_type,micro,10,1010,2,perimeter_sweep,20,1800,micro,0.5,24.02,61.8056,33.84,28.43,17.95,1,12.69,20.93
+drone_type,micro,11,1011,3,perimeter_sweep,20,1800,micro,0.5,23.73,61.0643,0,20.86,31.91,1,13.61,17.7
+drone_type,micro,12,1012,4,perimeter_sweep,20,1800,micro,0.5,24.27,62.4662,25.97,24.05,24.05,19,13.07,20.1
+drone_type,micro,13,1013,5,perimeter_sweep,20,1800,micro,0.5,23.09,59.4302,23.25,22.97,23.16,19,12.75,18.96
+drone_type,micro,14,1014,6,perimeter_sweep,20,1800,micro,0.5,25.18,64.7898,26.43,24.99,25.02,19,14.1,17.22
+drone_type,micro,15,1015,7,perimeter_sweep,20,1800,micro,0.5,24.67,63.4786,24.93,24.36,24.86,19,14.14,16.98
+drone_type,micro,16,1016,0,perimeter_sweep,20,1800,micro,0.5,25.57,65.8142,35.82,30.03,19.38,1,13.77,19.12
+drone_type,micro,17,1017,1,perimeter_sweep,20,1800,micro,0.5,25.26,64.9987,0,21.76,34.34,1,14.33,16.24
+drone_type,micro,18,1018,2,perimeter_sweep,20,1800,micro,0.5,24.4,62.8039,33.58,28.66,18.63,1,12.84,20.89
+drone_type,micro,19,1019,3,perimeter_sweep,20,1800,micro,0.5,23.06,59.3305,0,19.26,31.84,1,12.89,18.75
+drone_type,micro,20,1020,4,perimeter_sweep,20,1800,micro,0.5,24.16,62.1655,25.27,22.94,24.89,19,13.23,18.44
+drone_type,micro,21,1021,5,perimeter_sweep,20,1800,micro,0.5,24.44,62.8918,28.3,23.75,24.06,19,13.7,17.88
+drone_type,micro,22,1022,6,perimeter_sweep,20,1800,micro,0.5,24.22,62.3316,28.27,23.75,23.63,19,13.28,18.92
+drone_type,micro,23,1023,7,perimeter_sweep,20,1800,micro,0.5,23.85,61.3655,26.94,23.28,23.56,19,13.62,17.82
+drone_type,micro,24,1024,0,perimeter_sweep,20,1800,micro,0.5,25.72,66.194,35.78,30.96,18.92,1,13.88,17.76
+drone_type,micro,25,1025,1,perimeter_sweep,20,1800,micro,0.5,24.21,62.306,0,20.87,32.91,1,13.47,18.01
+drone_type,micro,26,1026,2,perimeter_sweep,20,1800,micro,0.5,25.13,64.6689,34.25,29.75,19.07,1,13.53,18.66
+drone_type,micro,27,1027,3,perimeter_sweep,20,1800,micro,0.5,24.94,64.1892,0,20.97,34.34,1,14.14,15.62
+drone_type,micro,28,1028,4,perimeter_sweep,20,1800,micro,0.5,24.15,62.1479,24.58,23.32,24.73,19,13.09,18.72
+drone_type,micro,29,1029,5,perimeter_sweep,20,1800,micro,0.5,23.39,60.1864,24.45,23.24,23.25,19,13.05,17.91
+drone_type,micro,30,1030,6,perimeter_sweep,20,1800,micro,0.5,24.1,62.0194,27.22,23.39,23.93,19,13.34,18.39
+drone_type,micro,31,1031,7,perimeter_sweep,20,1800,micro,0.5,24.32,62.584,25.49,24.46,23.92,19,13.83,17.7
+drone_type,small,0,1000,0,perimeter_sweep,20,1800,small,0.5,40.08,103.133,34.7,36.92,44.01,20,13.73,28.36
+drone_type,small,1,1001,1,perimeter_sweep,20,1800,small,0.5,37.2,95.7352,56.27,36.64,33,21,12.39,30.83
+drone_type,small,2,1002,2,perimeter_sweep,20,1800,small,0.5,37.77,97.2022,33.08,34.29,41.81,19,12.44,33.73
+drone_type,small,3,1003,3,perimeter_sweep,20,1800,small,0.5,37.53,96.5922,57.07,37.84,32.5,19,12.73,31.7
+drone_type,small,4,1004,4,perimeter_sweep,20,1800,small,0.5,38.1,98.0531,41.14,37.91,37.52,19,13.54,29.66
+drone_type,small,5,1005,5,perimeter_sweep,20,1800,small,0.5,37.45,96.3876,39.94,35.19,38.73,19,13.05,31.46
+drone_type,small,6,1006,6,perimeter_sweep,20,1800,small,0.5,38.7,99.5871,45.76,38.04,37.51,19,13.68,28.33
+drone_type,small,7,1007,7,perimeter_sweep,20,1800,small,0.5,38.04,97.9045,42.67,35.72,38.83,19,13.45,30.67
+drone_type,small,8,1008,0,perimeter_sweep,20,1800,small,0.5,39.75,102.282,34.59,35.55,44.49,19,13.36,29.97
+drone_type,small,9,1009,1,perimeter_sweep,20,1800,small,0.5,38.06,97.9372,57.39,37.26,33.98,20,13.06,30.37
+drone_type,small,10,1010,2,perimeter_sweep,20,1800,small,0.5,38.47,98.9955,33.72,35.26,42.29,19,12.66,33.89
+drone_type,small,11,1011,3,perimeter_sweep,20,1800,small,0.5,39.01,100.382,58.25,39.38,33.99,20,13.55,29.58
+drone_type,small,12,1012,4,perimeter_sweep,20,1800,small,0.5,37.86,97.4179,39.63,38.01,37.29,19,12.98,32.85
+drone_type,small,13,1013,5,perimeter_sweep,20,1800,small,0.5,37.04,95.3146,39.28,35.03,38.15,19,12.63,31.73
+drone_type,small,14,1014,6,perimeter_sweep,20,1800,small,0.5,38.74,99.6904,43.77,38.56,37.66,19,13.9,28.2
+drone_type,small,15,1015,7,perimeter_sweep,20,1800,small,0.5,38.66,99.4948,44.48,35.84,39.57,19,13.97,28.42
+drone_type,small,16,1016,0,perimeter_sweep,20,1800,small,0.5,40.62,104.533,35.71,36.77,45.01,19,13.74,30.91
+drone_type,small,17,1017,1,perimeter_sweep,20,1800,small,0.5,41.28,106.222,60.77,41.26,36.51,20,14.26,27.25
+drone_type,small,18,1018,2,perimeter_sweep,20,1800,small,0.5,39.01,100.385,33.5,35.53,43.24,20,12.8,33.73
+drone_type,small,19,1019,3,perimeter_sweep,20,1800,small,0.5,38.04,97.904,56.63,37.55,33.9,19,12.81,31.33
+drone_type,small,20,1020,4,perimeter_sweep,20,1800,small,0.5,37.71,97.0559,39.53,36.79,38.04,19,13.13,29.93
+drone_type,small,21,1021,5,perimeter_sweep,20,1800,small,0.5,38.55,99.1972,44.89,36.04,39.07,19,13.52,29.89
+drone_type,small,22,1022,6,perimeter_sweep,20,1800,small,0.5,37.8,97.2665,45.75,37.3,36.26,19,13.05,30.86
+drone_type,small,23,1023,7,perimeter_sweep,20,1800,small,0.5,37.74,97.1308,46.7,34.59,38.16,19,13.5,29.81
+drone_type,small,24,1024,0,perimeter_sweep,20,1800,small,0.5,40.78,104.953,35.64,37.91,44.42,20,13.8,28.84
+drone_type,small,25,1025,1,perimeter_sweep,20,1800,small,0.5,39.7,102.17,59.46,39.64,34.92,20,13.44,30.17
+drone_type,small,26,1026,2,perimeter_sweep,20,1800,small,0.5,39.97,102.849,34.16,36.39,44.35,19,13.42,30.26
+drone_type,small,27,1027,3,perimeter_sweep,20,1800,small,0.5,40.75,104.86,59.48,40.29,36.54,19,14.08,25.99
+drone_type,small,28,1028,4,perimeter_sweep,20,1800,small,0.5,37.67,96.942,38.65,37.14,37.87,19,12.94,30.22
+drone_type,small,29,1029,5,perimeter_sweep,20,1800,small,0.5,37.24,95.8364,40.42,35.43,37.96,19,12.91,29.91
+drone_type,small,30,1030,6,perimeter_sweep,20,1800,small,0.5,37.65,96.8945,44.63,36.88,36.58,19,13.15,29.97
+drone_type,small,31,1031,7,perimeter_sweep,20,1800,small,0.5,38.32,98.6021,45.2,35.94,38.6,19,13.71,29.63
+drone_type,medium,0,1000,0,perimeter_sweep,20,1800,medium,0.5,53.5,137.679,34.6,49.81,61.18,14,13.58,39.16
+drone_type,medium,1,1001,1,perimeter_sweep,20,1800,medium,0.5,51.06,131.407,58.09,55.24,45.89,10,12.33,43.3
+drone_type,medium,2,1002,2,perimeter_sweep,20,1800,medium,0.5,51.12,131.547,32.93,47.08,58.92,13,12.38,46.52
+drone_type,medium,3,1003,3,perimeter_sweep,20,1800,medium,0.5,51.51,132.544,58.25,56.82,45.45,12,12.68,44.42
+drone_type,medium,4,1004,4,perimeter_sweep,20,1800,medium,0.5,51.5,132.538,54.63,49.02,52.8,16,13.51,41.12
+drone_type,medium,5,1005,5,perimeter_sweep,20,1800,medium,0.5,50.97,131.16,50.79,52.89,49.42,20,13.02,43.54
+drone_type,medium,6,1006,6,perimeter_sweep,20,1800,medium,0.5,52.3,134.594,63.5,48.51,52.7,18,13.61,39.28
+drone_type,medium,7,1007,7,perimeter_sweep,20,1800,medium,0.5,51.62,132.831,57.15,53.56,48.65,20,13.39,42.62
+drone_type,medium,8,1008,0,perimeter_sweep,20,1800,medium,0.5,53.19,136.885,34.45,48.57,61.61,14,13.28,41.32
+drone_type,medium,9,1009,1,perimeter_sweep,20,1800,medium,0.5,51.94,133.662,59.38,55.8,46.92,11,12.99,42.48
+drone_type,medium,10,1010,2,perimeter_sweep,20,1800,medium,0.5,51.94,133.673,33.62,48.18,59.54,14,12.62,46.72
+drone_type,medium,11,1011,3,perimeter_sweep,20,1800,medium,0.5,52.93,136.208,59.52,58.37,46.81,13,13.49,41.55
+drone_type,medium,12,1012,4,perimeter_sweep,20,1800,medium,0.5,51.41,132.306,53.16,49.25,52.78,19,12.96,45.52
+drone_type,medium,13,1013,5,perimeter_sweep,20,1800,medium,0.5,50.5,129.948,50.02,52.62,48.85,18,12.61,44.06
+drone_type,medium,14,1014,6,perimeter_sweep,20,1800,medium,0.5,52.27,134.519,61.67,48.98,52.7,17,13.82,39.11
+drone_type,medium,15,1015,7,perimeter_sweep,20,1800,medium,0.5,52.25,134.452,58.81,53.69,49.44,20,13.88,39.46
+drone_type,medium,16,1016,0,perimeter_sweep,20,1800,medium,0.5,54.08,139.183,35.59,49.89,62.08,16,13.69,42.4
+drone_type,medium,17,1017,1,perimeter_sweep,20,1800,medium,0.5,55.28,142.248,62.63,60.17,49.42,17,14.17,38.4
+drone_type,medium,18,1018,2,perimeter_sweep,20,1800,medium,0.5,52.45,134.982,33.36,48.5,60.4,16,12.74,46.31
+drone_type,medium,19,1019,3,perimeter_sweep,20,1800,medium,0.5,52.01,133.837,57.98,56.54,46.79,11,12.7,44.07
+drone_type,medium,20,1020,4,perimeter_sweep,20,1800,medium,0.5,51.18,131.705,53.42,47.82,53.41,15,13.08,41.33
+drone_type,medium,21,1021,5,perimeter_sweep,20,1800,medium,0.5,52.16,134.222,55.78,53.91,49.82,20,13.48,41.48
+drone_type,medium,22,1022,6,perimeter_sweep,20,1800,medium,0.5,51.29,131.978,63.17,47.82,51.25,19,13,42.71
+drone_type,medium,23,1023,7,perimeter_sweep,20,1800,medium,0.5,51.13,131.57,60.85,52.2,47.85,20,13.45,41.31
+drone_type,medium,24,1024,0,perimeter_sweep,20,1800,medium,0.5,54.24,139.583,35.53,51.1,61.42,17,13.69,39.86
+drone_type,medium,25,1025,1,perimeter_sweep,20,1800,medium,0.5,53.72,138.235,61.42,58.52,47.85,14,13.38,42.47
+drone_type,medium,26,1026,2,perimeter_sweep,20,1800,medium,0.5,53.34,137.258,34.04,49.31,61.4,14,13.31,41.73
+drone_type,medium,27,1027,3,perimeter_sweep,20,1800,medium,0.5,54.67,140.689,60.73,59.25,49.4,15,13.87,36.35
+drone_type,medium,28,1028,4,perimeter_sweep,20,1800,medium,0.5,51.1,131.5,52.44,48.17,53.19,18,12.88,41.68
+drone_type,medium,29,1029,5,perimeter_sweep,20,1800,medium,0.5,50.56,130.106,50.87,53.09,48.38,20,12.83,41.46
+drone_type,medium,30,1030,6,perimeter_sweep,20,1800,medium,0.5,51.09,131.467,61.74,47.27,51.64,17,13.1,41.5
+drone_type,medium,31,1031,7,perimeter_sweep,20,1800,medium,0.5,51.83,133.386,59.61,53.78,48.31,20,13.65,41.15

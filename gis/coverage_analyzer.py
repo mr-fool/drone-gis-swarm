@@ -172,25 +172,20 @@ class CoverageAnalyzer:
         h_heat, w_heat = coverage.shape
         h_dem,  w_dem  = dem.shape
 
+        # Legacy grid: each coarse cell takes the elevation of one DEM pixel
+        # (vectorized; same pixels as the original nested loop)
+        row_scale = h_dem / h_heat
+        col_scale = w_dem / w_heat
+        dem_rows = np.minimum((np.arange(h_heat) * row_scale).astype(int), h_dem - 1)
+        dem_cols = np.minimum((np.arange(w_heat) * col_scale).astype(int), w_dem - 1)
+        cell_elev = dem[np.ix_(dem_rows, dem_cols)]
+        visited   = coverage > 0
+
         results = {}
         for band_name, (elev_min, elev_max) in ELEVATION_BANDS.items():
-            # Scale DEM to heatmap resolution
-            row_scale = h_dem / h_heat
-            col_scale = w_dem / w_heat
-
-            band_cells    = 0
-            covered_cells = 0
-
-            for row in range(h_heat):
-                for col in range(w_heat):
-                    dem_row = min(int(row * row_scale), h_dem - 1)
-                    dem_col = min(int(col * col_scale), w_dem - 1)
-                    elev    = dem[dem_row, dem_col]
-
-                    if elev_min <= elev < elev_max:
-                        band_cells += 1
-                        if coverage[row, col] > 0:
-                            covered_cells += 1
+            in_band       = (cell_elev >= elev_min) & (cell_elev < elev_max)
+            band_cells    = int(in_band.sum())
+            covered_cells = int((in_band & visited).sum())
 
             coverage_pct = (covered_cells / band_cells * 100) \
                            if band_cells > 0 else 0.0
@@ -299,11 +294,16 @@ class CoverageAnalyzer:
             total   = int(covered.size)
             basic_stats = {
                 **self.footprint.summary(),
-                "total_cells":   total,
-                "covered_cells": int(covered.sum()),
-                "covered_cell_definition": f">= {COARSE_COVERED_FRACTION:.0%} of 0.001-degree cell imaged",
-                "gap_cells":     total - int(covered.sum()),
+                # coverage_pct / gap_pct: share of DEM pixels imaged / not imaged.
                 "gap_pct":       round(100 - self.footprint.coverage_pct(), 2),
+                # Coarse 0.001-degree grid (used for gap zones). A cell counts as
+                # covered when >= COARSE_COVERED_FRACTION of it was imaged, so
+                # these counts differ slightly from the pixel-based percentages.
+                "coarse_cell_definition": f">= {COARSE_COVERED_FRACTION:.0%} of 0.001-degree cell imaged",
+                "coarse_total_cells":   total,
+                "coarse_covered_cells": int(covered.sum()),
+                "coarse_gap_cells":     total - int(covered.sum()),
+                "coarse_covered_pct":   round(100.0 * int(covered.sum()) / total, 2),
                 "legacy_point_sample_coverage_pct": legacy["coverage_pct"],
                 "legacy_point_sample_covered_cells": legacy["covered_cells"],
             }
@@ -337,8 +337,12 @@ class CoverageAnalyzer:
 
         oc = report["overall_coverage"]
         print(f"\nOverall Coverage:")
-        print(f"  Total cells:      {oc['total_cells']:,}")
-        print(f"  Covered cells:    {oc['covered_cells']:,}")
+        if "coarse_total_cells" in oc:
+            print(f"  Coarse cells:     {oc['coarse_covered_cells']:,} of "
+                  f"{oc['coarse_total_cells']:,} covered ({oc['coarse_cell_definition']})")
+        else:
+            print(f"  Total cells:      {oc['total_cells']:,}")
+            print(f"  Covered cells:    {oc['covered_cells']:,}")
         print(f"  Coverage:         {oc['coverage_pct']}%")
         if "imaged_km2" in oc:
             print(f"  Imaged area:      {oc['imaged_km2']} of {oc['total_km2']} km² "
@@ -348,7 +352,7 @@ class CoverageAnalyzer:
             print(f"  GSD (cm/pixel):   median {oc['median_gsd_cm']}, mean {oc['mean_gsd_cm']}, "
                   f"90th pct {oc['p90_gsd_cm']}")
             print(f"  Imaged at <= {oc['gsd_threshold_cm']} cm/pixel: {oc['quality_coverage_pct']}%")
-        print(f"  Gap cells:        {oc['gap_cells']:,} ({oc['gap_pct']}%)")
+        print(f"  Not imaged:       {oc['gap_pct']}%")
 
         print(f"\nCoverage by Elevation Band:")
         for band, stats in report["elevation_band_coverage"].items():

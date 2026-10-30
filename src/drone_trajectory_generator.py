@@ -37,6 +37,11 @@ class DroneSwarmGenerator:
     Optimized for desktop simulation with configurable complexity.
     """
     
+    # Every drone holds a cruise altitude above ground drawn from this range
+    # (meters AGL). Patterns differ only in their horizontal paths, so coverage
+    # and ground resolution are compared at the same flying height.
+    CRUISE_AGL_RANGE = (150.0, 250.0)
+
     def __init__(self, bounds: SimulationBounds, lane_spacing_m: float = 200.0):
         """
         Args:
@@ -136,7 +141,7 @@ class DroneSwarmGenerator:
 
             positions[:, 0] = cx + radius * np.cos(angles)
             positions[:, 1] = cy + radius * np.sin(angles)
-            positions[:, 2] = np.random.uniform(100, 300, num_drones)
+            positions[:, 2] = np.random.uniform(*self.CRUISE_AGL_RANGE, num_drones)
 
         elif pattern == FlightPattern.FORMATION_FLYING:
             # V-formation or grid formation (physical spacing in meters)
@@ -151,7 +156,7 @@ class DroneSwarmGenerator:
             # Random starting positions
             positions[:, 0] = np.random.uniform(b.x_min + 50, b.x_max - 50, num_drones)
             positions[:, 1] = np.random.uniform(b.y_min + 50, b.y_max - 50, num_drones)
-            positions[:, 2] = np.random.uniform(b.z_min + 20, b.z_max - 20, num_drones)
+            positions[:, 2] = np.random.uniform(*self.CRUISE_AGL_RANGE, num_drones)
 
         elif pattern == FlightPattern.EVASIVE_MANEUVERS:
             # Start clustered (50 m radius) at 20% / 20% of the area, then spread out
@@ -159,12 +164,17 @@ class DroneSwarmGenerator:
                                b.y_min + 0.2 * self._height, 200.0])
             cluster_radius = 50.0
             positions = center + np.random.normal(0, cluster_radius, (num_drones, 3))
+            positions[:, 2] = np.random.uniform(*self.CRUISE_AGL_RANGE, num_drones)
 
         elif pattern == FlightPattern.PERIMETER_SWEEP:
             # Start along the west edge, one lane per drone
             positions[:, 0] = b.x_min + 20
             positions[:, 1] = np.linspace(b.y_min + 50, b.y_max - 50, num_drones)
-            positions[:, 2] = np.random.uniform(150, 250, num_drones)
+            positions[:, 2] = np.random.uniform(*self.CRUISE_AGL_RANGE, num_drones)
+
+        if pattern == FlightPattern.FORMATION_FLYING:
+            # Formation helpers set ~200 m with small jitter; use the common range
+            positions[:, 2] = np.random.uniform(*self.CRUISE_AGL_RANGE, num_drones)
 
         return positions
 
@@ -182,8 +192,13 @@ class DroneSwarmGenerator:
         if st is None:
             n = max(getattr(self, '_num_drones', 1), 1)
             strip = (self._height - 100.0) / n   # lateral strip owned by this drone
+            # Keep the strip inside the area: a drone starting near the north or
+            # south edge would otherwise own a strip that runs off the map, and its
+            # lane changes got clipped to a ~40 m band instead of ~200 m.
+            lo = max(float(pos[1]) - strip / 2, self.bounds.y_min + 20)
+            hi = min(float(pos[1]) + strip / 2, self.bounds.y_max - 20)
             st = {'dir': 1.0, 'lane_y': float(pos[1]), 'lane_step': 1.0,
-                  'strip_lo': float(pos[1]) - strip / 2, 'strip_hi': float(pos[1]) + strip / 2}
+                  'strip_lo': lo, 'strip_hi': hi}
             self._drone_state[drone_id] = st
         return st
 
@@ -223,6 +238,11 @@ class DroneSwarmGenerator:
             desired_vel = self._calculate_desired_velocity(
                 drone_id, current_pos, current_vel, t, pattern, spec
             )
+            # Altitude hold: mapping autopilots fly at a set height, so no
+            # pattern maneuvers vertically. (Previously the dispersal patterns
+            # wandered across 60-490 m, so their coverage and resolution
+            # reflected altitude as well as flight path.)
+            desired_vel[2] = 0.0
             
             # Apply physical constraints
             desired_vel = self._apply_velocity_constraints(desired_vel, current_vel, spec, dt)
@@ -299,6 +319,7 @@ class DroneSwarmGenerator:
             # Zigzag pattern with random direction changes
             if np.random.random() < 0.05:  # 5% chance to change direction
                 self._evasive_direction = np.random.normal(0, 1, 3)
+                self._evasive_direction[2] = 0.0          # horizontal heading
                 self._evasive_direction = self._evasive_direction / np.linalg.norm(self._evasive_direction)
             
             if not hasattr(self, '_evasive_direction'):

@@ -136,7 +136,7 @@ class CoordinateTransformer:
         """
         Return ground elevation in meters at simulation position (x, y).
 
-        Uses bilinear interpolation from the clipped DEM.
+        Uses the nearest DEM pixel (no interpolation) from the clipped DEM.
         Returns 0.0 if position is outside DEM bounds.
         """
         lat, lon = self.sim_to_latlon(x_m, y_m)

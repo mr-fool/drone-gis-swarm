@@ -307,6 +307,18 @@ Modules were built and tested in this order:
   ground cameras watching the drones (carried over from counter-drone work)
   and did not measure mapping quality; `src/sensor_simulation.py` has been
   removed.
+- **Common cruise altitude.** Every drone holds a cruise altitude above ground
+  drawn from 150–250 m (`DroneSwarmGenerator.CRUISE_AGL_RANGE`) and no pattern
+  maneuvers vertically, so patterns are compared on their horizontal paths at
+  the same flying height. Previously the two dispersal patterns wandered over
+  60–490 m, which inflated their footprints and coarsened their resolution.
+- **Perimeter-sweep lanes.** Each drone's lane strip is kept inside the area, so
+  drones that start next to the north or south edge get the same ~200 m lane
+  range as the others (the edge drone used to be squeezed into ~40 m).
+- **Report fields.** `coverage_pct` / `gap_pct` are shares of DEM pixels imaged /
+  not imaged. Counts on the coarse 0.001° grid used for gap zones are reported
+  separately as `coarse_*` fields (a coarse cell counts as covered when at
+  least 50% of it was imaged).
 
 ## Known Limitations
 
@@ -320,3 +332,9 @@ Trajectories are generated in real meters without reference to the DEM. In the d
 
 **3. Imaging model is geometric only**
 Coverage and GSD come from camera geometry (field of view, pixel count, height above ground). Image overlap needed for photogrammetry, motion blur, lighting and weather are not modeled.
+
+**4. Pattern models are simple**
+The flight patterns are simple kinematic rules, not full swarm controllers. In particular, "formation traverse" has no formation-keeping: its formation force is a random-noise placeholder, so the drones start in a grid or V and then drift apart while advancing together. It is best described as a forward traverse from a tight cluster. The sinusoidal-dispersal heading state is shared between drones in generation order. Drone wingspan, turn radius and mass are defined but not used; only maximum speed and acceleration affect the paths.
+
+**5. Fixed-altitude ("msl") mode is a contrast case**
+In `--altitude-mode msl` drones fly at a fixed height above the highest terrain in the area, so over most of the canyon they are more than `max_mapping_agl` (default 500 m) above ground and little area counts as mapped (about 4% for the baseline mission, against about 39% in terrain-following mode). This is the expected penalty for not following terrain; the terrain-following "agl" mode is the one used for the paper's results.

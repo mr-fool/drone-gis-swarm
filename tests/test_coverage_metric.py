@@ -89,10 +89,50 @@ def test_seed_reproducible():
         assert np.array_equal(_traj(p, seed=3), _traj(p, seed=3))
 
 
-def test_no_altitude_creep():
-    # Wind is applied horizontally only; altitude-holding patterns stay level
-    z = _traj(duration=1800.0)[..., 2]
-    assert abs(z[:, -1].mean() - z[:, 0].mean()) < 10.0
+ALL_PATTERNS = ("perimeter_sweep", "formation_flying", "random_dispersal",
+                "evasive_maneuvers", "coordinated_attack")
+
+
+@pytest.mark.parametrize("pattern", ALL_PATTERNS)
+def test_altitude_hold_all_patterns(pattern):
+    # Every pattern holds its cruise altitude (only 0.5 m position noise), and
+    # all patterns draw cruise altitudes from the same range
+    from src.drone_trajectory_generator import DroneSwarmGenerator
+    lo, hi = DroneSwarmGenerator.CRUISE_AGL_RANGE
+    z = _traj(pattern, n=20, duration=1800.0)[..., 2]
+    assert np.abs(z - z[:, :1]).max() < 5.0
+    assert z.min() > lo - 5 and z.max() < hi + 5
+
+
+@pytest.mark.parametrize("orientation", (0, 4))
+def test_every_sweep_drone_gets_full_lane_range(orientation):
+    # Edge drones must not be squeezed into a clipped strip
+    from run_gis_simulation import generate_trajectories
+    np.random.seed(1)
+    t = generate_trajectories(20, "perimeter_sweep", 1800.0, 0.5, "small", orientation)["trajectories"]
+    lateral = 1 if orientation == 0 else 0
+    ranges = t[..., lateral].max(axis=1) - t[..., lateral].min(axis=1)
+    assert ranges.min() > 150.0
+
+
+def test_legacy_band_coverage_vectorized_matches_loop(ct, tmp_path):
+    from gis.sensor_heatmap import SensorHeatmap
+    from gis.coverage_analyzer import CoverageAnalyzer, ELEVATION_BANDS
+    from run_gis_simulation import generate_trajectories, extract_positions
+    np.random.seed(2)
+    sw = generate_trajectories(10, "random_dispersal", 600.0, 0.5, "small", 0)
+    hm = SensorHeatmap(ct, output_dir=str(tmp_path)); hm.add_batch_readings(extract_positions(sw))
+    got = CoverageAnalyzer(ct, hm, output_dir=str(tmp_path)).get_elevation_band_coverage()
+    cov, dem = hm.get_coverage_raster(), ct.get_dem_array()
+    (hh, wh), (hd, wd) = cov.shape, dem.shape
+    for name, (lo, hi) in ELEVATION_BANDS.items():
+        band = covd = 0
+        for r in range(hh):
+            for c in range(wh):
+                e = dem[min(int(r * hd / hh), hd - 1), min(int(c * wd / wh), wd - 1)]
+                if lo <= e < hi:
+                    band += 1; covd += int(cov[r, c] > 0)
+        assert got[name]["total_cells"] == band and got[name]["covered_cells"] == covd
 
 
 def test_empty_map_is_one_gap_zone(ct, tmp_path):

@@ -1,0 +1,102 @@
+{
+  "simulation_area": {
+    "bounds": {
+      "south": 40.55,
+      "north": 40.67,
+      "west": -111.81,
+      "east": -111.58
+    },
+    "location": "Big Cottonwood Canyon, Wasatch Range, Utah",
+    "width_m": 19320.000000000335,
+    "height_m": 13320.000000000506
+  },
+  "overall_coverage": {
+    "metric": "camera footprint area (DEM-pixel resolution)",
+    "fov_deg": 60.0,
+    "image_width_px": 1920,
+    "gsd_threshold_cm": 15.0,
+    "altitude_mode": "agl",
+    "max_mapping_agl_m": null,
+    "imaged_km2": 42.195,
+    "total_km2": 257.3424,
+    "coverage_pct": 16.4,
+    "mean_gsd_cm": 12.44,
+    "median_gsd_cm": 12.26,
+    "p90_gsd_cm": 15.45,
+    "quality_coverage_pct": 14.23,
+    "footprint_samples": 72000,
+    "ground_contact_samples": 0,
+    "above_mapping_agl_samples": 0,
+    "gap_pct": 83.6,
+    "coarse_cell_definition": ">= 50% of 0.001-degree cell imaged",
+    "coarse_total_cells": 27600,
+    "coarse_covered_cells": 4559,
+    "coarse_gap_cells": 23041,
+    "coarse_covered_pct": 16.52,
+    "legacy_point_sample_coverage_pct": 12.12,
+    "legacy_point_sample_covered_cells": 3345
+  },
+  "elevation_band_coverage": {
+    "valley": {
+      "elevation_range_m": "1375\u20131800",
+      "legacy_point_sample_coverage_pct": 19.72,
+      "legacy_total_cells": 3322,
+      "legacy_covered_cells": 655,
+      "total_pixels": 380164,
+      "imaged_pixels": 92494,
+      "coverage_pct": 24.33,
+      "mean_gsd_cm": 11.61,
+      "median_gsd_cm": 11.1,
+      "p90_gsd_cm": 14.41,
+      "quality_coverage_pct": 22.61
+    },
+    "mid_slope": {
+      "elevation_range_m": "1800\u20132600",
+      "legacy_point_sample_coverage_pct": 17.15,
+      "legacy_total_cells": 11036,
+      "legacy_covered_cells": 1893,
+      "total_pixels": 1286176,
+      "imaged_pixels": 294414,
+      "coverage_pct": 22.89,
+      "mean_gsd_cm": 12.47,
+      "median_gsd_cm": 12.37,
+      "p90_gsd_cm": 15.39,
+      "quality_coverage_pct": 19.95
+    },
+    "alpine": {
+      "elevation_range_m": "2600\u20133500",
+      "legacy_point_sample_coverage_pct": 6.02,
+      "legacy_total_cells": 13242,
+      "legacy_covered_cells": 797,
+      "total_pixels": 1552922,
+      "imaged_pixels": 140937,
+      "coverage_pct": 9.08,
+      "mean_gsd_cm": 12.9,
+      "median_gsd_cm": 12.56,
+      "p90_gsd_cm": 16.02,
+      "quality_coverage_pct": 7.44
+    }
+  },
+  "coverage_gaps": {
+    "n_gap_zones": 19,
+    "total_gap_km2": 214.573
+  },
+  "run_config": {
+    "n_drones": 20,
+    "pattern": "evasive_maneuvers",
+    "duration_s": 1800.0,
+    "timestep_s": 0.5,
+    "drone_type": "small",
+    "seed": 42,
+    "orientation": 0,
+    "fov_deg": 60.0,
+    "image_width_px": 1920,
+    "gsd_threshold_cm": 15.0,
+    "altitude_mode": "agl",
+    "max_mapping_agl_m": 500.0,
+    "sim_bounds_m": [
+      19320.000000000335,
+      13320.000000000506
+    ]
+  }
+}
